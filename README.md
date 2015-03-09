@@ -43,35 +43,33 @@ If there is no result then an exception will be thrown.
 
 Example:
 
-    use DateTime;
-    use DateTime::Format::XSD;
     my ( $answer_ref, $trace ) = $avatax->get_tax(
-        CustomerCode => 'ABC4335',
-        DocDate      => DateTime::Format::XSD->format_datetime(
-            DateTime->new( year => 2014, month => 1, day => 1 ) ),
-        CompanyCode  => 'APITrialCompany',
-        DocCode      => 'INV001',
-        DetailLevel  =>  'Tax',
-        Commit       => 0,
-        DocType      => 'SalesInvoice',
+        GetTaxRequest => {
+            CustomerCode => 'ABC4335',
+            DocDate      => '2014-01-01',
+            CompanyCode  => 'APITrialCompany',
+            DocCode      => 'INV001',
+            DetailLevel  =>  'Tax',
+            Commit       => 0,
+            DocType      => 'SalesInvoice',
+        },
     );
 
 ## post\_tax
 
 Example:
 
-    use DateTime;
-    use DateTime::Format::XSD;
     my ( $answer_ref, $trace ) = $avatax->post_tax(
-        CompanyCode => 'APITrialCompany',
-        DocType     => 'SalesInvoice',
-        DocCode     => 'INV001',
-        Commit      => 0,
-        DocDate     => DateTime::Format::XSD->format_datetime(
-            DateTime->new(year => 2014, month => 1, day => 1) ),
-        TotalTax    => '14.27',
-        TotalAmount => 175,
-        NewDocCode  => 'INV001-1',
+        PostTaxRequest => {
+            CompanyCode => 'APITrialCompany',
+            DocType     => 'SalesInvoice',
+            DocCode     => 'INV001',
+            Commit      => 0,
+            DocDate     => '2014-01-01',
+            TotalTax    => '14.27',
+            TotalAmount => 175,
+            NewDocCode  => 'INV001-1',
+        },
     );
 
 ## commit\_tax
@@ -79,10 +77,12 @@ Example:
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->commit_tax(
-        DocCode     => 'INV001',
-        DocType     => 'SalesInvoice',
-        CompanyCode => 'APITrialCompany',
-        NewDocCode  => 'INV001-1',
+        CommitTaxRequest => {
+            DocCode     => 'INV001',
+            DocType     => 'SalesInvoice',
+            CompanyCode => 'APITrialCompany',
+            NewDocCode  => 'INV001-1',
+        },
     );
 
 ## cancel\_tax
@@ -90,10 +90,12 @@ Example:
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->cancel_tax(
-        CompanyCode => 'APITrialCompany',
-        DocType     => 'SalesInvoice',
-        DocCode     => 'INV001',
-        CancelCode  => 'DocVoided',
+        CancelTaxRequest => {
+            CompanyCode => 'APITrialCompany',
+            DocType     => 'SalesInvoice',
+            DocCode     => 'INV001',
+            CancelCode  => 'DocVoided',
+        },
     );
 
 ## adjust\_tax
@@ -113,15 +115,15 @@ Example:
                 Commit       => 0,
                 DocType      => 'SalesInvoice',
                 # BusinessIdentificationNo => '234243',
-                # CustomerUsageType => 'G',
-                # ExemptionNo => '12345',
-                # Discount => 50,
-                # LocationCode => '01',
+                # CustomerUsageType        => 'G',
+                # ExemptionNo              => '12345',
+                # Discount                 => 50,
+                # LocationCode             => '01',
                 # TaxOverride => [
                 #    {   TaxOverrideType => 'TaxDate',
-                #        Reason => 'Adjustment for return',
-                #        TaxDate => '2013-07-01',
-                #        TaxAmount => 0,
+                #        Reason          => 'Adjustment for return',
+                #        TaxDate         => '2013-07-01',
+                #        TaxAmount       => 0,
                 #    },
                 # ],
                 # ServiceMode => 'Automatic',
@@ -280,8 +282,6 @@ Example:
 
 Example:
 
-    use DateTime;
-    use DateTime::Format::XSD;
     my ( $answer_ref, $trace ) = $avatax->tax_summary_fetch(
         TaxSummaryFetchRequest => {
             MerchantCode => 'example',

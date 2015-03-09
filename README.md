@@ -143,7 +143,11 @@ Example:
         }
     }
 
-## validate
+## reconcile\_tax\_history
+
+## apply\_payment
+
+## tax\_summary\_fetch
 
 # OTHER METHODS AND ATTRIBUTES
 

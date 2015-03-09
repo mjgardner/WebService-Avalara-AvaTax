@@ -218,4 +218,8 @@ Example:
         }
     }
 
-=method validate
+=method reconcile_tax_history
+
+=method apply_payment
+
+=method tax_summary_fetch

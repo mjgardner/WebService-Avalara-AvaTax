@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-use Modern::Perl '2010';
+use Modern::Perl;
 use Test::More;
 use Test::RequiresInternet ( 'development.avalara.net' => 443 );
 use Const::Fast;

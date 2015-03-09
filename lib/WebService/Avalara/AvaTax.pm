@@ -49,6 +49,11 @@ L<XML::Compile::WSDL11|XML::Compile::WSDL11> object.
 
 =over
 
+=item L<Avalara Developer Network|http://developer.avalara.com/>
+
+Official source for Avalara developer information, including API
+references, technical articles and more.
+
 =item L<Business::Tax::Avalara|Business::Tax::Avalara>
 
 An alternative that uses Avalara's REST API.
@@ -73,8 +78,9 @@ results hashref and an L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
 object suitable for debugging and exception handling.
 
 As of this writing the following operations are published in the Avalara
-AvaTax schema. Consult Avalara's Help Center for full documentation on input
-and output parameters for each operation.
+AvaTax schema. Consult
+L<Avalara's developer site|http://developer.avalara.com/>
+for full documentation on input and output parameters for each operation.
 
 =cut
 

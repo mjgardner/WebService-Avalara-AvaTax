@@ -34,8 +34,9 @@ results hashref and an [XML::Compile::SOAP::Trace](https://metacpan.org/pod/XML:
 object suitable for debugging and exception handling.
 
 As of this writing the following operations are published in the Avalara
-AvaTax schema. Consult Avalara's Help Center for full documentation on input
-and output parameters for each operation.
+AvaTax schema. Consult
+[Avalara's developer site](http://developer.avalara.com/)
+for full documentation on input and output parameters for each operation.
 
 If there is no result then an exception will be thrown.
 
@@ -302,6 +303,11 @@ call the AvaTax service, or the `wsdl` method to access the underlying
 [XML::Compile::WSDL11](https://metacpan.org/pod/XML::Compile::WSDL11) object.
 
 # SEE ALSO
+
+- [Avalara Developer Network](http://developer.avalara.com/)
+
+    Official source for Avalara developer information, including API
+    references, technical articles and more.
 
 - [Business::Tax::Avalara](https://metacpan.org/pod/Business::Tax::Avalara)
 

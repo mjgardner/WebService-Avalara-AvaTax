@@ -120,7 +120,7 @@ Example:
 
     use DateTime;
     use DateTime::Format::XSD;
-    my ( $result_ref, $trace ) = $avatax->get_tax(
+    my ( $answer_ref, $trace ) = $avatax->get_tax(
         CustomerCode => 'ABC4335',
         DocDate      => DateTime::Format::XSD->format_datetime(
             DateTime->new( year => 2014, month => 1, day => 1 ) ),
@@ -133,20 +133,80 @@ Example:
 
 =method post_tax
 
+Example:
+
+    use DateTime;
+    use DateTime::Format::XSD;
+    my ( $answer_ref, $trace ) = $avatax->post_tax(
+        CompanyCode => 'APITrialCompany',
+        DocType     => 'SalesInvoice',
+        DocCode     => 'INV001',
+        Commit      => 0,
+        DocDate     => DateTime::Format::XSD->format_datetime(
+            DateTime->new(year => 2014, month => 1, day => 1) ),
+        TotalTax    => '14.27',
+        TotalAmount => 175,
+        NewDocCode  => 'INV001-1',
+    );
+
 =method commit_tax
 
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->commit_tax(
+        DocCode     => 'INV001',
+        DocType     => 'SalesInvoice',
+        CompanyCode => 'APITrialCompany',
+        NewDocCode  => 'INV001-1',
+    );
+
 =method cancel_tax
+
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->cancel_tax(
+        CompanyCode => 'APITrialCompany',
+        DocType     => 'SalesInvoice',
+        DocCode     => 'INV001',
+        CancelCode  => 'DocVoided',
+    );
 
 =method adjust_tax
 
 =method get_tax_history
 
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->get_tax_history(
+        CompanyCode => 'APITrialCompany',
+        DocType     => 'SalesInvoice',
+        DocCode     => 'INV001',
+        DetailLevel => 'Tax',
+    );
+
 =method is_authorized
+
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->is_authorized(
+        join ', ' => qw(
+            Ping
+            IsAuthorized
+            GetTax
+            PostTax
+            GetTaxHistory
+            CommitTax
+            CancelTax
+            AdjustTax
+        ),
+    );
 
 =method ping
 
+Example:
+
     use List::Util 1.33 'any';
-    my ( $result_ref, $trace ) = $avatax->ping;
+    my ( $answer_ref, $trace ) = $avatax->ping;
     for my $code ( $result_ref->{parameters}{PingResult}{ResultCode} ) {
         if ( $code eq 'Success' ) { say $code; last }
         if ( $code eq 'Warning' ) {

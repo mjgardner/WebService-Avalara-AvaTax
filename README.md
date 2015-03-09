@@ -4,7 +4,7 @@ WebService::Avalara::AvaTax - Avalara SOAP interface as compiled Perl methods
 
 # VERSION
 
-version 0.001
+version 0.002
 
 # SYNOPSIS
 
@@ -45,7 +45,7 @@ Example:
 
     use DateTime;
     use DateTime::Format::XSD;
-    my ( $result_ref, $trace ) = $avatax->get_tax(
+    my ( $answer_ref, $trace ) = $avatax->get_tax(
         CustomerCode => 'ABC4335',
         DocDate      => DateTime::Format::XSD->format_datetime(
             DateTime->new( year => 2014, month => 1, day => 1 ) ),
@@ -58,20 +58,80 @@ Example:
 
 ## post\_tax
 
+Example:
+
+    use DateTime;
+    use DateTime::Format::XSD;
+    my ( $answer_ref, $trace ) = $avatax->post_tax(
+        CompanyCode => 'APITrialCompany',
+        DocType     => 'SalesInvoice',
+        DocCode     => 'INV001',
+        Commit      => 0,
+        DocDate     => DateTime::Format::XSD->format_datetime(
+            DateTime->new(year => 2014, month => 1, day => 1) ),
+        TotalTax    => '14.27',
+        TotalAmount => 175,
+        NewDocCode  => 'INV001-1',
+    );
+
 ## commit\_tax
 
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->commit_tax(
+        DocCode     => 'INV001',
+        DocType     => 'SalesInvoice',
+        CompanyCode => 'APITrialCompany',
+        NewDocCode  => 'INV001-1',
+    );
+
 ## cancel\_tax
+
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->cancel_tax(
+        CompanyCode => 'APITrialCompany',
+        DocType     => 'SalesInvoice',
+        DocCode     => 'INV001',
+        CancelCode  => 'DocVoided',
+    );
 
 ## adjust\_tax
 
 ## get\_tax\_history
 
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->get_tax_history(
+        CompanyCode => 'APITrialCompany',
+        DocType     => 'SalesInvoice',
+        DocCode     => 'INV001',
+        DetailLevel => 'Tax',
+    );
+
 ## is\_authorized
+
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->is_authorized(
+        join ', ' => qw(
+            Ping
+            IsAuthorized
+            GetTax
+            PostTax
+            GetTaxHistory
+            CommitTax
+            CancelTax
+            AdjustTax
+        ),
+    );
 
 ## ping
 
+Example:
+
     use List::Util 1.33 'any';
-    my ( $result_ref, $trace ) = $avatax->ping;
+    my ( $answer_ref, $trace ) = $avatax->ping;
     for my $code ( $result_ref->{parameters}{PingResult}{ResultCode} ) {
         if ( $code eq 'Success' ) { say $code; last }
         if ( $code eq 'Warning' ) {

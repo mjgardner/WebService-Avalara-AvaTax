@@ -1,7 +1,8 @@
 Revision history for perl distribution WebService-Avalara-AvaTax
 
 {{$NEXT}}
-
+    - no functional changes
+    - fix and complete example method calls in documentation
 0.003     2015-03-09 13:47:22-04:00 America/New_York (TRIAL RELEASE)
     - no functional changes
     - update license and add SEE ALSO section to docs

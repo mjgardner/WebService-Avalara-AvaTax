@@ -1,0 +1,34 @@
+severity = brutal
+verbose = 8
+exclude = CodeLayout::ProhibitHashBarewords Perl::Critic::Policy::Documentation::RequirePODUseEncodingUTF8 Editor::RequireEmacsFileVariables Modules::RequirePerlVersion Tics::ProhibitLongLines
+
+[Bangs::ProhibitCommentedOutCode]
+commentedcoderegex = pod\s+\K\$[A-Za-z_].*=
+
+[CodeLayout::RequireTidyCode]
+perltidyrc = xt/author/perltidy.rc
+
+# using Modern::Perl
+[Compatibility::PerlMinimumVersionAndWhy]
+above_version = 5.010
+[Compatibility::PodMinimumVersion]
+above_version = 5.010
+
+[ControlStructures::ProhibitPostfixControls]
+flowcontrol = carp cluck confess croak die exit goto warn throw
+
+[Documentation::RequirePodSections]
+lib_sections = NAME | VERSION | SYNOPSIS | DESCRIPTION | SUPPORT | AUTHOR | COPYRIGHT AND LICENSE
+script_sections = NAME | USAGE | DESCRIPTION | CONFIGURATION | SUPPORT | AUTHOR | COPYRIGHT AND LICENSE
+
+[Subroutines::ProhibitCallsToUndeclaredSubs]
+exempt_subs = Const::Fast::const Moo::has Moo::with Moo::Role::has
+
+[Subroutines::ProhibitUnusedPrivateSubroutines]
+private_name_regex = _(?!build_)\w+
+
+[TestingAndDebugging::RequireUseStrict]
+equivalent_modules = Modern::Perl
+
+[TestingAndDebugging::RequireUseWarnings]
+equivalent_modules = Modern::Perl

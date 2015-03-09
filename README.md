@@ -4,7 +4,7 @@ WebService::Avalara::AvaTax - Avalara SOAP interface as compiled Perl methods
 
 # VERSION
 
-version 0.003
+version 0.004
 
 # SYNOPSIS
 
@@ -98,15 +98,116 @@ Example:
 
 ## adjust\_tax
 
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->adjust_tax(
+        AdjustTaxRequest => {
+            AdjustmentReason      => 4,
+            AdjustmentDescription => 'Transaction Adjusted for Testing',
+            GetTaxRequest => {
+                CustomerCode => 'ABC4335',
+                DocDate      => '2014-01-01',
+                CompanyCode  => 'APITrialCompany',
+                DocCode      => 'INV001',
+                DetailLevel  => 'Tax',
+                Commit       => 0,
+                DocType      => 'SalesInvoice',
+                # BusinessIdentificationNo => '234243',
+                # CustomerUsageType => 'G',
+                # ExemptionNo => '12345',
+                # Discount => 50,
+                # LocationCode => '01',
+                # TaxOverride => [
+                #    {   TaxOverrideType => 'TaxDate',
+                #        Reason => 'Adjustment for return',
+                #        TaxDate => '2013-07-01',
+                #        TaxAmount => 0,
+                #    },
+                # ],
+                # ServiceMode => 'Automatic',
+                PurchaseOrderNo     => 'PO123456',
+                ReferenceCode       => 'ref123456',
+                PosLaneCode         => '09',
+                CurrencyCode        => 'USD',
+                ExchangeRate        => '1.0',
+                ExchangeRateEffDate => '2013-01-01',
+                SalespersonCode     => 'Bill Sales',
+                Addresses => {BaseAddress => [
+                    {   AddressCode => '01',
+                        Line1       => '45 Fremont Street',
+                        City        => 'San Francisco',
+                        Region      => 'CA',
+                    },
+                    {   AddressCode => '02',
+                        Line1       => '118 N Clark St',
+                        Line2       => 'Suite 100',
+                        Line3       => 'ATTN Accounts Payable',
+                        City        => 'Chicago',
+                        Region      => 'IL',
+                        Country     => 'US',
+                        PostalCode  => '60602',
+                    },
+                    {   AddressCode => '03',
+                        Latitude    => '47.627935',
+                        Longitude   => '-122.51702',
+                    },
+                ] },
+                Lines => {Line => [
+                    {   No              => '01',
+                        ItemCode        => 'N543',
+                        Qty             => 1,
+                        Amount          => 10,
+                        TaxCode         => 'NT',
+                        Description     => 'Red Size 7 Widget',
+                        OriginCode      => '01',
+                        DestinationCode => '02',
+                        # CustomerUsageType => 'L',
+                        # ExemptionNo       => '12345',
+                        # Discounted        => 1,
+                        # TaxIncluded       => 1,
+                        # TaxOverride => {
+                        #     TaxOverrideType => 'TaxDate',
+                        #     Reason          => 'Adjustment for return',
+                        #     TaxDate         => '2013-07-01',
+                        #     TaxAmount       => 0,
+                        # },
+                        Ref1 => 'ref123',
+                        Ref2 => 'ref456',
+                    },
+                    {   No              => '02',
+                        ItemCode        => 'T345',
+                        Qty             => 3,
+                        Amount          => 150,
+                        OriginCode      => '01',
+                        DestinationCode => '03',
+                        Description     => 'Size 10 Green Running Shoe',
+                        TaxCode         => 'PC30147',
+                    },
+                    {   No              => '02-FR',
+                        ItemCode        => 'FREIGHT',
+                        Qty             => 1,
+                        Amount          => 15,
+                        OriginCode      => '01',
+                        DestinationCode => '03',
+                        Description     => 'Shipping Charge',
+                        TaxCode         => 'FR',
+                    },
+                ] },
+            },
+        },
+    );
+
 ## get\_tax\_history
 
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->get_tax_history(
-        CompanyCode => 'APITrialCompany',
-        DocType     => 'SalesInvoice',
-        DocCode     => 'INV001',
-        DetailLevel => 'Tax',
+        GetTaxHistoryRequest => {
+            CompanyCode => 'APITrialCompany',
+            DocType     => 'SalesInvoice',
+            DocCode     => 'INV001',
+            DetailLevel => 'Tax',
+        },
     );
 
 ## is\_authorized
@@ -131,7 +232,7 @@ Example:
 Example:
 
     use List::Util 1.33 'any';
-    my ( $answer_ref, $trace ) = $avatax->ping;
+    my ( $answer_ref, $trace ) = $avatax->ping( Message => 'ignored' );
     for my $code ( $result_ref->{parameters}{PingResult}{ResultCode} ) {
         if ( $code eq 'Success' ) { say $code; last }
         if ( $code eq 'Warning' ) {
@@ -145,9 +246,49 @@ Example:
 
 ## reconcile\_tax\_history
 
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->reconcile_tax_history(
+        ReconcileTaxHistoryRequest => {
+            CompanyCode => 'APITrialCompany',
+            LastDocId   => 'example',
+            Reconciled  => 1,
+            StartDate   => '2014-01-01',
+            EndDate     => '2014-01-31',
+            DocStatus   => 'Temporary',
+            DocType     => 'SalesOrder',
+            LastDocCode => 'example',
+            PageSize    => 10,
+        },
+    );
+
 ## apply\_payment
 
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->apply_payment(
+        ApplyPaymentRequest => {
+            DocId       => 'example',
+            CompanyCode => 'APITrialCompany',
+            DocType     => 'SalesInvoice',
+            DocCode     => 'INV001',
+            PaymentDate => '2014-01-01',
+        },
+    );
+
 ## tax\_summary\_fetch
+
+Example:
+
+    use DateTime;
+    use DateTime::Format::XSD;
+    my ( $answer_ref, $trace ) = $avatax->tax_summary_fetch(
+        TaxSummaryFetchRequest => {
+            MerchantCode => 'example',
+            StartDate    => '2014-01-01',
+            EndDate      => '2014-01-31',
+        },
+    );
 
 # OTHER METHODS AND ATTRIBUTES
 

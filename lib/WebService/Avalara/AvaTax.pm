@@ -45,6 +45,22 @@ attribute to access the L<LWP::UserAgent|LWP::UserAgent> used to retrieve and
 call the AvaTax service, or the C<wsdl> method to access the underlying
 L<XML::Compile::WSDL11|XML::Compile::WSDL11> object.
 
+=head1 SEE ALSO
+
+=over
+
+=item L<Business::Tax::Avalara|Business::Tax::Avalara>
+
+An alternative that uses Avalara's REST API.
+
+=item L<XML::Compile::SOAP|XML::Compile::SOAP> and L<XML::Compile::WSDL11|XML::Compile::WSDL11>
+
+Part of the L<XML::Compile|XML::Compile> suite
+and the basis for this distribution. It's helpful to understand these in
+order to debug or extend this module.
+
+=back
+
 =for Pod::Coverage BUILD
 
 =head1 METHODS

@@ -4,7 +4,7 @@ WebService::Avalara::AvaTax - Avalara SOAP interface as compiled Perl methods
 
 # VERSION
 
-version 0.002
+version 0.003
 
 # SYNOPSIS
 
@@ -159,6 +159,18 @@ You can also use other attributes, such as the `user_agent`
 attribute to access the [LWP::UserAgent](https://metacpan.org/pod/LWP::UserAgent) used to retrieve and
 call the AvaTax service, or the `wsdl` method to access the underlying
 [XML::Compile::WSDL11](https://metacpan.org/pod/XML::Compile::WSDL11) object.
+
+# SEE ALSO
+
+- [Business::Tax::Avalara](https://metacpan.org/pod/Business::Tax::Avalara)
+
+    An alternative that uses Avalara's REST API.
+
+- [XML::Compile::SOAP](https://metacpan.org/pod/XML::Compile::SOAP) and [XML::Compile::WSDL11](https://metacpan.org/pod/XML::Compile::WSDL11)
+
+    Part of the [XML::Compile](https://metacpan.org/pod/XML::Compile) suite
+    and the basis for this distribution. It's helpful to understand these in
+    order to debug or extend this module.
 
 # SUPPORT
 

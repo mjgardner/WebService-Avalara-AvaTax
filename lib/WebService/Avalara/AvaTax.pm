@@ -189,7 +189,7 @@ Example:
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->is_authorized(
-        join ', ' => qw(
+        Operations => join ', ' => qw(
             Ping
             IsAuthorized
             GetTax

@@ -20,10 +20,10 @@ my $avatax = new_ok(
     'AvaTax',
 );
 
-my ( $result_ref, $trace ) = $avatax->ping;
+my ( $answer_ref, $trace ) = $avatax->ping;
 
 if (not is(
-        $result_ref->{parameters}{PingResult}{ResultCode} => 'Success',
+        $answer_ref->{parameters}{PingResult}{ResultCode} => 'Success',
         'ping',
     )
     )

@@ -2,7 +2,7 @@ package WebService::Avalara::AvaTax::Role::Connection;
 
 # ABSTRACT: Wrapper for Avalara AvaTax web services
 
-use Modern::Perl '2010';    ## no critic (Modules::ProhibitUseQuotedVersion)
+use Modern::Perl '2011';    ## no critic (Modules::ProhibitUseQuotedVersion)
 
 # VERSION
 use utf8;
@@ -171,8 +171,7 @@ sub call {
         $operation => {
             Profile => {
                 Client => "$PROGRAM_NAME," . ( $main::VERSION // q{} ),
-                Adapter => __PACKAGE__ . ','
-                    . ( $__PACKAGE__::VERSION // q{} ),
+                Adapter => __PACKAGE__ . q{,} . ( $VERSION // q{} ),
                 Machine => hostname(),
             },
             parameters => {@params},
@@ -186,7 +185,8 @@ An instance of an L<LWP::UserAgent|LWP::UserAgent> (sub-)class. You can
 use your own subclass to add features such as caching or enhanced logging.
 
 If you do not specify a C<user_agent> then we default to an
-L<LWPx::UserAgent::Cached|LWPx::UserAgent::Cached> with its C<ssl_opts> parameter set to C<<{verify_hostname => 0}>>.
+L<LWPx::UserAgent::Cached|LWPx::UserAgent::Cached> with its C<ssl_opts>
+parameter set to C<< {verify_hostname => 0} >>.
 
 =cut
 

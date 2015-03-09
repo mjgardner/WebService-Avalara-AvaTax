@@ -10,9 +10,9 @@ perltidyrc = xt/author/perltidy.rc
 
 # using Modern::Perl
 [Compatibility::PerlMinimumVersionAndWhy]
-above_version = 5.010
+above_version = 5.012
 [Compatibility::PodMinimumVersion]
-above_version = 5.010
+above_version = 5.012
 
 [ControlStructures::ProhibitPostfixControls]
 flowcontrol = carp cluck confess croak die exit goto warn throw
@@ -22,7 +22,7 @@ lib_sections = NAME | VERSION | SYNOPSIS | DESCRIPTION | SUPPORT | AUTHOR | COPY
 script_sections = NAME | USAGE | DESCRIPTION | CONFIGURATION | SUPPORT | AUTHOR | COPYRIGHT AND LICENSE
 
 [Subroutines::ProhibitCallsToUndeclaredSubs]
-exempt_subs = Const::Fast::const Moo::has Moo::with Moo::Role::has
+exempt_subs = Const::Fast::const Log::Report::dispatcher Moo::has Moo::with Moo::Role::has Sys::Hostname::hostname
 
 [Subroutines::ProhibitUnusedPrivateSubroutines]
 private_name_regex = _(?!build_)\w+

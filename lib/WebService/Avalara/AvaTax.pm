@@ -2,7 +2,7 @@ package WebService::Avalara::AvaTax;
 
 # ABSTRACT: Avalara SOAP interface as compiled Perl methods
 
-use Modern::Perl '2010';    ## no critic (Modules::ProhibitUseQuotedVersion)
+use Modern::Perl '2011';    ## no critic (Modules::ProhibitUseQuotedVersion)
 
 # VERSION
 use utf8;

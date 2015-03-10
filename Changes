@@ -1,6 +1,6 @@
 Revision history for perl distribution WebService-Avalara-AvaTax
 
-{{$NEXT}}
+0.006     2015-03-10 11:52:22-04:00 America/New_York (TRIAL RELEASE)
     - remove extra "FooRequest => {}" around method parameters
 0.005     2015-03-09 21:30:34-04:00 America/New_York (TRIAL RELEASE)
     - rolled up WebService::Avalara::AvaTax::Role::Connection into main

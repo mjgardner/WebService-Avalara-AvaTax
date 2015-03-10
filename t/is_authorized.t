@@ -19,8 +19,7 @@ my $avatax
     = WebService::Avalara::AvaTax->new( map { ( $_ => $ENV{"AVALARA_\U$_"} ) }
         @AVALARA_ENV );
 
-my ( $answer_ref, $trace )
-    = $avatax->is_authorized( Operations => $AUTHORIZED_LIST );
+my ( $answer_ref, $trace ) = $avatax->is_authorized($AUTHORIZED_LIST);
 
 is( $answer_ref->{parameters}{IsAuthorizedResult}{ResultCode} => 'Success',
     $AUTHORIZED_LIST

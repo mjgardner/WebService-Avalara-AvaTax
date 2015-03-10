@@ -248,6 +248,23 @@ has _stash => (
     default => sub { Package::Stash->new(__PACKAGE__) },
 );
 
+const my %OPERATION_PARAMETER => (
+    Ping         => 'Message',
+    IsAuthorized => 'Operations',
+    map { ( $_ => "${_}Request" ) }
+        qw(
+        GetTax
+        GetTaxHistory
+        PostTax
+        CommitTax
+        CancelTax
+        ReconcileTaxHistory
+        AdjustTax
+        ApplyPayment
+        TaxSummaryFetch
+        ),
+);
+
 sub _method_closure {
     my $operation = shift;
     return sub {
@@ -271,7 +288,11 @@ sub _method_closure {
                     Adapter => __PACKAGE__ . q{,} . ( $VERSION // q{} ),
                     Machine => hostname(),
                 },
-                parameters => {@parameters},
+                parameters => {
+                    $OPERATION_PARAMETER{$operation} => @parameters % 2
+                    ? "@parameters"
+                    : {@parameters},
+                },
             },
         );
 
@@ -297,15 +318,13 @@ __END__
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->get_tax(
-        GetTaxRequest => {
-            CustomerCode => 'ABC4335',
-            DocDate      => '2014-01-01',
-            CompanyCode  => 'APITrialCompany',
-            DocCode      => 'INV001',
-            DetailLevel  =>  'Tax',
-            Commit       => 0,
-            DocType      => 'SalesInvoice',
-        },
+        CustomerCode => 'ABC4335',
+        DocDate      => '2014-01-01',
+        CompanyCode  => 'APITrialCompany',
+        DocCode      => 'INV001',
+        DetailLevel  =>  'Tax',
+        Commit       => 0,
+        DocType      => 'SalesInvoice',
     );
 
 =method post_tax
@@ -313,16 +332,14 @@ Example:
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->post_tax(
-        PostTaxRequest => {
-            CompanyCode => 'APITrialCompany',
-            DocType     => 'SalesInvoice',
-            DocCode     => 'INV001',
-            Commit      => 0,
-            DocDate     => '2014-01-01',
-            TotalTax    => '14.27',
-            TotalAmount => 175,
-            NewDocCode  => 'INV001-1',
-        },
+        CompanyCode => 'APITrialCompany',
+        DocType     => 'SalesInvoice',
+        DocCode     => 'INV001',
+        Commit      => 0,
+        DocDate     => '2014-01-01',
+        TotalTax    => '14.27',
+        TotalAmount => 175,
+        NewDocCode  => 'INV001-1',
     );
 
 =method commit_tax
@@ -330,12 +347,10 @@ Example:
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->commit_tax(
-        CommitTaxRequest => {
-            DocCode     => 'INV001',
-            DocType     => 'SalesInvoice',
-            CompanyCode => 'APITrialCompany',
-            NewDocCode  => 'INV001-1',
-        },
+        DocCode     => 'INV001',
+        DocType     => 'SalesInvoice',
+        CompanyCode => 'APITrialCompany',
+        NewDocCode  => 'INV001-1',
     );
 
 =method cancel_tax
@@ -343,12 +358,10 @@ Example:
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->cancel_tax(
-        CancelTaxRequest => {
-            CompanyCode => 'APITrialCompany',
-            DocType     => 'SalesInvoice',
-            DocCode     => 'INV001',
-            CancelCode  => 'DocVoided',
-        },
+        CompanyCode => 'APITrialCompany',
+        DocType     => 'SalesInvoice',
+        DocCode     => 'INV001',
+        CancelCode  => 'DocVoided',
     );
 
 =method adjust_tax
@@ -356,99 +369,97 @@ Example:
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->adjust_tax(
-        AdjustTaxRequest => {
-            AdjustmentReason      => 4,
-            AdjustmentDescription => 'Transaction Adjusted for Testing',
-            GetTaxRequest => {
-                CustomerCode => 'ABC4335',
-                DocDate      => '2014-01-01',
-                CompanyCode  => 'APITrialCompany',
-                DocCode      => 'INV001',
-                DetailLevel  => 'Tax',
-                Commit       => 0,
-                DocType      => 'SalesInvoice',
-                # BusinessIdentificationNo => '234243',
-                # CustomerUsageType        => 'G',
-                # ExemptionNo              => '12345',
-                # Discount                 => 50,
-                # LocationCode             => '01',
-                # TaxOverride => [
-                #    {   TaxOverrideType => 'TaxDate',
-                #        Reason          => 'Adjustment for return',
-                #        TaxDate         => '2013-07-01',
-                #        TaxAmount       => 0,
-                #    },
-                # ],
-                # ServiceMode => 'Automatic',
-                PurchaseOrderNo     => 'PO123456',
-                ReferenceCode       => 'ref123456',
-                PosLaneCode         => '09',
-                CurrencyCode        => 'USD',
-                ExchangeRate        => '1.0',
-                ExchangeRateEffDate => '2013-01-01',
-                SalespersonCode     => 'Bill Sales',
-                Addresses => {BaseAddress => [
-                    {   AddressCode => '01',
-                        Line1       => '45 Fremont Street',
-                        City        => 'San Francisco',
-                        Region      => 'CA',
-                    },
-                    {   AddressCode => '02',
-                        Line1       => '118 N Clark St',
-                        Line2       => 'Suite 100',
-                        Line3       => 'ATTN Accounts Payable',
-                        City        => 'Chicago',
-                        Region      => 'IL',
-                        Country     => 'US',
-                        PostalCode  => '60602',
-                    },
-                    {   AddressCode => '03',
-                        Latitude    => '47.627935',
-                        Longitude   => '-122.51702',
-                    },
-                ] },
-                Lines => {Line => [
-                    {   No              => '01',
-                        ItemCode        => 'N543',
-                        Qty             => 1,
-                        Amount          => 10,
-                        TaxCode         => 'NT',
-                        Description     => 'Red Size 7 Widget',
-                        OriginCode      => '01',
-                        DestinationCode => '02',
-                        # CustomerUsageType => 'L',
-                        # ExemptionNo       => '12345',
-                        # Discounted        => 1,
-                        # TaxIncluded       => 1,
-                        # TaxOverride => {
-                        #     TaxOverrideType => 'TaxDate',
-                        #     Reason          => 'Adjustment for return',
-                        #     TaxDate         => '2013-07-01',
-                        #     TaxAmount       => 0,
-                        # },
-                        Ref1 => 'ref123',
-                        Ref2 => 'ref456',
-                    },
-                    {   No              => '02',
-                        ItemCode        => 'T345',
-                        Qty             => 3,
-                        Amount          => 150,
-                        OriginCode      => '01',
-                        DestinationCode => '03',
-                        Description     => 'Size 10 Green Running Shoe',
-                        TaxCode         => 'PC30147',
-                    },
-                    {   No              => '02-FR',
-                        ItemCode        => 'FREIGHT',
-                        Qty             => 1,
-                        Amount          => 15,
-                        OriginCode      => '01',
-                        DestinationCode => '03',
-                        Description     => 'Shipping Charge',
-                        TaxCode         => 'FR',
-                    },
-                ] },
-            },
+        AdjustmentReason      => 4,
+        AdjustmentDescription => 'Transaction Adjusted for Testing',
+        GetTaxRequest => {
+            CustomerCode => 'ABC4335',
+            DocDate      => '2014-01-01',
+            CompanyCode  => 'APITrialCompany',
+            DocCode      => 'INV001',
+            DetailLevel  => 'Tax',
+            Commit       => 0,
+            DocType      => 'SalesInvoice',
+            # BusinessIdentificationNo => '234243',
+            # CustomerUsageType        => 'G',
+            # ExemptionNo              => '12345',
+            # Discount                 => 50,
+            # LocationCode             => '01',
+            # TaxOverride => [
+            #    {   TaxOverrideType => 'TaxDate',
+            #        Reason          => 'Adjustment for return',
+            #        TaxDate         => '2013-07-01',
+            #        TaxAmount       => 0,
+            #    },
+            # ],
+            # ServiceMode => 'Automatic',
+            PurchaseOrderNo     => 'PO123456',
+            ReferenceCode       => 'ref123456',
+            PosLaneCode         => '09',
+            CurrencyCode        => 'USD',
+            ExchangeRate        => '1.0',
+            ExchangeRateEffDate => '2013-01-01',
+            SalespersonCode     => 'Bill Sales',
+            Addresses => { BaseAddress => [
+                {   AddressCode => '01',
+                    Line1       => '45 Fremont Street',
+                    City        => 'San Francisco',
+                    Region      => 'CA',
+                },
+                {   AddressCode => '02',
+                    Line1       => '118 N Clark St',
+                    Line2       => 'Suite 100',
+                    Line3       => 'ATTN Accounts Payable',
+                    City        => 'Chicago',
+                    Region      => 'IL',
+                    Country     => 'US',
+                    PostalCode  => '60602',
+                },
+                {   AddressCode => '03',
+                    Latitude    => '47.627935',
+                    Longitude   => '-122.51702',
+                },
+            ] },
+            Lines => { Line => [
+                {   No              => '01',
+                    ItemCode        => 'N543',
+                    Qty             => 1,
+                    Amount          => 10,
+                    TaxCode         => 'NT',
+                    Description     => 'Red Size 7 Widget',
+                    OriginCode      => '01',
+                    DestinationCode => '02',
+                    # CustomerUsageType => 'L',
+                    # ExemptionNo       => '12345',
+                    # Discounted        => 1,
+                    # TaxIncluded       => 1,
+                    # TaxOverride => {
+                    #     TaxOverrideType => 'TaxDate',
+                    #     Reason          => 'Adjustment for return',
+                    #     TaxDate         => '2013-07-01',
+                    #     TaxAmount       => 0,
+                    # },
+                    Ref1 => 'ref123',
+                    Ref2 => 'ref456',
+                },
+                {   No              => '02',
+                    ItemCode        => 'T345',
+                    Qty             => 3,
+                    Amount          => 150,
+                    OriginCode      => '01',
+                    DestinationCode => '03',
+                    Description     => 'Size 10 Green Running Shoe',
+                    TaxCode         => 'PC30147',
+                },
+                {   No              => '02-FR',
+                    ItemCode        => 'FREIGHT',
+                    Qty             => 1,
+                    Amount          => 15,
+                    OriginCode      => '01',
+                    DestinationCode => '03',
+                    Description     => 'Shipping Charge',
+                    TaxCode         => 'FR',
+                },
+            ] },
         },
     );
 
@@ -457,30 +468,26 @@ Example:
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->get_tax_history(
-        GetTaxHistoryRequest => {
-            CompanyCode => 'APITrialCompany',
-            DocType     => 'SalesInvoice',
-            DocCode     => 'INV001',
-            DetailLevel => 'Tax',
-        },
+        CompanyCode => 'APITrialCompany',
+        DocType     => 'SalesInvoice',
+        DocCode     => 'INV001',
+        DetailLevel => 'Tax',
     );
 
 =method is_authorized
 
 Example:
 
-    my ( $answer_ref, $trace ) = $avatax->is_authorized(
-        Operations => join ', ' => qw(
-            Ping
-            IsAuthorized
-            GetTax
-            PostTax
-            GetTaxHistory
-            CommitTax
-            CancelTax
-            AdjustTax
-        ),
-    );
+    my ( $answer_ref, $trace ) = $avatax->is_authorized( join ', ' => qw(
+        Ping
+        IsAuthorized
+        GetTax
+        PostTax
+        GetTaxHistory
+        CommitTax
+        CancelTax
+        AdjustTax
+    ) );
 
 =method ping
 
@@ -504,17 +511,15 @@ Example:
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->reconcile_tax_history(
-        ReconcileTaxHistoryRequest => {
-            CompanyCode => 'APITrialCompany',
-            LastDocId   => 'example',
-            Reconciled  => 1,
-            StartDate   => '2014-01-01',
-            EndDate     => '2014-01-31',
-            DocStatus   => 'Temporary',
-            DocType     => 'SalesOrder',
-            LastDocCode => 'example',
-            PageSize    => 10,
-        },
+        CompanyCode => 'APITrialCompany',
+        LastDocId   => 'example',
+        Reconciled  => 1,
+        StartDate   => '2014-01-01',
+        EndDate     => '2014-01-31',
+        DocStatus   => 'Temporary',
+        DocType     => 'SalesOrder',
+        LastDocCode => 'example',
+        PageSize    => 10,
     );
 
 =method apply_payment
@@ -522,13 +527,11 @@ Example:
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->apply_payment(
-        ApplyPaymentRequest => {
-            DocId       => 'example',
-            CompanyCode => 'APITrialCompany',
-            DocType     => 'SalesInvoice',
-            DocCode     => 'INV001',
-            PaymentDate => '2014-01-01',
-        },
+        DocId       => 'example',
+        CompanyCode => 'APITrialCompany',
+        DocType     => 'SalesInvoice',
+        DocCode     => 'INV001',
+        PaymentDate => '2014-01-01',
     );
 
 =method tax_summary_fetch
@@ -536,9 +539,7 @@ Example:
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->tax_summary_fetch(
-        TaxSummaryFetchRequest => {
-            MerchantCode => 'example',
-            StartDate    => '2014-01-01',
-            EndDate      => '2014-01-31',
-        },
+        MerchantCode => 'example',
+        StartDate    => '2014-01-01',
+        EndDate      => '2014-01-31',
     );

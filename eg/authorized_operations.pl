@@ -13,8 +13,7 @@ my $avatax
         @AVALARA_ENV );
 
 my ( $answer_ref, $trace )
-    = $avatax->is_authorized(
-    Operations => join q{, } => uniq map { $_->name }
+    = $avatax->is_authorized( join q{, } => uniq map { $_->name }
         $avatax->wsdl->operations );
 
 if ( 'Success' eq $answer_ref->{parameters}{IsAuthorizedResult}{ResultCode} )

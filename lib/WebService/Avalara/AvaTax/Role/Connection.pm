@@ -51,21 +51,8 @@ The password used for Avalara authentication. Required.
 
 has password => ( is => 'ro', isa => Str, required => 1 );
 
-=attr soap_service
-
-The SOAP service name for AvaTax. Defaults to C<TaxSvc>.
-
-=cut
-
-has soap_service => ( is => 'ro', isa => Str, default => 'TaxSvc' );
-
-=attr soap_port
-
-The SOAP service name for AvaTax. Defaults to C<TaxSvcSoap>.
-
-=cut
-
-has soap_port => ( is => 'ro', isa => Str, default => 'TaxSvcSoap' );
+has _soap_service => ( is => 'ro', isa => Str, default => 'TaxSvc' );
+has _soap_port    => ( is => 'ro', isa => Str, default => 'TaxSvcSoap' );
 
 has _wss => (
     is      => 'ro',
@@ -116,19 +103,10 @@ has debug => (
         sub { dispatcher( mode => ( $_[1] ? 'DEBUG' : 'NORMAL' ), 'ALL' ) },
 );
 
-=attr transport
-
-An L<XML::Compile::Transport::SOAPHTTP|XML::Compile::Transport::SOAPHTTP>
-object used to make SOAP calls. By default it uses C<user_agent> along with
-C<wsdl>'s C<endPoint> for the address, and adds a handler for C<POST>s to
-the endpoint to add the appropriate C<SOAPAction> HTTP header.
-
-=cut
-
-has transport =>
+has _transport =>
     ( is => 'lazy', isa => InstanceOf ['XML::Compile::Transport::SOAPHTTP'] );
 
-sub _build_transport {
+sub _build__transport {
     my $self = shift;
     my $wss  = $self->_wss;
     my $wsdl = $self->wsdl;
@@ -136,8 +114,8 @@ sub _build_transport {
 
     my $user_agent  = $self->user_agent;
     my %soap_params = (
-        service => $self->soap_service,
-        port    => $self->soap_port,
+        service => $self->_soap_service,
+        port    => $self->_soap_port,
     );
     my $endpoint_uri = URI->new( $wsdl->endPoint(%soap_params) );
     $user_agent->add_handler(
@@ -160,7 +138,9 @@ has _operation_name => ( is => 'rw', isa => Str, default => q{} );
 
 =method call
 
-Given an operation name and parameters, makes a SOAP call.
+Given an operation name and parameters, makes a SOAP call. The operation will
+also receive a C<Profile> parameter containing information about the program,
+machine and version of this module making the call.
 
 =cut
 
@@ -198,7 +178,18 @@ has user_agent => (
     },
 );
 
-has wsdl => ( is => 'lazy', isa => InstanceOf ['XML::Compile::WSDL11'] );
+=attr wsdl
+
+After construction, you can retrieve the created
+L<XML::Compile::WSDL11|XML::Compile::WSDL11> instance.
+
+=cut
+
+has wsdl => (
+    is       => 'lazy',
+    isa      => InstanceOf ['XML::Compile::WSDL11'],
+    init_arg => undef,
+);
 
 sub _build_wsdl {
     my $self = shift;

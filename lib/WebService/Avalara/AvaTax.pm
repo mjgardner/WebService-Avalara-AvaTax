@@ -111,9 +111,9 @@ sub _method_closure {
         if ( not $self->_compiled->{$method} ) {
             $wsdl->compileCall(
                 $method,
-                transport => $self->transport,
-                service   => $self->soap_service,
-                port      => $self->soap_port,
+                transport => $self->_transport,
+                service   => $self->_soap_service,
+                port      => $self->_soap_port,
             );
             $self->_compiled->{$method} = 1;
         }

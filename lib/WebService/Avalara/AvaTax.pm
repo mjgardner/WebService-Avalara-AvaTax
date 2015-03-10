@@ -506,7 +506,57 @@ Example:
         }
     }
 
-=method reconcile_tax_history
+=method tax_summary_fetch
+
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->tax_summary_fetch(
+        MerchantCode => 'example',
+        StartDate    => '2014-01-01',
+        EndDate      => '2014-01-31',
+    );
+
+=method apply_payment (DEPRECATED)
+
+From L<Avalara API documentation|http://developer.avalara.com/api-docs/soap/applypayment>:
+
+=over
+
+The ApplyPayment method of the TaxSvc was originally designed to update an
+existing document record with a PaymentDate value. This function (and
+cash-basis accounting in general) is no longer supported, and will not work on
+new or existing accounts, but remains in the TaxSvc WSDL and some
+automatically built adaptors for backwards compatibility.
+
+=back
+
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->apply_payment(
+        DocId       => 'example',
+        CompanyCode => 'APITrialCompany',
+        DocType     => 'SalesInvoice',
+        DocCode     => 'INV001',
+        PaymentDate => '2014-01-01',
+    );
+
+=method reconcile_tax_history (LEGACY API)
+
+From L<Avalara API documentation|http://developer.avalara.com/api-docs/soap/reconciletaxhistory>:
+
+=over
+
+The ReconcileTaxHistory method of the TaxSvc was designed to allow users to
+pull a range of documents for reconciliation against a document of record
+(i.e. in the ERP), and then flag the reconciled documents as completed. Those
+flagged documents would then be omitted from subsequent ReconcileTaxHistory
+calls. This method no longer changes the "reconciled" document flag, but can
+be used to retrieve ranges of document data (much like the AccountSvc
+L<DocumentFetch|http://developer.avalara.com/api-docs/soap/accountsvc/document-elements>),
+and remains in the TaxSvc WSDL and some automatically built
+adaptors for backwards compatibility.
+
+=back
 
 Example:
 
@@ -520,26 +570,4 @@ Example:
         DocType     => 'SalesOrder',
         LastDocCode => 'example',
         PageSize    => 10,
-    );
-
-=method apply_payment
-
-Example:
-
-    my ( $answer_ref, $trace ) = $avatax->apply_payment(
-        DocId       => 'example',
-        CompanyCode => 'APITrialCompany',
-        DocType     => 'SalesInvoice',
-        DocCode     => 'INV001',
-        PaymentDate => '2014-01-01',
-    );
-
-=method tax_summary_fetch
-
-Example:
-
-    my ( $answer_ref, $trace ) = $avatax->tax_summary_fetch(
-        MerchantCode => 'example',
-        StartDate    => '2014-01-01',
-        EndDate      => '2014-01-31',
     );

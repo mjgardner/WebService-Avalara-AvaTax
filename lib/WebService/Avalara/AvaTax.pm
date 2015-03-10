@@ -194,21 +194,6 @@ sub _build__transport {
 
 has _operation_name => ( is => 'rw', isa => Str, default => q{} );
 
-sub _call {
-    my ( $self, $operation, @params ) = @_;
-    $self->_operation_name($operation);
-    return $self->wsdl->call(
-        $operation => {
-            Profile => {
-                Client => "$PROGRAM_NAME," . ( $main::VERSION // q{} ),
-                Adapter => __PACKAGE__ . q{,} . ( $VERSION // q{} ),
-                Machine => hostname(),
-            },
-            parameters => {@params},
-        },
-    );
-}
-
 =head1 SEE ALSO
 
 =over
@@ -264,20 +249,31 @@ has _stash => (
 );
 
 sub _method_closure {
-    my $method = shift;
+    my $operation = shift;
     return sub {
-        my $self = shift;
+        my ( $self, @parameters ) = @_;
         my $wsdl = $self->wsdl;
-        if ( not $self->_compiled->{$method} ) {
+        if ( not $self->_compiled->{$operation} ) {
             $wsdl->compileCall(
-                $method,
+                $operation,
                 transport => $self->_transport,
                 service   => $self->_soap_service,
                 port      => $self->_soap_port,
             );
-            $self->_compiled->{$method} = 1;
+            $self->_compiled->{$operation} = 1;
         }
-        my ( $answer_ref, $trace ) = $self->_call( $method => @_ );
+
+        $self->_operation_name($operation);
+        my ( $answer_ref, $trace ) = $wsdl->call(
+            $operation => {
+                Profile => {
+                    Client => "$PROGRAM_NAME," . ( $main::VERSION // q{} ),
+                    Adapter => __PACKAGE__ . q{,} . ( $VERSION // q{} ),
+                    Machine => hostname(),
+                },
+                parameters => {@parameters},
+            },
+        );
 
 =pod
 

@@ -26,60 +26,18 @@ parameters but will use the same compiled code.
 
 # METHODS
 
-Aside from the `new` and `call` methods, available method names are
-dynamically loaded from the AvaTax WSDL file's operations and can be passed
-either a hash or reference to a hash with the necessary parameters. In scalar
-context they return a reference to a hash containing the results of the SOAP
-call; in list context they return the results hashref and an
+Aside from the ["new"](#new) method, available method names are dynamically loaded
+from the AvaTax WSDL file's operations and can be passed either a hash or
+reference to a hash with the necessary parameters. In scalar context they
+return a reference to a hash containing the results of the SOAP call; in list
+context they return the results hashref and an
 [XML::Compile::SOAP::Trace](https://metacpan.org/pod/XML::Compile::SOAP::Trace)
 object suitable for debugging and exception handling.
 
-As of this writing the following operations are published in the Avalara
-AvaTax schema. Consult
-[Avalara's developer site](http://developer.avalara.com/)
-for full documentation on input and output parameters for each operation.
-
-If there is no result then an exception will be thrown.
-
 ## new
 
-Builds a new AvaTax web service client. Takes the following parameters, which
-are also available as instance methods.
-
-- username
-
-    The Avalara email address used for authentication. Required.
-
-- password
-
-    The password used for Avalara authentication. Required.
-
-- endpoint
-
-    A string or [URI](https://metacpan.org/pod/URI) object indicating the AvaTax WSDL file to load.
-    Defaults to [https://development.avalara.net/tax/taxsvc.wsdl](https://development.avalara.net/tax/taxsvc.wsdl).
-    For production API access one should set this to
-    [https://avatax.avalara.net/tax/taxsvc.wsdl](https://avatax.avalara.net/tax/taxsvc.wsdl).
-
-- user\_agent
-
-    An instance of an [LWP::UserAgent](https://metacpan.org/pod/LWP::UserAgent) (sub-)class. You can
-    use your own subclass to add features such as caching or enhanced logging.
-
-    If you do not specify a `user_agent` then we default to an
-    [LWPx::UserAgent::Cached](https://metacpan.org/pod/LWPx::UserAgent::Cached) with its `ssl_opts`
-    parameter set to `{verify_hostname => 0}`.
-
-- debug
-
-    When set to true, the [Log::Report](https://metacpan.org/pod/Log::Report) dispatcher used by
-    [XML::Compile](https://metacpan.org/pod/XML::Compile) and friends is set to _DEBUG_ mode.
-
-## call
-
-Given an operation name and parameters, makes a SOAP call. The operation will
-also receive a `Profile` parameter containing information about the program,
-machine and version of this module making the call.
+Builds a new AvaTax web service client. See the ["ATTRIBUTES"](#attributes) section for
+description of its named parameters.
 
 ## get\_tax
 
@@ -334,6 +292,34 @@ Example:
 
 # ATTRIBUTES
 
+## username
+
+The Avalara email address used for authentication. Required.
+
+## password
+
+The password used for Avalara authentication. Required.
+
+## endpoint
+
+A [URI](https://metacpan.org/pod/URI) object indicating the AvaTax WSDL file to load. Defaults to
+[https://development.avalara.net/tax/taxsvc.wsdl](https://development.avalara.net/tax/taxsvc.wsdl). For production API access
+one should set this to [https://avatax.avalara.net/tax/taxsvc.wsdl](https://avatax.avalara.net/tax/taxsvc.wsdl).
+
+## debug
+
+When set to true, the [Log::Report](https://metacpan.org/pod/Log::Report) dispatcher used by
+[XML::Compile](https://metacpan.org/pod/XML::Compile) and friends is set to _DEBUG_ mode.
+
+## user\_agent
+
+An instance of an [LWP::UserAgent](https://metacpan.org/pod/LWP::UserAgent) (sub-)class. You can
+use your own subclass to add features such as caching or enhanced logging.
+
+If you do not specify a `user_agent` then we default to an
+[LWPx::UserAgent::Cached](https://metacpan.org/pod/LWPx::UserAgent::Cached) with its `ssl_opts`
+parameter set to `{verify_hostname => 0}`.
+
 ## wsdl
 
 After construction, you can retrieve the created
@@ -360,6 +346,8 @@ Example:
     Part of the [XML::Compile](https://metacpan.org/pod/XML::Compile) suite
     and the basis for this distribution. It's helpful to understand these in
     order to debug or extend this module.
+
+If there is no result then an exception will be thrown.
 
 # SUPPORT
 

@@ -17,10 +17,6 @@ SKIP: {
     Test::Vars->import;
 
     subtest 'unused vars' => sub {
-        vars_ok('lib/WebService/Avalara/AvaTax.pm');
-        vars_ok(
-            'lib/WebService/Avalara/AvaTax/Role/Connection.pm',
-            ignore_vars => { '$auth' => 1, '$wss' => 1 }
-        );
+        all_vars_ok( ignore_vars => { '$auth' => 1, '$wss' => 1 } );
     };
 }

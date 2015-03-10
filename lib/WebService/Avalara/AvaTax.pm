@@ -28,11 +28,186 @@ parameters but will use the same compiled code.
 =cut
 
 use Const::Fast;
-use Package::Stash;
+use English '-no_match_vars';
+use Log::Report;
+use LWPx::UserAgent::Cached;
 use Moo;
-use Types::Standard qw(Bool HashRef InstanceOf);
+use MooX::Types::MooseLike::Email 'EmailAddressLoose';
+use Package::Stash;
+use Scalar::Util 'blessed';
+use Sys::Hostname;
+use Types::Standard qw(Bool HashRef InstanceOf Str);
+use URI;
+use XML::Compile::SOAP::WSS;
+use XML::Compile::SOAP11;
+use XML::Compile::SOAP12;
+use XML::Compile::WSDL11;
+use XML::Compile::Transport::SOAPHTTP;
 use namespace::clean;
-with 'WebService::Avalara::AvaTax::Role::Connection';
+
+=method new
+
+Builds a new AvaTax web service client. See the L</ATTRIBUTES> section for
+description of its named parameters.
+
+=attr username
+
+The Avalara email address used for authentication. Required.
+
+=cut
+
+has username => ( is => 'ro', isa => EmailAddressLoose, required => 1 );
+
+=attr password
+
+The password used for Avalara authentication. Required.
+
+=cut
+
+has password => ( is => 'ro', isa => Str, required => 1 );
+
+=attr endpoint
+
+A L<URI|URI> object indicating the AvaTax WSDL file to load. Defaults to
+L<https://development.avalara.net/tax/taxsvc.wsdl>. For production API access
+one should set this to L<https://avatax.avalara.net/tax/taxsvc.wsdl>.
+
+=cut
+
+has endpoint => (
+    is     => 'lazy',
+    isa    => InstanceOf ['URI'],
+    coerce => sub {
+        defined blessed( $_[0] )
+            && $_[0]->isa('URI') ? $_[0] : URI->new( $_[0] );
+    },
+    default =>
+        sub { URI->new('https://development.avalara.net/tax/taxsvc.wsdl') },
+);
+
+=attr debug
+
+When set to true, the L<Log::Report|Log::Report> dispatcher used by
+L<XML::Compile|XML::Compile> and friends is set to I<DEBUG> mode.
+
+=cut
+
+has debug => (
+    is      => 'ro',
+    isa     => Bool,
+    default => 0,
+    trigger =>
+        sub { dispatcher( mode => ( $_[1] ? 'DEBUG' : 'NORMAL' ), 'ALL' ) },
+);
+
+=attr user_agent
+
+An instance of an L<LWP::UserAgent|LWP::UserAgent> (sub-)class. You can
+use your own subclass to add features such as caching or enhanced logging.
+
+If you do not specify a C<user_agent> then we default to an
+L<LWPx::UserAgent::Cached|LWPx::UserAgent::Cached> with its C<ssl_opts>
+parameter set to C<< {verify_hostname => 0} >>.
+
+=cut
+
+has user_agent => (
+    is      => 'lazy',
+    isa     => InstanceOf ['LWP::UserAgent'],
+    default => sub {
+        LWPx::UserAgent::Cached->new( ssl_opts => { verify_hostname => 0 } );
+    },
+);
+
+=attr wsdl
+
+After construction, you can retrieve the created
+L<XML::Compile::WSDL11|XML::Compile::WSDL11> instance.
+
+Example:
+
+    my $wsdl = $avatax->wsdl;
+    my @soap_operations = map { $_->name } $wsdl->operations;
+
+=cut
+
+has wsdl => (
+    is       => 'lazy',
+    isa      => InstanceOf ['XML::Compile::WSDL11'],
+    init_arg => undef,
+);
+
+sub _build_wsdl {
+    my $self = shift;
+    return XML::Compile::WSDL11->new(
+        $self->user_agent->get( $self->endpoint )->content );
+}
+
+has _soap_service => ( is => 'ro', isa => Str, default => 'TaxSvc' );
+has _soap_port    => ( is => 'ro', isa => Str, default => 'TaxSvcSoap' );
+
+has _wss => (
+    is      => 'ro',
+    isa     => InstanceOf ['XML::Compile::SOAP::WSS'],
+    default => sub { XML::Compile::SOAP::WSS->new },
+);
+
+has _auth => ( is => 'lazy', isa => InstanceOf ['XML::Compile::WSS'] );
+
+sub _build__auth {
+    my $self = shift;
+    my $wss  = $self->_wss;
+    return $wss->basicAuth( map { ( $_ => $self->$_ ) }
+            qw(username password) );
+}
+
+has _transport =>
+    ( is => 'lazy', isa => InstanceOf ['XML::Compile::Transport::SOAPHTTP'] );
+
+sub _build__transport {
+    my $self = shift;
+    my $wss  = $self->_wss;
+    my $wsdl = $self->wsdl;
+    my $auth = $self->_auth;
+
+    my $user_agent  = $self->user_agent;
+    my %soap_params = (
+        service => $self->_soap_service,
+        port    => $self->_soap_port,
+    );
+    my $endpoint_uri = URI->new( $wsdl->endPoint(%soap_params) );
+    $user_agent->add_handler(
+        request_prepare => sub {
+            $_[0]->header( SOAPAction =>
+                    $wsdl->operation( $self->_operation_name, %soap_params )
+                    ->soapAction, );
+        },
+        (   m_method => 'POST',
+            map { ( "m_$_" => $endpoint_uri->$_ ) } qw(scheme host_port path),
+        ),
+    );
+    return XML::Compile::Transport::SOAPHTTP->new(
+        address    => $endpoint_uri,
+        user_agent => $self->user_agent,
+    );
+}
+
+has _operation_name => ( is => 'rw', isa => Str, default => q{} );
+
+sub _call {
+    my ( $self, $operation, @params ) = @_;
+    $self->_operation_name($operation);
+    return $self->wsdl->call(
+        $operation => {
+            Profile => {
+                Client => "$PROGRAM_NAME," . ( $main::VERSION // q{} ),
+                Adapter => __PACKAGE__ . q{,} . ( $VERSION // q{} ),
+                Machine => hostname(),
+            },
+            parameters => {@params},
+        },
+    );
+}
 
 =head1 SEE ALSO
 
@@ -55,76 +230,17 @@ order to debug or extend this module.
 
 =back
 
-=method new
-
-Builds a new AvaTax web service client. Takes the following parameters, which
-are also available as instance methods.
-
-=over
-
-=item username
-
-The Avalara email address used for authentication. Required.
-
-=item password
-
-The password used for Avalara authentication. Required.
-
-=item endpoint
-
-A string or L<URI|URI> object indicating the AvaTax WSDL file to load.
-Defaults to L<https://development.avalara.net/tax/taxsvc.wsdl>.
-For production API access one should set this to
-L<https://avatax.avalara.net/tax/taxsvc.wsdl>.
-
-=item user_agent
-
-An instance of an L<LWP::UserAgent|LWP::UserAgent> (sub-)class. You can
-use your own subclass to add features such as caching or enhanced logging.
-
-If you do not specify a C<user_agent> then we default to an
-L<LWPx::UserAgent::Cached|LWPx::UserAgent::Cached> with its C<ssl_opts>
-parameter set to C<< {verify_hostname => 0} >>.
-
-=item debug
-
-When set to true, the L<Log::Report|Log::Report> dispatcher used by
-L<XML::Compile|XML::Compile> and friends is set to I<DEBUG> mode.
-
-=back
-
-=attr wsdl
-
-After construction, you can retrieve the created
-L<XML::Compile::WSDL11|XML::Compile::WSDL11> instance.
-
-Example:
-
-    my $wsdl = $avatax->wsdl;
-    my @soap_operations = map { $_->name } $wsdl->operations;
-
-=method call
-
-Given an operation name and parameters, makes a SOAP call. The operation will
-also receive a C<Profile> parameter containing information about the program,
-machine and version of this module making the call.
-
-=for Pod::Coverage BUILD
-
 =head1 METHODS
 
-Aside from the C<new> and C<call> methods, available method names are
-dynamically loaded from the AvaTax WSDL file's operations and can be passed
-either a hash or reference to a hash with the necessary parameters. In scalar
-context they return a reference to a hash containing the results of the SOAP
-call; in list context they return the results hashref and an
+Aside from the L</new> method, available method names are dynamically loaded
+from the AvaTax WSDL file's operations and can be passed either a hash or
+reference to a hash with the necessary parameters. In scalar context they
+return a reference to a hash containing the results of the SOAP call; in list
+context they return the results hashref and an
 L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
 object suitable for debugging and exception handling.
 
-As of this writing the following operations are published in the Avalara
-AvaTax schema. Consult
-L<Avalara's developer site|http://developer.avalara.com/>
-for full documentation on input and output parameters for each operation.
+=for Pod::Coverage BUILD
 
 =cut
 
@@ -161,7 +277,7 @@ sub _method_closure {
             );
             $self->_compiled->{$method} = 1;
         }
-        my ( $answer_ref, $trace ) = $self->call( $method => @_ );
+        my ( $answer_ref, $trace ) = $self->_call( $method => @_ );
 
 =pod
 

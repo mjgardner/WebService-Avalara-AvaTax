@@ -4,28 +4,28 @@ package WebService::Avalara::AvaTax;
 
 use Modern::Perl '2011';    ## no critic (Modules::ProhibitUseQuotedVersion)
 
-# VERSION
+our $VERSION = '0.005';     # TRIAL VERSION
 use utf8;
 
-=head1 SYNOPSIS
-
-    use WebService::Avalara::AvaTax;
-    my $avatax = WebService::Avalara::AvaTax->new(
-        username => 'avalara@example.com',
-        password => 'sekrit',
-    );
-    my $answer_ref = $avatax->ping;
-
-=head1 DESCRIPTION
-
-This class provides a Perl method API for
-L<Avalara AvaTax|http://developer.avalara.com/api-docs/soap>
-web services. The first call to any AvaTax SOAP operation uses
-L<XML::Compile::WSDL11|XML::Compile::WSDL11> to compile and execute against the
-specified Avalara AvaTax service; subsequent calls can vary the
-parameters but will use the same compiled code.
-
-=cut
+#pod =head1 SYNOPSIS
+#pod
+#pod     use WebService::Avalara::AvaTax;
+#pod     my $avatax = WebService::Avalara::AvaTax->new(
+#pod         username => 'avalara@example.com',
+#pod         password => 'sekrit',
+#pod     );
+#pod     my $answer_ref = $avatax->ping;
+#pod
+#pod =head1 DESCRIPTION
+#pod
+#pod This class provides a Perl method API for
+#pod L<Avalara AvaTax|http://developer.avalara.com/api-docs/soap>
+#pod web services. The first call to any AvaTax SOAP operation uses
+#pod L<XML::Compile::WSDL11|XML::Compile::WSDL11> to compile and execute against the
+#pod specified Avalara AvaTax service; subsequent calls can vary the
+#pod parameters but will use the same compiled code.
+#pod
+#pod =cut
 
 use Const::Fast;
 use English '-no_match_vars';
@@ -45,34 +45,34 @@ use XML::Compile::WSDL11;
 use XML::Compile::Transport::SOAPHTTP;
 use namespace::clean;
 
-=method new
-
-Builds a new AvaTax web service client. See the L</ATTRIBUTES> section for
-description of its named parameters.
-
-=attr username
-
-The Avalara email address used for authentication. Required.
-
-=cut
+#pod =method new
+#pod
+#pod Builds a new AvaTax web service client. See the L</ATTRIBUTES> section for
+#pod description of its named parameters.
+#pod
+#pod =attr username
+#pod
+#pod The Avalara email address used for authentication. Required.
+#pod
+#pod =cut
 
 has username => ( is => 'ro', isa => EmailAddressLoose, required => 1 );
 
-=attr password
-
-The password used for Avalara authentication. Required.
-
-=cut
+#pod =attr password
+#pod
+#pod The password used for Avalara authentication. Required.
+#pod
+#pod =cut
 
 has password => ( is => 'ro', isa => Str, required => 1 );
 
-=attr endpoint
-
-A L<URI|URI> object indicating the AvaTax WSDL file to load. Defaults to
-L<https://development.avalara.net/tax/taxsvc.wsdl>. For production API access
-one should set this to L<https://avatax.avalara.net/tax/taxsvc.wsdl>.
-
-=cut
+#pod =attr endpoint
+#pod
+#pod A L<URI|URI> object indicating the AvaTax WSDL file to load. Defaults to
+#pod L<https://development.avalara.net/tax/taxsvc.wsdl>. For production API access
+#pod one should set this to L<https://avatax.avalara.net/tax/taxsvc.wsdl>.
+#pod
+#pod =cut
 
 has endpoint => (
     is     => 'lazy',
@@ -85,12 +85,12 @@ has endpoint => (
         sub { URI->new('https://development.avalara.net/tax/taxsvc.wsdl') },
 );
 
-=attr debug
-
-When set to true, the L<Log::Report|Log::Report> dispatcher used by
-L<XML::Compile|XML::Compile> and friends is set to I<DEBUG> mode.
-
-=cut
+#pod =attr debug
+#pod
+#pod When set to true, the L<Log::Report|Log::Report> dispatcher used by
+#pod L<XML::Compile|XML::Compile> and friends is set to I<DEBUG> mode.
+#pod
+#pod =cut
 
 has debug => (
     is      => 'ro',
@@ -100,16 +100,16 @@ has debug => (
         sub { dispatcher( mode => ( $_[1] ? 'DEBUG' : 'NORMAL' ), 'ALL' ) },
 );
 
-=attr user_agent
-
-An instance of an L<LWP::UserAgent|LWP::UserAgent> (sub-)class. You can
-use your own subclass to add features such as caching or enhanced logging.
-
-If you do not specify a C<user_agent> then we default to an
-L<LWPx::UserAgent::Cached|LWPx::UserAgent::Cached> with its C<ssl_opts>
-parameter set to C<< {verify_hostname => 0} >>.
-
-=cut
+#pod =attr user_agent
+#pod
+#pod An instance of an L<LWP::UserAgent|LWP::UserAgent> (sub-)class. You can
+#pod use your own subclass to add features such as caching or enhanced logging.
+#pod
+#pod If you do not specify a C<user_agent> then we default to an
+#pod L<LWPx::UserAgent::Cached|LWPx::UserAgent::Cached> with its C<ssl_opts>
+#pod parameter set to C<< {verify_hostname => 0} >>.
+#pod
+#pod =cut
 
 has user_agent => (
     is      => 'lazy',
@@ -119,17 +119,17 @@ has user_agent => (
     },
 );
 
-=attr wsdl
-
-After construction, you can retrieve the created
-L<XML::Compile::WSDL11|XML::Compile::WSDL11> instance.
-
-Example:
-
-    my $wsdl = $avatax->wsdl;
-    my @soap_operations = map { $_->name } $wsdl->operations;
-
-=cut
+#pod =attr wsdl
+#pod
+#pod After construction, you can retrieve the created
+#pod L<XML::Compile::WSDL11|XML::Compile::WSDL11> instance.
+#pod
+#pod Example:
+#pod
+#pod     my $wsdl = $avatax->wsdl;
+#pod     my @soap_operations = map { $_->name } $wsdl->operations;
+#pod
+#pod =cut
 
 has wsdl => (
     is       => 'lazy',
@@ -209,40 +209,40 @@ sub _call {
     );
 }
 
-=head1 SEE ALSO
-
-=over
-
-=item L<Avalara Developer Network|http://developer.avalara.com/>
-
-Official source for Avalara developer information, including API
-references, technical articles and more.
-
-=item L<Business::Tax::Avalara|Business::Tax::Avalara>
-
-An alternative that uses Avalara's REST API.
-
-=item L<XML::Compile::SOAP|XML::Compile::SOAP> and L<XML::Compile::WSDL11|XML::Compile::WSDL11>
-
-Part of the L<XML::Compile|XML::Compile> suite
-and the basis for this distribution. It's helpful to understand these in
-order to debug or extend this module.
-
-=back
-
-=head1 METHODS
-
-Aside from the L</new> method, available method names are dynamically loaded
-from the AvaTax WSDL file's operations and can be passed either a hash or
-reference to a hash with the necessary parameters. In scalar context they
-return a reference to a hash containing the results of the SOAP call; in list
-context they return the results hashref and an
-L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
-object suitable for debugging and exception handling.
-
-=for Pod::Coverage BUILD
-
-=cut
+#pod =head1 SEE ALSO
+#pod
+#pod =over
+#pod
+#pod =item L<Avalara Developer Network|http://developer.avalara.com/>
+#pod
+#pod Official source for Avalara developer information, including API
+#pod references, technical articles and more.
+#pod
+#pod =item L<Business::Tax::Avalara|Business::Tax::Avalara>
+#pod
+#pod An alternative that uses Avalara's REST API.
+#pod
+#pod =item L<XML::Compile::SOAP|XML::Compile::SOAP> and L<XML::Compile::WSDL11|XML::Compile::WSDL11>
+#pod
+#pod Part of the L<XML::Compile|XML::Compile> suite
+#pod and the basis for this distribution. It's helpful to understand these in
+#pod order to debug or extend this module.
+#pod
+#pod =back
+#pod
+#pod =head1 METHODS
+#pod
+#pod Aside from the L</new> method, available method names are dynamically loaded
+#pod from the AvaTax WSDL file's operations and can be passed either a hash or
+#pod reference to a hash with the necessary parameters. In scalar context they
+#pod return a reference to a hash containing the results of the SOAP call; in list
+#pod context they return the results hashref and an
+#pod L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
+#pod object suitable for debugging and exception handling.
+#pod
+#pod =for Pod::Coverage BUILD
+#pod
+#pod =cut
 
 sub BUILD {
     my $self = shift;
@@ -279,11 +279,11 @@ sub _method_closure {
         }
         my ( $answer_ref, $trace ) = $self->_call( $method => @_ );
 
-=pod
-
-If there is no result then an exception will be thrown.
-
-=cut
+        #pod =pod
+        #pod
+        #pod If there is no result then an exception will be thrown.
+        #pod
+        #pod =cut
 
         if ( not $answer_ref ) {
             for ( $trace->errors ) { $_->throw }
@@ -296,7 +296,55 @@ If there is no result then an exception will be thrown.
 
 __END__
 
-=method get_tax
+=pod
+
+=encoding UTF-8
+
+=for :stopwords Mark Gardner ZipRecruiter cpan testmatrix url annocpan anno bugtracker rt
+cpants kwalitee diff irc mailto metadata placeholders metacpan
+
+=head1 NAME
+
+WebService::Avalara::AvaTax - Avalara SOAP interface as compiled Perl methods
+
+=head1 VERSION
+
+version 0.005
+
+=head1 SYNOPSIS
+
+    use WebService::Avalara::AvaTax;
+    my $avatax = WebService::Avalara::AvaTax->new(
+        username => 'avalara@example.com',
+        password => 'sekrit',
+    );
+    my $answer_ref = $avatax->ping;
+
+=head1 DESCRIPTION
+
+This class provides a Perl method API for
+L<Avalara AvaTax|http://developer.avalara.com/api-docs/soap>
+web services. The first call to any AvaTax SOAP operation uses
+L<XML::Compile::WSDL11|XML::Compile::WSDL11> to compile and execute against the
+specified Avalara AvaTax service; subsequent calls can vary the
+parameters but will use the same compiled code.
+
+=head1 METHODS
+
+Aside from the L</new> method, available method names are dynamically loaded
+from the AvaTax WSDL file's operations and can be passed either a hash or
+reference to a hash with the necessary parameters. In scalar context they
+return a reference to a hash containing the results of the SOAP call; in list
+context they return the results hashref and an
+L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
+object suitable for debugging and exception handling.
+
+=head2 new
+
+Builds a new AvaTax web service client. See the L</ATTRIBUTES> section for
+description of its named parameters.
+
+=head2 get_tax
 
 Example:
 
@@ -312,7 +360,7 @@ Example:
         },
     );
 
-=method post_tax
+=head2 post_tax
 
 Example:
 
@@ -329,7 +377,7 @@ Example:
         },
     );
 
-=method commit_tax
+=head2 commit_tax
 
 Example:
 
@@ -342,7 +390,7 @@ Example:
         },
     );
 
-=method cancel_tax
+=head2 cancel_tax
 
 Example:
 
@@ -355,7 +403,7 @@ Example:
         },
     );
 
-=method adjust_tax
+=head2 adjust_tax
 
 Example:
 
@@ -456,7 +504,7 @@ Example:
         },
     );
 
-=method get_tax_history
+=head2 get_tax_history
 
 Example:
 
@@ -469,7 +517,7 @@ Example:
         },
     );
 
-=method is_authorized
+=head2 is_authorized
 
 Example:
 
@@ -486,7 +534,7 @@ Example:
         ),
     );
 
-=method ping
+=head2 ping
 
 Example:
 
@@ -503,7 +551,7 @@ Example:
         }
     }
 
-=method reconcile_tax_history
+=head2 reconcile_tax_history
 
 Example:
 
@@ -521,7 +569,7 @@ Example:
         },
     );
 
-=method apply_payment
+=head2 apply_payment
 
 Example:
 
@@ -535,7 +583,7 @@ Example:
         },
     );
 
-=method tax_summary_fetch
+=head2 tax_summary_fetch
 
 Example:
 
@@ -546,3 +594,188 @@ Example:
             EndDate      => '2014-01-31',
         },
     );
+
+=head1 ATTRIBUTES
+
+=head2 username
+
+The Avalara email address used for authentication. Required.
+
+=head2 password
+
+The password used for Avalara authentication. Required.
+
+=head2 endpoint
+
+A L<URI|URI> object indicating the AvaTax WSDL file to load. Defaults to
+L<https://development.avalara.net/tax/taxsvc.wsdl>. For production API access
+one should set this to L<https://avatax.avalara.net/tax/taxsvc.wsdl>.
+
+=head2 debug
+
+When set to true, the L<Log::Report|Log::Report> dispatcher used by
+L<XML::Compile|XML::Compile> and friends is set to I<DEBUG> mode.
+
+=head2 user_agent
+
+An instance of an L<LWP::UserAgent|LWP::UserAgent> (sub-)class. You can
+use your own subclass to add features such as caching or enhanced logging.
+
+If you do not specify a C<user_agent> then we default to an
+L<LWPx::UserAgent::Cached|LWPx::UserAgent::Cached> with its C<ssl_opts>
+parameter set to C<< {verify_hostname => 0} >>.
+
+=head2 wsdl
+
+After construction, you can retrieve the created
+L<XML::Compile::WSDL11|XML::Compile::WSDL11> instance.
+
+Example:
+
+    my $wsdl = $avatax->wsdl;
+    my @soap_operations = map { $_->name } $wsdl->operations;
+
+=head1 SEE ALSO
+
+=over
+
+=item L<Avalara Developer Network|http://developer.avalara.com/>
+
+Official source for Avalara developer information, including API
+references, technical articles and more.
+
+=item L<Business::Tax::Avalara|Business::Tax::Avalara>
+
+An alternative that uses Avalara's REST API.
+
+=item L<XML::Compile::SOAP|XML::Compile::SOAP> and L<XML::Compile::WSDL11|XML::Compile::WSDL11>
+
+Part of the L<XML::Compile|XML::Compile> suite
+and the basis for this distribution. It's helpful to understand these in
+order to debug or extend this module.
+
+=back
+
+=for Pod::Coverage BUILD
+
+If there is no result then an exception will be thrown.
+
+=head1 SUPPORT
+
+=head2 Perldoc
+
+You can find documentation for this module with the perldoc command.
+
+  perldoc WebService::Avalara::AvaTax
+
+=head2 Websites
+
+The following websites have more information about this module, and may be of help to you. As always,
+in addition to those websites please use your favorite search engine to discover more resources.
+
+=over 4
+
+=item *
+
+MetaCPAN
+
+A modern, open-source CPAN search engine, useful to view POD in HTML format.
+
+L<http://metacpan.org/release/WebService-Avalara-AvaTax>
+
+=item *
+
+Search CPAN
+
+The default CPAN search engine, useful to view POD in HTML format.
+
+L<http://search.cpan.org/dist/WebService-Avalara-AvaTax>
+
+=item *
+
+AnnoCPAN
+
+The AnnoCPAN is a website that allows community annotations of Perl module documentation.
+
+L<http://annocpan.org/dist/WebService-Avalara-AvaTax>
+
+=item *
+
+CPAN Ratings
+
+The CPAN Ratings is a website that allows community ratings and reviews of Perl modules.
+
+L<http://cpanratings.perl.org/d/WebService-Avalara-AvaTax>
+
+=item *
+
+CPAN Forum
+
+The CPAN Forum is a web forum for discussing Perl modules.
+
+L<http://cpanforum.com/dist/WebService-Avalara-AvaTax>
+
+=item *
+
+CPANTS
+
+The CPANTS is a website that analyzes the Kwalitee ( code metrics ) of a distribution.
+
+L<http://cpants.cpanauthors.org/dist/WebService-Avalara-AvaTax>
+
+=item *
+
+CPAN Testers
+
+The CPAN Testers is a network of smokers who run automated tests on uploaded CPAN distributions.
+
+L<http://www.cpantesters.org/distro/W/WebService-Avalara-AvaTax>
+
+=item *
+
+CPAN Testers Matrix
+
+The CPAN Testers Matrix is a website that provides a visual overview of the test results for a distribution on various Perls/platforms.
+
+L<http://matrix.cpantesters.org/?dist=WebService-Avalara-AvaTax>
+
+=item *
+
+CPAN Testers Dependencies
+
+The CPAN Testers Dependencies is a website that shows a chart of the test results of all dependencies for a distribution.
+
+L<http://deps.cpantesters.org/?module=WebService::Avalara::AvaTax>
+
+=back
+
+=head2 Bugs / Feature Requests
+
+Please report any bugs or feature requests through the web
+interface at
+L<https://github.com/mjgardner/WebService-Avalara-AvaTax/issues>.
+You will be automatically notified of any progress on the
+request by the system.
+
+=head2 Source Code
+
+The code is open to the world, and available for you to hack on. Please feel free to browse it and play
+with it, or whatever. If you want to contribute patches, please send me a diff or prod me to pull
+from your repository :)
+
+L<https://github.com/mjgardner/WebService-Avalara-AvaTax>
+
+  git clone git://github.com/mjgardner/WebService-Avalara-AvaTax.git
+
+=head1 AUTHOR
+
+Mark Gardner <mjgardner@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by ZipRecruiter.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut

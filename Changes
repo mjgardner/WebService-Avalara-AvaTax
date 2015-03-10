@@ -1,6 +1,6 @@
 Revision history for perl distribution WebService-Avalara-AvaTax
 
-{{$NEXT}}
+0.005     2015-03-09 21:30:34-04:00 America/New_York (TRIAL RELEASE)
     - rolled up WebService::Avalara::AvaTax::Role::Connection into main
       AvaTax class since it wasn't clear keeping it a separate role was
       offering anything beyond added complexity

@@ -34,17 +34,6 @@ use Types::Standard qw(Bool HashRef InstanceOf);
 use namespace::clean;
 with 'WebService::Avalara::AvaTax::Role::Connection';
 
-=head1 OTHER METHODS AND ATTRIBUTES
-
-Because this class consumes the
-C<WebService::Avalara::AvaTax::Role::Connection> role, it also has
-that role's attributes and methods. Please consult that module for attributes
-important for establishing a connection such as C<username> and C<password>.
-You can also use other attributes, such as the C<user_agent>
-attribute to access the L<LWP::UserAgent|LWP::UserAgent> used to retrieve and
-call the AvaTax service, or the C<wsdl> method to access the underlying
-L<XML::Compile::WSDL11|XML::Compile::WSDL11> object.
-
 =head1 SEE ALSO
 
 =over
@@ -66,15 +55,70 @@ order to debug or extend this module.
 
 =back
 
+=method new
+
+Builds a new AvaTax web service client. Takes the following parameters, which
+are also available as instance methods.
+
+=over
+
+=item username
+
+The Avalara email address used for authentication. Required.
+
+=item password
+
+The password used for Avalara authentication. Required.
+
+=item endpoint
+
+A string or L<URI|URI> object indicating the AvaTax WSDL file to load.
+Defaults to L<https://development.avalara.net/tax/taxsvc.wsdl>.
+For production API access one should set this to
+L<https://avatax.avalara.net/tax/taxsvc.wsdl>.
+
+=item user_agent
+
+An instance of an L<LWP::UserAgent|LWP::UserAgent> (sub-)class. You can
+use your own subclass to add features such as caching or enhanced logging.
+
+If you do not specify a C<user_agent> then we default to an
+L<LWPx::UserAgent::Cached|LWPx::UserAgent::Cached> with its C<ssl_opts>
+parameter set to C<< {verify_hostname => 0} >>.
+
+=item debug
+
+When set to true, the L<Log::Report|Log::Report> dispatcher used by
+L<XML::Compile|XML::Compile> and friends is set to I<DEBUG> mode.
+
+=back
+
+=attr wsdl
+
+After construction, you can retrieve the created
+L<XML::Compile::WSDL11|XML::Compile::WSDL11> instance.
+
+Example:
+
+    my $wsdl = $avatax->wsdl;
+    my @soap_operations = map { $_->name } $wsdl->operations;
+
+=method call
+
+Given an operation name and parameters, makes a SOAP call. The operation will
+also receive a C<Profile> parameter containing information about the program,
+machine and version of this module making the call.
+
 =for Pod::Coverage BUILD
 
 =head1 METHODS
 
-Available method names are dynamically loaded from the AvaTax WSDL file's
-operations, and can be passed either a hash or reference to a hash with the
-necessary parameters. In scalar context they return a reference to a hash
-containing the results of the SOAP call; in list context they return the
-results hashref and an L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
+Aside from the C<new> and C<call> methods, available method names are
+dynamically loaded from the AvaTax WSDL file's operations and can be passed
+either a hash or reference to a hash with the necessary parameters. In scalar
+context they return a reference to a hash containing the results of the SOAP
+call; in list context they return the results hashref and an
+L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
 object suitable for debugging and exception handling.
 
 As of this writing the following operations are published in the Avalara

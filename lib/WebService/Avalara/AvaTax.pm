@@ -27,6 +27,7 @@ parameters but will use the same compiled code.
 
 =cut
 
+use Carp;
 use Const::Fast;
 use English '-no_match_vars';
 use Log::Report;
@@ -36,13 +37,19 @@ use MooX::Types::MooseLike::Email 'EmailAddressLoose';
 use Package::Stash;
 use Scalar::Util 'blessed';
 use Sys::Hostname;
-use Types::Standard qw(Bool HashRef InstanceOf Str);
+use Types::Standard qw(ArrayRef Bool HashRef InstanceOf Str);
+use Types::URI 'Uri';
 use URI;
 use XML::Compile::SOAP::WSS;
 use XML::Compile::SOAP11;
 use XML::Compile::SOAP12;
 use XML::Compile::WSDL11;
 use XML::Compile::Transport::SOAPHTTP;
+use MooX::Struct EndpointLocator => [
+    wsdl_uri => [ is => 'ro', isa => Uri, required => 1, coerce => 1 ],
+    port     => [ is => 'ro', isa => Str, required => 1 ],
+    service  => [ is => 'ro', isa => Str, required => 1 ],
+];
 use namespace::clean;
 
 =method new
@@ -66,24 +73,43 @@ The password used for Avalara authentication. Required.
 
 has password => ( is => 'ro', isa => Str, required => 1 );
 
-=attr endpoint
+=attr is_production
 
-A L<URI|URI> object indicating the AvaTax WSDL file to load. Defaults to
-L<https://development.avalara.net/tax/taxsvc.wsdl>. For production API access
-one should set this to L<https://avatax.avalara.net/tax/taxsvc.wsdl>.
+A boolean value that indicates whether to connect to the production AvaTax
+services (true) or development (false). Defaults to false.
 
 =cut
 
-has endpoint => (
-    is     => 'lazy',
-    isa    => InstanceOf ['URI'],
-    coerce => sub {
-        defined blessed( $_[0] )
-            && $_[0]->isa('URI') ? $_[0] : URI->new( $_[0] );
-    },
-    default =>
-        sub { URI->new('https://development.avalara.net/tax/taxsvc.wsdl') },
-);
+has is_production => ( is => 'ro', isa => Bool, default => 0 );
+
+{
+    ## no critic (Subroutines::ProhibitCallsToUndeclaredSubs)
+    ## no critic (Modules::RequireExplicitInclusion)
+    has _endpoints =>
+        ( is => 'lazy', isa => ArrayRef [ InstanceOf [EndpointLocator] ] );
+    const my %SOAP_PARAMS => (
+        address => { port => 'AddressSvcSoap', service => 'AddressSvc' },
+        tax     => { port => 'TaxSvcSoap',     service => 'TaxSvc' },
+    );
+
+    sub _build__endpoints {
+        my $self = shift;
+        my $uri_base
+            = 'https://'
+            . ( $self->is_production ? 'avatax' : 'development' )
+            . '.avalara.net';
+        return [
+            map { EndpointLocator->new($_) } (
+                {   wsdl_uri => "$uri_base/address/addresssvc.wsdl",
+                    %{ $SOAP_PARAMS{address} },
+                },
+                {   wsdl_uri => "$uri_base/tax/taxsvc.wsdl",
+                    %{ $SOAP_PARAMS{tax} },
+                },
+            ),
+        ];
+    }
+}
 
 =attr debug
 
@@ -139,12 +165,12 @@ has wsdl => (
 
 sub _build_wsdl {
     my $self = shift;
-    return XML::Compile::WSDL11->new(
-        $self->user_agent->get( $self->endpoint )->content );
+    my $wsdl = XML::Compile::WSDL11->new;
+    for ( map { $_->wsdl_uri } @{ $self->_endpoints } ) {
+        $wsdl->addWSDL( $self->user_agent->get($_)->content );
+    }
+    return $wsdl;
 }
-
-has _soap_service => ( is => 'ro', isa => Str, default => 'TaxSvc' );
-has _soap_port    => ( is => 'ro', isa => Str, default => 'TaxSvcSoap' );
 
 has _wss => (
     is      => 'ro',
@@ -161,31 +187,36 @@ sub _build__auth {
             qw(username password) );
 }
 
-has _transport =>
-    ( is => 'lazy', isa => InstanceOf ['XML::Compile::Transport::SOAPHTTP'] );
+has _transports => (
+    is      => 'lazy',
+    isa     => ArrayRef [ InstanceOf ['XML::Compile::Transport::SOAPHTTP'] ],
+    default => sub {
+        [ map { $_[0]->_make_transport($_) } @{ $_[0]->_endpoints } ];
+    },
+);
 
-sub _build__transport {
-    my $self = shift;
+sub _make_transport {
+    my ( $self, $endpoint_locator ) = @_;
+
     my $wss  = $self->_wss;
     my $wsdl = $self->wsdl;
     my $auth = $self->_auth;
 
-    my $user_agent  = $self->user_agent;
-    my %soap_params = (
-        service => $self->_soap_service,
-        port    => $self->_soap_port,
-    );
+    my %soap_params  = map { $_ => $endpoint_locator->$_ } qw(port service);
     my $endpoint_uri = URI->new( $wsdl->endPoint(%soap_params) );
+    my $user_agent   = $self->user_agent;
+
     $user_agent->add_handler(
         request_prepare => sub {
             $_[0]->header( SOAPAction =>
                     $wsdl->operation( $self->_operation_name, %soap_params )
-                    ->soapAction, );
+                    ->soapAction );
         },
         (   m_method => 'POST',
             map { ( "m_$_" => $endpoint_uri->$_ ) } qw(scheme host_port path),
         ),
     );
+
     return XML::Compile::Transport::SOAPHTTP->new(
         address    => $endpoint_uri,
         user_agent => $self->user_agent,
@@ -231,17 +262,36 @@ object suitable for debugging and exception handling.
 
 sub BUILD {
     my $self = shift;
-    for my $operation ( map { $_->name } $self->wsdl->operations ) {
-        my $method = $operation;
-        $method =~ s/ (?<= [[:alnum:]] ) ( [[:upper:]] ) /_\l$1/xmsg;
-        $method = lcfirst $method;
+
+    # compile operations
+    my @operations;
+    for my $index ( 0 .. $#{ $self->_endpoints } ) {
+        my %soap_params
+            = map { ( $_ => $self->_endpoints->[$index]->$_ ) }
+            qw(port service);
+        $self->wsdl->compileCalls(
+            long_names => 1,
+            transport  => $self->_transports->[$index],
+            %soap_params,
+        );
+        push @operations => $self->wsdl->operations(%soap_params);
+    }
+
+    # stash methods
+    for my $operation (@operations) {
+        my $method_name
+            = ( 2 > grep { $_->name eq $operation->name } @operations )
+            ? $operation->name
+            : $operation->longName;
+        $method_name =~ s/[#]//xms;
+        $method_name =~ s/ (?<= [[:alnum:]] ) ( [[:upper:]] ) /_\l$1/xmsg;
+        $method_name = lcfirst $method_name;
         $self->_stash->add_symbol(
-            "&$method" => _method_closure($operation) );
+            "&$method_name" => _method_closure($operation) );
     }
     return;
 }
 
-has _compiled => ( is => 'rw', isa => HashRef [Bool], default => sub { {} } );
 has _stash => (
     is      => 'lazy',
     isa     => InstanceOf ['Package::Stash'],
@@ -262,6 +312,7 @@ const my %OPERATION_PARAMETER => (
         AdjustTax
         ApplyPayment
         TaxSummaryFetch
+        Validate
         ),
 );
 
@@ -270,30 +321,23 @@ sub _method_closure {
     return sub {
         my ( $self, @parameters ) = @_;
         my $wsdl = $self->wsdl;
-        if ( not $self->_compiled->{$operation} ) {
-            $wsdl->compileCall(
-                $operation,
-                transport => $self->_transport,
-                service   => $self->_soap_service,
-                port      => $self->_soap_port,
-            );
-            $self->_compiled->{$operation} = 1;
-        }
 
-        $self->_operation_name($operation);
+        $self->_operation_name( $operation->name );
         my ( $answer_ref, $trace ) = $wsdl->call(
-            $operation => {
+            $operation->serviceName . q{#}
+                . $operation->name => {
                 Profile => {
                     Client => "$PROGRAM_NAME," . ( $main::VERSION // q{} ),
                     Adapter => __PACKAGE__ . q{,} . ( $VERSION // q{} ),
                     Machine => hostname(),
                 },
                 parameters => {
-                    $OPERATION_PARAMETER{$operation} => @parameters % 2
+                    $OPERATION_PARAMETER{ $operation->name } =>
+                        @parameters % 2
                     ? "@parameters"
                     : {@parameters},
                 },
-            },
+                },
         );
 
 =pod
@@ -474,27 +518,76 @@ Example:
         DetailLevel => 'Tax',
     );
 
-=method is_authorized
+=method validate
 
 Example:
 
-    my ( $answer_ref, $trace ) = $avatax->is_authorized( join ', ' => qw(
-        Ping
-        IsAuthorized
-        GetTax
-        PostTax
-        GetTaxHistory
-        CommitTax
-        CancelTax
-        AdjustTax
-    ) );
+    my ( $answer_ref, $trace ) = $avatax->validate(
+        Address => {
+            Line1      => '118 N Clark St',
+            Line2      => 'Suite 100',
+            Line3      => 'ATTN Accounts Payable',
+            City       => 'Chicago',
+            Region     => 'IL',
+            PostalCode => '60602',
+        },
+        Coordinates => 1,
+        Taxability  => 1,
+        TextCase    => 'Upper',
+    );
 
-=method ping
+=method tax_svc_is_authorized
+
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->tax_svc_is_authorized(
+        join ', ' => qw(
+            Ping
+            IsAuthorized
+            GetTax
+            PostTax
+            GetTaxHistory
+            CommitTax
+            CancelTax
+            AdjustTax
+        ),
+    );
+
+=method address_svc_is_authorized
+
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->address_svc_is_authorized(
+        join ', ' => qw(
+            Ping
+            IsAuthorized
+            Validate
+        ),
+    );
+
+=method tax_svc_ping
 
 Example:
 
     use List::Util 1.33 'any';
-    my ( $answer_ref, $trace ) = $avatax->ping( Message => 'ignored' );
+    my ( $answer_ref, $trace ) = $avatax->tax_svc_ping;
+    for my $code ( $result_ref->{parameters}{PingResult}{ResultCode} ) {
+        if ( $code eq 'Success' ) { say $code; last }
+        if ( $code eq 'Warning' ) {
+            warn $result_ref->{parameters}{PingResult}{Messages};
+            last;
+        }
+        if ( any {$code eq $_} qw(Error Exception) ) {
+            die $result_ref->{parameters}{PingResult}{Messages};
+        }
+    }
+
+=method address_svc_ping
+
+Example:
+
+    use List::Util 1.33 'any';
+    my ( $answer_ref, $trace ) = $avatax->address_svc_ping;
     for my $code ( $result_ref->{parameters}{PingResult}{ResultCode} ) {
         if ( $code eq 'Success' ) { say $code; last }
         if ( $code eq 'Warning' ) {

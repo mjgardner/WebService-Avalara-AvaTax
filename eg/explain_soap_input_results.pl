@@ -1,7 +1,7 @@
 # Operation GetTaxSoapIn
 #           INPUT, document literal
 # Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
@@ -59,19 +59,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -83,7 +83,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -118,52 +118,52 @@ $parameters =
     #   ServiceMode, PaymentDate, ExchangeRate, ExchangeRateEffDate,
     #   PosLaneCode, BusinessIdentificationNo
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CompanyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: InventoryTransferInvoice InventoryTransferOrder
     #    PurchaseInvoice PurchaseOrder ReturnInvoice
     #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
     #    SalesInvoice SalesOrder
     DocType => "SalesOrder",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocCode => "example",
 
-    # is a xsd:date
+    # is a xs:date
     DocDate => "2006-10-06",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     SalespersonCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CustomerCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CustomerUsageType => "example",
 
-    # is a xsd:decimal
+    # is a xs:decimal
     Discount => 3.1415,
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     PurchaseOrderNo => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     ExemptionNo => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     OriginCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DestinationCode => "example",
 
@@ -179,46 +179,46 @@ $parameters =
       [ { # sequence of AddressCode, Line1, Line2, Line3, City, Region,
           #   PostalCode, Country, TaxRegionId, Latitude, Longitude
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           AddressCode => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Line1 => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Line2 => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Line3 => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           City => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Region => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           PostalCode => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Country => "example",
 
-          # is a xsd:int
+          # is a xs:int
           TaxRegionId => 42,
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Latitude => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Longitude => "example", }, ], },
 
@@ -236,56 +236,56 @@ $parameters =
           #   ExemptionNo, CustomerUsageType, Description, TaxOverride,
           #   TaxIncluded, BusinessIdentificationNo
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           No => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           OriginCode => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           DestinationCode => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           ItemCode => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           TaxCode => "example",
 
-          # is a xsd:decimal
+          # is a xs:decimal
           Qty => 3.1415,
 
-          # is a xsd:decimal
+          # is a xs:decimal
           Amount => 3.1415,
 
-          # is a xsd:boolean
+          # is a xs:boolean
           Discounted => "true",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           RevAcct => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Ref1 => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Ref2 => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           ExemptionNo => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           CustomerUsageType => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Description => "example",
 
@@ -294,48 +294,48 @@ $parameters =
           TaxOverride =>
           { # sequence of TaxOverrideType, TaxAmount, TaxDate, Reason
 
-            # is a xsd:string
+            # is a xs:string
             # Enum: AccruedTaxAmount DeriveTaxable Exemption None
             #    TaxAmount TaxDate
             TaxOverrideType => "None",
 
-            # is a xsd:decimal
+            # is a xs:decimal
             TaxAmount => 3.1415,
 
-            # is a xsd:date
+            # is a xs:date
             TaxDate => "2006-10-06",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Reason => "example", },
 
-          # is a xsd:boolean
+          # is a xs:boolean
           # defaults to 'false'
           TaxIncluded => "false",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           BusinessIdentificationNo => "example", }, ], },
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: Diagnostic Document Line Summary Tax
     DetailLevel => "Document",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     ReferenceCode => "example",
 
-    # is a xsd:int
+    # is a xs:int
     HashCode => 42,
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     LocationCode => "example",
 
-    # is a xsd:boolean
+    # is a xs:boolean
     Commit => "true",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     BatchCode => "example",
 
@@ -344,28 +344,28 @@ $parameters =
     # is optional
     TaxOverride => [{},],
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CurrencyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: Automatic Local Remote
     ServiceMode => "Automatic",
 
-    # is a xsd:date
+    # is a xs:date
     PaymentDate => "2006-10-06",
 
-    # is a xsd:decimal
+    # is a xs:decimal
     ExchangeRate => 3.1415,
 
-    # is a xsd:date
+    # is a xs:date
     ExchangeRateEffDate => "2006-10-06",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     PosLaneCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     BusinessIdentificationNo => "example", }, }
 
@@ -374,7 +374,7 @@ $parameters =
 # Operation GetTaxHistorySoapIn
 #           INPUT, document literal
 # Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
@@ -425,7 +425,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -433,19 +433,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -457,7 +457,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -486,26 +486,26 @@ $parameters =
   GetTaxHistoryRequest =>
   { # sequence of DocId, CompanyCode, DocType, DocCode, DetailLevel
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocId => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CompanyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: InventoryTransferInvoice InventoryTransferOrder
     #    PurchaseInvoice PurchaseOrder ReturnInvoice
     #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
     #    SalesInvoice SalesOrder
     DocType => "SalesOrder",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: Diagnostic Document Line Summary Tax
     DetailLevel => "Document", }, }
 
@@ -514,7 +514,7 @@ $parameters =
 # Operation PostTaxSoapIn
 #           INPUT, document literal
 # Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
@@ -565,7 +565,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -573,19 +573,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -597,7 +597,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -627,41 +627,41 @@ $parameters =
   { # sequence of DocId, CompanyCode, DocType, DocCode, DocDate,
     #   TotalAmount, TotalTax, HashCode, Commit, NewDocCode
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocId => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CompanyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: InventoryTransferInvoice InventoryTransferOrder
     #    PurchaseInvoice PurchaseOrder ReturnInvoice
     #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
     #    SalesInvoice SalesOrder
     DocType => "SalesOrder",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocCode => "example",
 
-    # is a xsd:date
+    # is a xs:date
     DocDate => "2006-10-06",
 
-    # is a xsd:decimal
+    # is a xs:decimal
     TotalAmount => 3.1415,
 
-    # is a xsd:decimal
+    # is a xs:decimal
     TotalTax => 3.1415,
 
-    # is a xsd:int
+    # is a xs:int
     HashCode => 42,
 
-    # is a xsd:boolean
+    # is a xs:boolean
     Commit => "true",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     NewDocCode => "example", }, }
 
@@ -670,7 +670,7 @@ $parameters =
 # Operation CommitTaxSoapIn
 #           INPUT, document literal
 # Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
@@ -725,7 +725,7 @@ $AuditMessage =
 # Describing complex tns:AuditMessage
 #     {http://avatax.avalara.com/services}AuditMessage
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:AuditMessage
 { # any attribute in any namespace
@@ -733,7 +733,7 @@ $AuditMessage =
 
   # sequence of Message
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Message => "example", }
 
@@ -744,7 +744,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -752,19 +752,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -776,7 +776,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -805,26 +805,26 @@ $parameters =
   CommitTaxRequest =>
   { # sequence of DocId, CompanyCode, DocType, DocCode, NewDocCode
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocId => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CompanyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: InventoryTransferInvoice InventoryTransferOrder
     #    PurchaseInvoice PurchaseOrder ReturnInvoice
     #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
     #    SalesInvoice SalesOrder
     DocType => "SalesOrder",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     NewDocCode => "example", }, }
 
@@ -833,7 +833,7 @@ $parameters =
 # Operation CancelTaxSoapIn
 #           INPUT, document literal
 # Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
@@ -888,7 +888,7 @@ $AuditMessage =
 # Describing complex tns:AuditMessage
 #     {http://avatax.avalara.com/services}AuditMessage
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:AuditMessage
 { # any attribute in any namespace
@@ -896,7 +896,7 @@ $AuditMessage =
 
   # sequence of Message
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Message => "example", }
 
@@ -907,7 +907,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -915,19 +915,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -939,7 +939,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -968,26 +968,26 @@ $parameters =
   CancelTaxRequest =>
   { # sequence of DocId, CompanyCode, DocType, DocCode, CancelCode
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocId => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CompanyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: InventoryTransferInvoice InventoryTransferOrder
     #    PurchaseInvoice PurchaseOrder ReturnInvoice
     #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
     #    SalesInvoice SalesOrder
     DocType => "SalesOrder",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: AdjustmentCancelled DocDeleted DocVoided
     #    PostFailed Unspecified
     CancelCode => "Unspecified", }, }
@@ -997,7 +997,7 @@ $parameters =
 # Operation ReconcileTaxHistorySoapIn
 #           INPUT, document literal
 # Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
@@ -1048,7 +1048,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -1056,19 +1056,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -1080,7 +1080,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -1110,39 +1110,39 @@ $parameters =
   { # sequence of CompanyCode, LastDocId, Reconciled, StartDate,
     #   EndDate, DocStatus, DocType, LastDocCode, PageSize
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CompanyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     LastDocId => "example",
 
-    # is a xsd:boolean
+    # is a xs:boolean
     Reconciled => "true",
 
-    # is a xsd:date
+    # is a xs:date
     StartDate => "2006-10-06",
 
-    # is a xsd:date
+    # is a xs:date
     EndDate => "2006-10-06",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: Adjusted Any Cancelled Committed Posted Saved
     #    Temporary
     DocStatus => "Temporary",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: InventoryTransferInvoice InventoryTransferOrder
     #    PurchaseInvoice PurchaseOrder ReturnInvoice
     #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
     #    SalesInvoice SalesOrder
     DocType => "SalesOrder",
 
-    # is a xsd:string
+    # is a xs:string
     LastDocCode => "example",
 
-    # is a xsd:int
+    # is a xs:int
     PageSize => 42, }, }
 
 ;
@@ -1150,7 +1150,7 @@ $parameters =
 # Operation AdjustTaxSoapIn
 #           INPUT, document literal
 # Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
@@ -1201,7 +1201,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -1209,19 +1209,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -1233,7 +1233,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -1263,10 +1263,10 @@ $parameters =
   { # sequence of AdjustmentReason, AdjustmentDescription,
     #   GetTaxRequest
 
-    # is a xsd:int
+    # is a xs:int
     AdjustmentReason => 42,
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     AdjustmentDescription => "example",
 
@@ -1281,52 +1281,52 @@ $parameters =
       #   ServiceMode, PaymentDate, ExchangeRate, ExchangeRateEffDate,
       #   PosLaneCode, BusinessIdentificationNo
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       CompanyCode => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # Enum: InventoryTransferInvoice InventoryTransferOrder
       #    PurchaseInvoice PurchaseOrder ReturnInvoice
       #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
       #    SalesInvoice SalesOrder
       DocType => "SalesOrder",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       DocCode => "example",
 
-      # is a xsd:date
+      # is a xs:date
       DocDate => "2006-10-06",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       SalespersonCode => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       CustomerCode => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       CustomerUsageType => "example",
 
-      # is a xsd:decimal
+      # is a xs:decimal
       Discount => 3.1415,
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       PurchaseOrderNo => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       ExemptionNo => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       OriginCode => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       DestinationCode => "example",
 
@@ -1342,46 +1342,46 @@ $parameters =
         [ { # sequence of AddressCode, Line1, Line2, Line3, City, Region,
             #   PostalCode, Country, TaxRegionId, Latitude, Longitude
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             AddressCode => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Line1 => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Line2 => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Line3 => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             City => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Region => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             PostalCode => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Country => "example",
 
-            # is a xsd:int
+            # is a xs:int
             TaxRegionId => 42,
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Latitude => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Longitude => "example", }, ], },
 
@@ -1399,56 +1399,56 @@ $parameters =
             #   ExemptionNo, CustomerUsageType, Description, TaxOverride,
             #   TaxIncluded, BusinessIdentificationNo
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             No => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             OriginCode => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             DestinationCode => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             ItemCode => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             TaxCode => "example",
 
-            # is a xsd:decimal
+            # is a xs:decimal
             Qty => 3.1415,
 
-            # is a xsd:decimal
+            # is a xs:decimal
             Amount => 3.1415,
 
-            # is a xsd:boolean
+            # is a xs:boolean
             Discounted => "true",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             RevAcct => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Ref1 => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Ref2 => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             ExemptionNo => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             CustomerUsageType => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Description => "example",
 
@@ -1457,48 +1457,48 @@ $parameters =
             TaxOverride =>
             { # sequence of TaxOverrideType, TaxAmount, TaxDate, Reason
 
-              # is a xsd:string
+              # is a xs:string
               # Enum: AccruedTaxAmount DeriveTaxable Exemption None
               #    TaxAmount TaxDate
               TaxOverrideType => "None",
 
-              # is a xsd:decimal
+              # is a xs:decimal
               TaxAmount => 3.1415,
 
-              # is a xsd:date
+              # is a xs:date
               TaxDate => "2006-10-06",
 
-              # is a xsd:string
+              # is a xs:string
               # is optional
               Reason => "example", },
 
-            # is a xsd:boolean
+            # is a xs:boolean
             # defaults to 'false'
             TaxIncluded => "false",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             BusinessIdentificationNo => "example", }, ], },
 
-      # is a xsd:string
+      # is a xs:string
       # Enum: Diagnostic Document Line Summary Tax
       DetailLevel => "Document",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       ReferenceCode => "example",
 
-      # is a xsd:int
+      # is a xs:int
       HashCode => 42,
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       LocationCode => "example",
 
-      # is a xsd:boolean
+      # is a xs:boolean
       Commit => "true",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       BatchCode => "example",
 
@@ -1507,28 +1507,28 @@ $parameters =
       # is optional
       TaxOverride => [{},],
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       CurrencyCode => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # Enum: Automatic Local Remote
       ServiceMode => "Automatic",
 
-      # is a xsd:date
+      # is a xs:date
       PaymentDate => "2006-10-06",
 
-      # is a xsd:decimal
+      # is a xs:decimal
       ExchangeRate => 3.1415,
 
-      # is a xsd:date
+      # is a xs:date
       ExchangeRateEffDate => "2006-10-06",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       PosLaneCode => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       BusinessIdentificationNo => "example", }, }, }
 
@@ -1537,7 +1537,7 @@ $parameters =
 # Operation ApplyPaymentSoapIn
 #           INPUT, document literal
 # Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
@@ -1592,7 +1592,7 @@ $AuditMessage =
 # Describing complex tns:AuditMessage
 #     {http://avatax.avalara.com/services}AuditMessage
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:AuditMessage
 { # any attribute in any namespace
@@ -1600,7 +1600,7 @@ $AuditMessage =
 
   # sequence of Message
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Message => "example", }
 
@@ -1611,7 +1611,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -1619,19 +1619,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -1643,7 +1643,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -1672,26 +1672,26 @@ $parameters =
   ApplyPaymentRequest =>
   { # sequence of DocId, CompanyCode, DocType, DocCode, PaymentDate
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocId => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CompanyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: InventoryTransferInvoice InventoryTransferOrder
     #    PurchaseInvoice PurchaseOrder ReturnInvoice
     #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
     #    SalesInvoice SalesOrder
     DocType => "SalesOrder",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocCode => "example",
 
-    # is a xsd:date
+    # is a xs:date
     PaymentDate => "2006-10-06", }, }
 
 ;
@@ -1699,7 +1699,7 @@ $parameters =
 # Operation PingSoapIn
 #           INPUT, document literal
 # Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
@@ -1750,7 +1750,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -1758,19 +1758,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -1782,7 +1782,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -1806,7 +1806,7 @@ $parameters =
 # is an unnamed complex
 { # sequence of Message
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Message => "example", }
 
@@ -1815,7 +1815,7 @@ $parameters =
 # Operation IsAuthorizedSoapIn
 #           INPUT, document literal
 # Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
@@ -1866,7 +1866,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -1874,19 +1874,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -1898,7 +1898,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -1922,7 +1922,7 @@ $parameters =
 # is an unnamed complex
 { # sequence of Operations
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Operations => "example", }
 
@@ -1931,7 +1931,7 @@ $parameters =
 # Operation TaxSummaryFetchSoapIn
 #           INPUT, document literal
 # Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
@@ -1982,7 +1982,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -1990,19 +1990,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -2014,7 +2014,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -2043,31 +2043,29 @@ $parameters =
   TaxSummaryFetchRequest =>
   { # sequence of MerchantCode, StartDate, EndDate
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     MerchantCode => "example",
 
-    # is a xsd:date
+    # is a xs:date
     StartDate => "2006-10-06",
 
-    # is a xsd:date
+    # is a xs:date
     EndDate => "2006-10-06", }, }
 
 ;
 
 # Operation GetTaxSoapIn
 #           INPUT, document literal
-# Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+# Produced  by XML::Compile::SOAP12::Operation version 3.03
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
 
 # Compile only once in your code, usually during initiation:
-#   my $call = $wsdl->compileClient('GetTax');
-# then call it as often as you need.  Alternatively
-#   $wsdl->compileCalls();   # once
-#   $response = $wsdl->call('GetTax', $request);
+my $call = $wsdl->compileClient('GetTax');
+# ... then call it as often as you need.
 # The details of the types and elements are attached below.
 
 # Header part 'Profile' is element tns:Profile
@@ -2109,7 +2107,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -2117,19 +2115,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -2141,7 +2139,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -2176,52 +2174,52 @@ $parameters =
     #   ServiceMode, PaymentDate, ExchangeRate, ExchangeRateEffDate,
     #   PosLaneCode, BusinessIdentificationNo
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CompanyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: InventoryTransferInvoice InventoryTransferOrder
     #    PurchaseInvoice PurchaseOrder ReturnInvoice
     #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
     #    SalesInvoice SalesOrder
     DocType => "SalesOrder",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocCode => "example",
 
-    # is a xsd:date
+    # is a xs:date
     DocDate => "2006-10-06",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     SalespersonCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CustomerCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CustomerUsageType => "example",
 
-    # is a xsd:decimal
+    # is a xs:decimal
     Discount => 3.1415,
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     PurchaseOrderNo => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     ExemptionNo => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     OriginCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DestinationCode => "example",
 
@@ -2237,46 +2235,46 @@ $parameters =
       [ { # sequence of AddressCode, Line1, Line2, Line3, City, Region,
           #   PostalCode, Country, TaxRegionId, Latitude, Longitude
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           AddressCode => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Line1 => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Line2 => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Line3 => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           City => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Region => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           PostalCode => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Country => "example",
 
-          # is a xsd:int
+          # is a xs:int
           TaxRegionId => 42,
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Latitude => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Longitude => "example", }, ], },
 
@@ -2294,56 +2292,56 @@ $parameters =
           #   ExemptionNo, CustomerUsageType, Description, TaxOverride,
           #   TaxIncluded, BusinessIdentificationNo
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           No => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           OriginCode => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           DestinationCode => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           ItemCode => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           TaxCode => "example",
 
-          # is a xsd:decimal
+          # is a xs:decimal
           Qty => 3.1415,
 
-          # is a xsd:decimal
+          # is a xs:decimal
           Amount => 3.1415,
 
-          # is a xsd:boolean
+          # is a xs:boolean
           Discounted => "true",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           RevAcct => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Ref1 => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Ref2 => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           ExemptionNo => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           CustomerUsageType => "example",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           Description => "example",
 
@@ -2352,48 +2350,48 @@ $parameters =
           TaxOverride =>
           { # sequence of TaxOverrideType, TaxAmount, TaxDate, Reason
 
-            # is a xsd:string
+            # is a xs:string
             # Enum: AccruedTaxAmount DeriveTaxable Exemption None
             #    TaxAmount TaxDate
             TaxOverrideType => "None",
 
-            # is a xsd:decimal
+            # is a xs:decimal
             TaxAmount => 3.1415,
 
-            # is a xsd:date
+            # is a xs:date
             TaxDate => "2006-10-06",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Reason => "example", },
 
-          # is a xsd:boolean
+          # is a xs:boolean
           # defaults to 'false'
           TaxIncluded => "false",
 
-          # is a xsd:string
+          # is a xs:string
           # is optional
           BusinessIdentificationNo => "example", }, ], },
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: Diagnostic Document Line Summary Tax
     DetailLevel => "Document",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     ReferenceCode => "example",
 
-    # is a xsd:int
+    # is a xs:int
     HashCode => 42,
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     LocationCode => "example",
 
-    # is a xsd:boolean
+    # is a xs:boolean
     Commit => "true",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     BatchCode => "example",
 
@@ -2402,28 +2400,28 @@ $parameters =
     # is optional
     TaxOverride => [{},],
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CurrencyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: Automatic Local Remote
     ServiceMode => "Automatic",
 
-    # is a xsd:date
+    # is a xs:date
     PaymentDate => "2006-10-06",
 
-    # is a xsd:decimal
+    # is a xs:decimal
     ExchangeRate => 3.1415,
 
-    # is a xsd:date
+    # is a xs:date
     ExchangeRateEffDate => "2006-10-06",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     PosLaneCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     BusinessIdentificationNo => "example", }, }
 
@@ -2431,17 +2429,15 @@ $parameters =
 
 # Operation GetTaxHistorySoapIn
 #           INPUT, document literal
-# Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+# Produced  by XML::Compile::SOAP12::Operation version 3.03
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
 
 # Compile only once in your code, usually during initiation:
-#   my $call = $wsdl->compileClient('GetTaxHistory');
-# then call it as often as you need.  Alternatively
-#   $wsdl->compileCalls();   # once
-#   $response = $wsdl->call('GetTaxHistory', $request);
+my $call = $wsdl->compileClient('GetTaxHistory');
+# ... then call it as often as you need.
 # The details of the types and elements are attached below.
 
 # Header part 'Profile' is element tns:Profile
@@ -2483,7 +2479,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -2491,19 +2487,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -2515,7 +2511,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -2544,26 +2540,26 @@ $parameters =
   GetTaxHistoryRequest =>
   { # sequence of DocId, CompanyCode, DocType, DocCode, DetailLevel
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocId => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CompanyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: InventoryTransferInvoice InventoryTransferOrder
     #    PurchaseInvoice PurchaseOrder ReturnInvoice
     #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
     #    SalesInvoice SalesOrder
     DocType => "SalesOrder",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: Diagnostic Document Line Summary Tax
     DetailLevel => "Document", }, }
 
@@ -2571,17 +2567,15 @@ $parameters =
 
 # Operation PostTaxSoapIn
 #           INPUT, document literal
-# Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+# Produced  by XML::Compile::SOAP12::Operation version 3.03
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
 
 # Compile only once in your code, usually during initiation:
-#   my $call = $wsdl->compileClient('PostTax');
-# then call it as often as you need.  Alternatively
-#   $wsdl->compileCalls();   # once
-#   $response = $wsdl->call('PostTax', $request);
+my $call = $wsdl->compileClient('PostTax');
+# ... then call it as often as you need.
 # The details of the types and elements are attached below.
 
 # Header part 'Profile' is element tns:Profile
@@ -2623,7 +2617,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -2631,19 +2625,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -2655,7 +2649,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -2685,41 +2679,41 @@ $parameters =
   { # sequence of DocId, CompanyCode, DocType, DocCode, DocDate,
     #   TotalAmount, TotalTax, HashCode, Commit, NewDocCode
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocId => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CompanyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: InventoryTransferInvoice InventoryTransferOrder
     #    PurchaseInvoice PurchaseOrder ReturnInvoice
     #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
     #    SalesInvoice SalesOrder
     DocType => "SalesOrder",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocCode => "example",
 
-    # is a xsd:date
+    # is a xs:date
     DocDate => "2006-10-06",
 
-    # is a xsd:decimal
+    # is a xs:decimal
     TotalAmount => 3.1415,
 
-    # is a xsd:decimal
+    # is a xs:decimal
     TotalTax => 3.1415,
 
-    # is a xsd:int
+    # is a xs:int
     HashCode => 42,
 
-    # is a xsd:boolean
+    # is a xs:boolean
     Commit => "true",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     NewDocCode => "example", }, }
 
@@ -2727,17 +2721,15 @@ $parameters =
 
 # Operation CommitTaxSoapIn
 #           INPUT, document literal
-# Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+# Produced  by XML::Compile::SOAP12::Operation version 3.03
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
 
 # Compile only once in your code, usually during initiation:
-#   my $call = $wsdl->compileClient('CommitTax');
-# then call it as often as you need.  Alternatively
-#   $wsdl->compileCalls();   # once
-#   $response = $wsdl->call('CommitTax', $request);
+my $call = $wsdl->compileClient('CommitTax');
+# ... then call it as often as you need.
 # The details of the types and elements are attached below.
 
 # Header part 'AuditMessage' is element tns:AuditMessage
@@ -2783,7 +2775,7 @@ $AuditMessage =
 # Describing complex tns:AuditMessage
 #     {http://avatax.avalara.com/services}AuditMessage
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:AuditMessage
 { # any attribute in any namespace
@@ -2791,7 +2783,7 @@ $AuditMessage =
 
   # sequence of Message
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Message => "example", }
 
@@ -2802,7 +2794,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -2810,19 +2802,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -2834,7 +2826,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -2863,26 +2855,26 @@ $parameters =
   CommitTaxRequest =>
   { # sequence of DocId, CompanyCode, DocType, DocCode, NewDocCode
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocId => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CompanyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: InventoryTransferInvoice InventoryTransferOrder
     #    PurchaseInvoice PurchaseOrder ReturnInvoice
     #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
     #    SalesInvoice SalesOrder
     DocType => "SalesOrder",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     NewDocCode => "example", }, }
 
@@ -2890,17 +2882,15 @@ $parameters =
 
 # Operation CancelTaxSoapIn
 #           INPUT, document literal
-# Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+# Produced  by XML::Compile::SOAP12::Operation version 3.03
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
 
 # Compile only once in your code, usually during initiation:
-#   my $call = $wsdl->compileClient('CancelTax');
-# then call it as often as you need.  Alternatively
-#   $wsdl->compileCalls();   # once
-#   $response = $wsdl->call('CancelTax', $request);
+my $call = $wsdl->compileClient('CancelTax');
+# ... then call it as often as you need.
 # The details of the types and elements are attached below.
 
 # Header part 'AuditMessage' is element tns:AuditMessage
@@ -2946,7 +2936,7 @@ $AuditMessage =
 # Describing complex tns:AuditMessage
 #     {http://avatax.avalara.com/services}AuditMessage
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:AuditMessage
 { # any attribute in any namespace
@@ -2954,7 +2944,7 @@ $AuditMessage =
 
   # sequence of Message
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Message => "example", }
 
@@ -2965,7 +2955,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -2973,19 +2963,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -2997,7 +2987,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -3026,26 +3016,26 @@ $parameters =
   CancelTaxRequest =>
   { # sequence of DocId, CompanyCode, DocType, DocCode, CancelCode
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocId => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CompanyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: InventoryTransferInvoice InventoryTransferOrder
     #    PurchaseInvoice PurchaseOrder ReturnInvoice
     #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
     #    SalesInvoice SalesOrder
     DocType => "SalesOrder",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: AdjustmentCancelled DocDeleted DocVoided
     #    PostFailed Unspecified
     CancelCode => "Unspecified", }, }
@@ -3054,17 +3044,15 @@ $parameters =
 
 # Operation ReconcileTaxHistorySoapIn
 #           INPUT, document literal
-# Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+# Produced  by XML::Compile::SOAP12::Operation version 3.03
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
 
 # Compile only once in your code, usually during initiation:
-#   my $call = $wsdl->compileClient('ReconcileTaxHistory');
-# then call it as often as you need.  Alternatively
-#   $wsdl->compileCalls();   # once
-#   $response = $wsdl->call('ReconcileTaxHistory', $request);
+my $call = $wsdl->compileClient('ReconcileTaxHistory');
+# ... then call it as often as you need.
 # The details of the types and elements are attached below.
 
 # Header part 'Profile' is element tns:Profile
@@ -3106,7 +3094,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -3114,19 +3102,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -3138,7 +3126,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -3168,56 +3156,54 @@ $parameters =
   { # sequence of CompanyCode, LastDocId, Reconciled, StartDate,
     #   EndDate, DocStatus, DocType, LastDocCode, PageSize
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CompanyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     LastDocId => "example",
 
-    # is a xsd:boolean
+    # is a xs:boolean
     Reconciled => "true",
 
-    # is a xsd:date
+    # is a xs:date
     StartDate => "2006-10-06",
 
-    # is a xsd:date
+    # is a xs:date
     EndDate => "2006-10-06",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: Adjusted Any Cancelled Committed Posted Saved
     #    Temporary
     DocStatus => "Temporary",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: InventoryTransferInvoice InventoryTransferOrder
     #    PurchaseInvoice PurchaseOrder ReturnInvoice
     #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
     #    SalesInvoice SalesOrder
     DocType => "SalesOrder",
 
-    # is a xsd:string
+    # is a xs:string
     LastDocCode => "example",
 
-    # is a xsd:int
+    # is a xs:int
     PageSize => 42, }, }
 
 ;
 
 # Operation AdjustTaxSoapIn
 #           INPUT, document literal
-# Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+# Produced  by XML::Compile::SOAP12::Operation version 3.03
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
 
 # Compile only once in your code, usually during initiation:
-#   my $call = $wsdl->compileClient('AdjustTax');
-# then call it as often as you need.  Alternatively
-#   $wsdl->compileCalls();   # once
-#   $response = $wsdl->call('AdjustTax', $request);
+my $call = $wsdl->compileClient('AdjustTax');
+# ... then call it as often as you need.
 # The details of the types and elements are attached below.
 
 # Header part 'Profile' is element tns:Profile
@@ -3259,7 +3245,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -3267,19 +3253,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -3291,7 +3277,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -3321,10 +3307,10 @@ $parameters =
   { # sequence of AdjustmentReason, AdjustmentDescription,
     #   GetTaxRequest
 
-    # is a xsd:int
+    # is a xs:int
     AdjustmentReason => 42,
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     AdjustmentDescription => "example",
 
@@ -3339,52 +3325,52 @@ $parameters =
       #   ServiceMode, PaymentDate, ExchangeRate, ExchangeRateEffDate,
       #   PosLaneCode, BusinessIdentificationNo
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       CompanyCode => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # Enum: InventoryTransferInvoice InventoryTransferOrder
       #    PurchaseInvoice PurchaseOrder ReturnInvoice
       #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
       #    SalesInvoice SalesOrder
       DocType => "SalesOrder",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       DocCode => "example",
 
-      # is a xsd:date
+      # is a xs:date
       DocDate => "2006-10-06",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       SalespersonCode => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       CustomerCode => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       CustomerUsageType => "example",
 
-      # is a xsd:decimal
+      # is a xs:decimal
       Discount => 3.1415,
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       PurchaseOrderNo => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       ExemptionNo => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       OriginCode => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       DestinationCode => "example",
 
@@ -3400,46 +3386,46 @@ $parameters =
         [ { # sequence of AddressCode, Line1, Line2, Line3, City, Region,
             #   PostalCode, Country, TaxRegionId, Latitude, Longitude
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             AddressCode => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Line1 => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Line2 => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Line3 => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             City => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Region => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             PostalCode => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Country => "example",
 
-            # is a xsd:int
+            # is a xs:int
             TaxRegionId => 42,
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Latitude => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Longitude => "example", }, ], },
 
@@ -3457,56 +3443,56 @@ $parameters =
             #   ExemptionNo, CustomerUsageType, Description, TaxOverride,
             #   TaxIncluded, BusinessIdentificationNo
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             No => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             OriginCode => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             DestinationCode => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             ItemCode => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             TaxCode => "example",
 
-            # is a xsd:decimal
+            # is a xs:decimal
             Qty => 3.1415,
 
-            # is a xsd:decimal
+            # is a xs:decimal
             Amount => 3.1415,
 
-            # is a xsd:boolean
+            # is a xs:boolean
             Discounted => "true",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             RevAcct => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Ref1 => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Ref2 => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             ExemptionNo => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             CustomerUsageType => "example",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             Description => "example",
 
@@ -3515,48 +3501,48 @@ $parameters =
             TaxOverride =>
             { # sequence of TaxOverrideType, TaxAmount, TaxDate, Reason
 
-              # is a xsd:string
+              # is a xs:string
               # Enum: AccruedTaxAmount DeriveTaxable Exemption None
               #    TaxAmount TaxDate
               TaxOverrideType => "None",
 
-              # is a xsd:decimal
+              # is a xs:decimal
               TaxAmount => 3.1415,
 
-              # is a xsd:date
+              # is a xs:date
               TaxDate => "2006-10-06",
 
-              # is a xsd:string
+              # is a xs:string
               # is optional
               Reason => "example", },
 
-            # is a xsd:boolean
+            # is a xs:boolean
             # defaults to 'false'
             TaxIncluded => "false",
 
-            # is a xsd:string
+            # is a xs:string
             # is optional
             BusinessIdentificationNo => "example", }, ], },
 
-      # is a xsd:string
+      # is a xs:string
       # Enum: Diagnostic Document Line Summary Tax
       DetailLevel => "Document",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       ReferenceCode => "example",
 
-      # is a xsd:int
+      # is a xs:int
       HashCode => 42,
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       LocationCode => "example",
 
-      # is a xsd:boolean
+      # is a xs:boolean
       Commit => "true",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       BatchCode => "example",
 
@@ -3565,28 +3551,28 @@ $parameters =
       # is optional
       TaxOverride => [{},],
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       CurrencyCode => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # Enum: Automatic Local Remote
       ServiceMode => "Automatic",
 
-      # is a xsd:date
+      # is a xs:date
       PaymentDate => "2006-10-06",
 
-      # is a xsd:decimal
+      # is a xs:decimal
       ExchangeRate => 3.1415,
 
-      # is a xsd:date
+      # is a xs:date
       ExchangeRateEffDate => "2006-10-06",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       PosLaneCode => "example",
 
-      # is a xsd:string
+      # is a xs:string
       # is optional
       BusinessIdentificationNo => "example", }, }, }
 
@@ -3594,17 +3580,15 @@ $parameters =
 
 # Operation ApplyPaymentSoapIn
 #           INPUT, document literal
-# Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+# Produced  by XML::Compile::SOAP12::Operation version 3.03
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
 
 # Compile only once in your code, usually during initiation:
-#   my $call = $wsdl->compileClient('ApplyPayment');
-# then call it as often as you need.  Alternatively
-#   $wsdl->compileCalls();   # once
-#   $response = $wsdl->call('ApplyPayment', $request);
+my $call = $wsdl->compileClient('ApplyPayment');
+# ... then call it as often as you need.
 # The details of the types and elements are attached below.
 
 # Header part 'AuditMessage' is element tns:AuditMessage
@@ -3650,7 +3634,7 @@ $AuditMessage =
 # Describing complex tns:AuditMessage
 #     {http://avatax.avalara.com/services}AuditMessage
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:AuditMessage
 { # any attribute in any namespace
@@ -3658,7 +3642,7 @@ $AuditMessage =
 
   # sequence of Message
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Message => "example", }
 
@@ -3669,7 +3653,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -3677,19 +3661,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -3701,7 +3685,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -3730,34 +3714,566 @@ $parameters =
   ApplyPaymentRequest =>
   { # sequence of DocId, CompanyCode, DocType, DocCode, PaymentDate
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocId => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     CompanyCode => "example",
 
-    # is a xsd:string
+    # is a xs:string
     # Enum: InventoryTransferInvoice InventoryTransferOrder
     #    PurchaseInvoice PurchaseOrder ReturnInvoice
     #    ReturnOrder ReverseChargeInvoice ReverseChargeOrder
     #    SalesInvoice SalesOrder
     DocType => "SalesOrder",
 
-    # is a xsd:string
+    # is a xs:string
     # is optional
     DocCode => "example",
 
-    # is a xsd:date
+    # is a xs:date
     PaymentDate => "2006-10-06", }, }
 
 ;
 
 # Operation PingSoapIn
 #           INPUT, document literal
+# Produced  by XML::Compile::SOAP12::Operation version 3.03
+#           on Wed Mar 11 15:25:00 2015
+#
+# The output below is only an example: it cannot be used
+# without interpretation, although very close to real code.
+
+# Compile only once in your code, usually during initiation:
+my $call = $wsdl->compileClient('Ping');
+# ... then call it as often as you need.
+# The details of the types and elements are attached below.
+
+# Header part 'Profile' is element tns:Profile
+my $Profile = {};
+
+# Header part 'wsse_Security' is element wsse:Security
+my $wsse_Security = {};
+
+# Body part 'parameters' is element tns:Ping
+my $parameters = {};
+
+# Call with the combination of parts.
+my @params = (
+    Profile => $Profile,
+    wsse_Security => $wsse_Security,
+    parameters => $parameters,
+);
+my ($answer, $trace) = $call->(@params);
+
+# @params will become %$data_in in the server handler.
+# $answer is a HASH, an operation OUTPUT or Fault.
+# $trace is an XML::Compile::SOAP::Trace object.
+
+# You may get an error back from the server
+if(my $f = $answer->{Fault})
+{   my $errname = $f->{_NAME};
+    my $error   = $answer->{$errname};
+    print "$error->{code}\n";
+
+    my $details = $error->{detail};
+    if(not $details)
+    {   # system error, no $details
+    }
+    exit 1;
+}
+
+#--------------------------------------------------------------
+$Profile =
+# Describing complex tns:Profile
+#     {http://avatax.avalara.com/services}Profile
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
+
+# is a tns:Profile
+{ # any attribute in any namespace
+  ANYATTR => "AnySimple",
+
+  # sequence of Name, Client, Adapter, Machine
+
+  # is a xs:string
+  # is optional
+  Name => "example",
+
+  # is a xs:string
+  # is optional
+  Client => "example",
+
+  # is a xs:string
+  # is optional
+  Adapter => "example",
+
+  # is a xs:string
+  # is optional
+  Machine => "example", }
+
+;
+
+#--------------------------------------------------------------
+$wsse_Security =
+# Describing complex wsse:Security
+#     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
+
+# is a wsse:SecurityHeaderType
+{ # any attribute not in wsse:
+  ANYATTR => "AnySimple",
+
+  # sequence of ANY
+
+  # any element in any namespace
+  # occurs any number of times
+  ANY => [ "Anything", ], }
+
+;
+
+#--------------------------------------------------------------
+$parameters =
+# Describing complex tns:Ping
+#     {http://avatax.avalara.com/services}Ping
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+
+# is an unnamed complex
+{ # sequence of Message
+
+  # is a xs:string
+  # is optional
+  Message => "example", }
+
+;
+
+# Operation IsAuthorizedSoapIn
+#           INPUT, document literal
+# Produced  by XML::Compile::SOAP12::Operation version 3.03
+#           on Wed Mar 11 15:25:00 2015
+#
+# The output below is only an example: it cannot be used
+# without interpretation, although very close to real code.
+
+# Compile only once in your code, usually during initiation:
+my $call = $wsdl->compileClient('IsAuthorized');
+# ... then call it as often as you need.
+# The details of the types and elements are attached below.
+
+# Header part 'Profile' is element tns:Profile
+my $Profile = {};
+
+# Header part 'wsse_Security' is element wsse:Security
+my $wsse_Security = {};
+
+# Body part 'parameters' is element tns:IsAuthorized
+my $parameters = {};
+
+# Call with the combination of parts.
+my @params = (
+    Profile => $Profile,
+    wsse_Security => $wsse_Security,
+    parameters => $parameters,
+);
+my ($answer, $trace) = $call->(@params);
+
+# @params will become %$data_in in the server handler.
+# $answer is a HASH, an operation OUTPUT or Fault.
+# $trace is an XML::Compile::SOAP::Trace object.
+
+# You may get an error back from the server
+if(my $f = $answer->{Fault})
+{   my $errname = $f->{_NAME};
+    my $error   = $answer->{$errname};
+    print "$error->{code}\n";
+
+    my $details = $error->{detail};
+    if(not $details)
+    {   # system error, no $details
+    }
+    exit 1;
+}
+
+#--------------------------------------------------------------
+$Profile =
+# Describing complex tns:Profile
+#     {http://avatax.avalara.com/services}Profile
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
+
+# is a tns:Profile
+{ # any attribute in any namespace
+  ANYATTR => "AnySimple",
+
+  # sequence of Name, Client, Adapter, Machine
+
+  # is a xs:string
+  # is optional
+  Name => "example",
+
+  # is a xs:string
+  # is optional
+  Client => "example",
+
+  # is a xs:string
+  # is optional
+  Adapter => "example",
+
+  # is a xs:string
+  # is optional
+  Machine => "example", }
+
+;
+
+#--------------------------------------------------------------
+$wsse_Security =
+# Describing complex wsse:Security
+#     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
+
+# is a wsse:SecurityHeaderType
+{ # any attribute not in wsse:
+  ANYATTR => "AnySimple",
+
+  # sequence of ANY
+
+  # any element in any namespace
+  # occurs any number of times
+  ANY => [ "Anything", ], }
+
+;
+
+#--------------------------------------------------------------
+$parameters =
+# Describing complex tns:IsAuthorized
+#     {http://avatax.avalara.com/services}IsAuthorized
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+
+# is an unnamed complex
+{ # sequence of Operations
+
+  # is a xs:string
+  # is optional
+  Operations => "example", }
+
+;
+
+# Operation TaxSummaryFetchSoapIn
+#           INPUT, document literal
+# Produced  by XML::Compile::SOAP12::Operation version 3.03
+#           on Wed Mar 11 15:25:00 2015
+#
+# The output below is only an example: it cannot be used
+# without interpretation, although very close to real code.
+
+# Compile only once in your code, usually during initiation:
+my $call = $wsdl->compileClient('TaxSummaryFetch');
+# ... then call it as often as you need.
+# The details of the types and elements are attached below.
+
+# Header part 'Profile' is element tns:Profile
+my $Profile = {};
+
+# Header part 'wsse_Security' is element wsse:Security
+my $wsse_Security = {};
+
+# Body part 'parameters' is element tns:TaxSummaryFetch
+my $parameters = {};
+
+# Call with the combination of parts.
+my @params = (
+    Profile => $Profile,
+    wsse_Security => $wsse_Security,
+    parameters => $parameters,
+);
+my ($answer, $trace) = $call->(@params);
+
+# @params will become %$data_in in the server handler.
+# $answer is a HASH, an operation OUTPUT or Fault.
+# $trace is an XML::Compile::SOAP::Trace object.
+
+# You may get an error back from the server
+if(my $f = $answer->{Fault})
+{   my $errname = $f->{_NAME};
+    my $error   = $answer->{$errname};
+    print "$error->{code}\n";
+
+    my $details = $error->{detail};
+    if(not $details)
+    {   # system error, no $details
+    }
+    exit 1;
+}
+
+#--------------------------------------------------------------
+$Profile =
+# Describing complex tns:Profile
+#     {http://avatax.avalara.com/services}Profile
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
+
+# is a tns:Profile
+{ # any attribute in any namespace
+  ANYATTR => "AnySimple",
+
+  # sequence of Name, Client, Adapter, Machine
+
+  # is a xs:string
+  # is optional
+  Name => "example",
+
+  # is a xs:string
+  # is optional
+  Client => "example",
+
+  # is a xs:string
+  # is optional
+  Adapter => "example",
+
+  # is a xs:string
+  # is optional
+  Machine => "example", }
+
+;
+
+#--------------------------------------------------------------
+$wsse_Security =
+# Describing complex wsse:Security
+#     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
+
+# is a wsse:SecurityHeaderType
+{ # any attribute not in wsse:
+  ANYATTR => "AnySimple",
+
+  # sequence of ANY
+
+  # any element in any namespace
+  # occurs any number of times
+  ANY => [ "Anything", ], }
+
+;
+
+#--------------------------------------------------------------
+$parameters =
+# Describing complex tns:TaxSummaryFetch
+#     {http://avatax.avalara.com/services}TaxSummaryFetch
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+
+# is an unnamed complex
+{ # sequence of TaxSummaryFetchRequest
+
+  # is a tns:TaxSummaryFetchRequest
+  # is optional
+  TaxSummaryFetchRequest =>
+  { # sequence of MerchantCode, StartDate, EndDate
+
+    # is a xs:string
+    # is optional
+    MerchantCode => "example",
+
+    # is a xs:date
+    StartDate => "2006-10-06",
+
+    # is a xs:date
+    EndDate => "2006-10-06", }, }
+
+;
+
+# Operation ValidateSoapIn
+#           INPUT, document literal
 # Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+#           on Wed Mar 11 15:25:00 2015
+#
+# The output below is only an example: it cannot be used
+# without interpretation, although very close to real code.
+
+# Compile only once in your code, usually during initiation:
+#   my $call = $wsdl->compileClient('Validate');
+# then call it as often as you need.  Alternatively
+#   $wsdl->compileCalls();   # once
+#   $response = $wsdl->call('Validate', $request);
+# The details of the types and elements are attached below.
+
+# Header part 'Profile' is element tns:Profile
+my $Profile = {};
+
+# Header part 'wsse_Security' is element wsse:Security
+my $wsse_Security = {};
+
+# Body part 'parameters' is element tns:Validate
+my $parameters = {};
+
+# Call with the combination of parts.
+my @params = (
+    Profile => $Profile,
+    wsse_Security => $wsse_Security,
+    parameters => $parameters,
+);
+my ($answer, $trace) = $call->(@params);
+
+# @params will become %$data_in in the server handler.
+# $answer is a HASH, an operation OUTPUT or Fault.
+# $trace is an XML::Compile::SOAP::Trace object.
+
+# You may get an error back from the server
+if(my $f = $answer->{Fault})
+{   my $errname = $f->{_NAME};
+    my $error   = $answer->{$errname};
+    print "$error->{code}\n";
+
+    my $details = $error->{detail};
+    if(not $details)
+    {   # system error, no $details
+    }
+    exit 1;
+}
+
+#--------------------------------------------------------------
+$Profile =
+# Describing complex tns:Profile
+#     {http://avatax.avalara.com/services}Profile
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
+
+# is a tns:Profile
+{ # any attribute in any namespace
+  ANYATTR => "AnySimple",
+
+  # sequence of Name, Client, Adapter, Machine
+
+  # is a xs:string
+  # is optional
+  Name => "example",
+
+  # is a xs:string
+  # is optional
+  Client => "example",
+
+  # is a xs:string
+  # is optional
+  Adapter => "example",
+
+  # is a xs:string
+  # is optional
+  Machine => "example", }
+
+;
+
+#--------------------------------------------------------------
+$wsse_Security =
+# Describing complex wsse:Security
+#     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
+
+# is a wsse:SecurityHeaderType
+{ # any attribute not in wsse:
+  ANYATTR => "AnySimple",
+
+  # sequence of ANY
+
+  # any element in any namespace
+  # occurs any number of times
+  ANY => [ "Anything", ], }
+
+;
+
+#--------------------------------------------------------------
+$parameters =
+# Describing complex tns:Validate
+#     {http://avatax.avalara.com/services}Validate
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+
+# is an unnamed complex
+{ # sequence of ValidateRequest
+
+  # is a tns:ValidateRequest
+  # is optional
+  ValidateRequest =>
+  { # sequence of Address, TextCase, Coordinates, Taxability, Date
+
+    # is a tns:BaseAddress
+    # is optional
+    Address =>
+    { # sequence of AddressCode, Line1, Line2, Line3, City, Region,
+      #   PostalCode, Country, TaxRegionId, Latitude, Longitude
+
+      # is a xs:string
+      # is optional
+      AddressCode => "example",
+
+      # is a xs:string
+      # is optional
+      Line1 => "example",
+
+      # is a xs:string
+      # is optional
+      Line2 => "example",
+
+      # is a xs:string
+      # is optional
+      Line3 => "example",
+
+      # is a xs:string
+      # is optional
+      City => "example",
+
+      # is a xs:string
+      # is optional
+      Region => "example",
+
+      # is a xs:string
+      # is optional
+      PostalCode => "example",
+
+      # is a xs:string
+      # is optional
+      Country => "example",
+
+      # is a xs:int
+      TaxRegionId => 42,
+
+      # is a xs:string
+      # is optional
+      Latitude => "example",
+
+      # is a xs:string
+      # is optional
+      Longitude => "example", },
+
+    # is a xs:string
+    # Enum: Default Mixed Upper
+    TextCase => "Default",
+
+    # is a xs:boolean
+    Coordinates => "true",
+
+    # is a xs:boolean
+    Taxability => "true",
+
+    # is a xs:date
+    Date => "2006-10-06", }, }
+
+;
+
+# Operation PingSoapIn
+#           INPUT, document literal
+# Produced  by XML::Compile::SOAP11::Operation version 3.08
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
@@ -3808,7 +4324,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -3816,19 +4332,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -3840,7 +4356,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -3864,7 +4380,7 @@ $parameters =
 # is an unnamed complex
 { # sequence of Message
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Message => "example", }
 
@@ -3873,7 +4389,7 @@ $parameters =
 # Operation IsAuthorizedSoapIn
 #           INPUT, document literal
 # Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
@@ -3924,7 +4440,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -3932,19 +4448,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -3956,7 +4472,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -3980,25 +4496,23 @@ $parameters =
 # is an unnamed complex
 { # sequence of Operations
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Operations => "example", }
 
 ;
 
-# Operation TaxSummaryFetchSoapIn
+# Operation ValidateSoapIn
 #           INPUT, document literal
-# Produced  by XML::Compile::SOAP11::Operation version 3.08
-#           on Mon Mar  9 12:09:21 2015
+# Produced  by XML::Compile::SOAP12::Operation version 3.03
+#           on Wed Mar 11 15:25:00 2015
 #
 # The output below is only an example: it cannot be used
 # without interpretation, although very close to real code.
 
 # Compile only once in your code, usually during initiation:
-#   my $call = $wsdl->compileClient('TaxSummaryFetch');
-# then call it as often as you need.  Alternatively
-#   $wsdl->compileCalls();   # once
-#   $response = $wsdl->call('TaxSummaryFetch', $request);
+my $call = $wsdl->compileClient('Validate');
+# ... then call it as often as you need.
 # The details of the types and elements are attached below.
 
 # Header part 'Profile' is element tns:Profile
@@ -4007,7 +4521,7 @@ my $Profile = {};
 # Header part 'wsse_Security' is element wsse:Security
 my $wsse_Security = {};
 
-# Body part 'parameters' is element tns:TaxSummaryFetch
+# Body part 'parameters' is element tns:Validate
 my $parameters = {};
 
 # Call with the combination of parts.
@@ -4040,7 +4554,7 @@ $Profile =
 # Describing complex tns:Profile
 #     {http://avatax.avalara.com/services}Profile
 # xmlns:tns       http://avatax.avalara.com/services
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a tns:Profile
 { # any attribute in any namespace
@@ -4048,19 +4562,19 @@ $Profile =
 
   # sequence of Name, Client, Adapter, Machine
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Name => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Client => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Adapter => "example",
 
-  # is a xsd:string
+  # is a xs:string
   # is optional
   Machine => "example", }
 
@@ -4072,7 +4586,7 @@ $wsse_Security =
 #     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
-# xmlns:xsd       http://www.w3.org/2001/XMLSchema
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
 
 # is a wsse:SecurityHeaderType
 { # any attribute not in wsse:
@@ -4088,28 +4602,309 @@ $wsse_Security =
 
 #--------------------------------------------------------------
 $parameters =
-# Describing complex tns:TaxSummaryFetch
-#     {http://avatax.avalara.com/services}TaxSummaryFetch
+# Describing complex tns:Validate
+#     {http://avatax.avalara.com/services}Validate
 # xmlns:tns       http://avatax.avalara.com/services
 # xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
 
 # is an unnamed complex
-{ # sequence of TaxSummaryFetchRequest
+{ # sequence of ValidateRequest
 
-  # is a tns:TaxSummaryFetchRequest
+  # is a tns:ValidateRequest
   # is optional
-  TaxSummaryFetchRequest =>
-  { # sequence of MerchantCode, StartDate, EndDate
+  ValidateRequest =>
+  { # sequence of Address, TextCase, Coordinates, Taxability, Date
 
-    # is a xsd:string
+    # is a tns:BaseAddress
     # is optional
-    MerchantCode => "example",
+    Address =>
+    { # sequence of AddressCode, Line1, Line2, Line3, City, Region,
+      #   PostalCode, Country, TaxRegionId, Latitude, Longitude
 
-    # is a xsd:date
-    StartDate => "2006-10-06",
+      # is a xs:string
+      # is optional
+      AddressCode => "example",
 
-    # is a xsd:date
-    EndDate => "2006-10-06", }, }
+      # is a xs:string
+      # is optional
+      Line1 => "example",
+
+      # is a xs:string
+      # is optional
+      Line2 => "example",
+
+      # is a xs:string
+      # is optional
+      Line3 => "example",
+
+      # is a xs:string
+      # is optional
+      City => "example",
+
+      # is a xs:string
+      # is optional
+      Region => "example",
+
+      # is a xs:string
+      # is optional
+      PostalCode => "example",
+
+      # is a xs:string
+      # is optional
+      Country => "example",
+
+      # is a xs:int
+      TaxRegionId => 42,
+
+      # is a xs:string
+      # is optional
+      Latitude => "example",
+
+      # is a xs:string
+      # is optional
+      Longitude => "example", },
+
+    # is a xs:string
+    # Enum: Default Mixed Upper
+    TextCase => "Default",
+
+    # is a xs:boolean
+    Coordinates => "true",
+
+    # is a xs:boolean
+    Taxability => "true",
+
+    # is a xs:date
+    Date => "2006-10-06", }, }
 
 ;
 
+# Operation PingSoapIn
+#           INPUT, document literal
+# Produced  by XML::Compile::SOAP12::Operation version 3.03
+#           on Wed Mar 11 15:25:00 2015
+#
+# The output below is only an example: it cannot be used
+# without interpretation, although very close to real code.
+
+# Compile only once in your code, usually during initiation:
+my $call = $wsdl->compileClient('Ping');
+# ... then call it as often as you need.
+# The details of the types and elements are attached below.
+
+# Header part 'Profile' is element tns:Profile
+my $Profile = {};
+
+# Header part 'wsse_Security' is element wsse:Security
+my $wsse_Security = {};
+
+# Body part 'parameters' is element tns:Ping
+my $parameters = {};
+
+# Call with the combination of parts.
+my @params = (
+    Profile => $Profile,
+    wsse_Security => $wsse_Security,
+    parameters => $parameters,
+);
+my ($answer, $trace) = $call->(@params);
+
+# @params will become %$data_in in the server handler.
+# $answer is a HASH, an operation OUTPUT or Fault.
+# $trace is an XML::Compile::SOAP::Trace object.
+
+# You may get an error back from the server
+if(my $f = $answer->{Fault})
+{   my $errname = $f->{_NAME};
+    my $error   = $answer->{$errname};
+    print "$error->{code}\n";
+
+    my $details = $error->{detail};
+    if(not $details)
+    {   # system error, no $details
+    }
+    exit 1;
+}
+
+#--------------------------------------------------------------
+$Profile =
+# Describing complex tns:Profile
+#     {http://avatax.avalara.com/services}Profile
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
+
+# is a tns:Profile
+{ # any attribute in any namespace
+  ANYATTR => "AnySimple",
+
+  # sequence of Name, Client, Adapter, Machine
+
+  # is a xs:string
+  # is optional
+  Name => "example",
+
+  # is a xs:string
+  # is optional
+  Client => "example",
+
+  # is a xs:string
+  # is optional
+  Adapter => "example",
+
+  # is a xs:string
+  # is optional
+  Machine => "example", }
+
+;
+
+#--------------------------------------------------------------
+$wsse_Security =
+# Describing complex wsse:Security
+#     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
+
+# is a wsse:SecurityHeaderType
+{ # any attribute not in wsse:
+  ANYATTR => "AnySimple",
+
+  # sequence of ANY
+
+  # any element in any namespace
+  # occurs any number of times
+  ANY => [ "Anything", ], }
+
+;
+
+#--------------------------------------------------------------
+$parameters =
+# Describing complex tns:Ping
+#     {http://avatax.avalara.com/services}Ping
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+
+# is an unnamed complex
+{ # sequence of Message
+
+  # is a xs:string
+  # is optional
+  Message => "example", }
+
+;
+
+# Operation IsAuthorizedSoapIn
+#           INPUT, document literal
+# Produced  by XML::Compile::SOAP12::Operation version 3.03
+#           on Wed Mar 11 15:25:00 2015
+#
+# The output below is only an example: it cannot be used
+# without interpretation, although very close to real code.
+
+# Compile only once in your code, usually during initiation:
+my $call = $wsdl->compileClient('IsAuthorized');
+# ... then call it as often as you need.
+# The details of the types and elements are attached below.
+
+# Header part 'Profile' is element tns:Profile
+my $Profile = {};
+
+# Header part 'wsse_Security' is element wsse:Security
+my $wsse_Security = {};
+
+# Body part 'parameters' is element tns:IsAuthorized
+my $parameters = {};
+
+# Call with the combination of parts.
+my @params = (
+    Profile => $Profile,
+    wsse_Security => $wsse_Security,
+    parameters => $parameters,
+);
+my ($answer, $trace) = $call->(@params);
+
+# @params will become %$data_in in the server handler.
+# $answer is a HASH, an operation OUTPUT or Fault.
+# $trace is an XML::Compile::SOAP::Trace object.
+
+# You may get an error back from the server
+if(my $f = $answer->{Fault})
+{   my $errname = $f->{_NAME};
+    my $error   = $answer->{$errname};
+    print "$error->{code}\n";
+
+    my $details = $error->{detail};
+    if(not $details)
+    {   # system error, no $details
+    }
+    exit 1;
+}
+
+#--------------------------------------------------------------
+$Profile =
+# Describing complex tns:Profile
+#     {http://avatax.avalara.com/services}Profile
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
+
+# is a tns:Profile
+{ # any attribute in any namespace
+  ANYATTR => "AnySimple",
+
+  # sequence of Name, Client, Adapter, Machine
+
+  # is a xs:string
+  # is optional
+  Name => "example",
+
+  # is a xs:string
+  # is optional
+  Client => "example",
+
+  # is a xs:string
+  # is optional
+  Adapter => "example",
+
+  # is a xs:string
+  # is optional
+  Machine => "example", }
+
+;
+
+#--------------------------------------------------------------
+$wsse_Security =
+# Describing complex wsse:Security
+#     {http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd}Security
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+# xmlns:xs        http://www.w3.org/2001/XMLSchema
+
+# is a wsse:SecurityHeaderType
+{ # any attribute not in wsse:
+  ANYATTR => "AnySimple",
+
+  # sequence of ANY
+
+  # any element in any namespace
+  # occurs any number of times
+  ANY => [ "Anything", ], }
+
+;
+
+#--------------------------------------------------------------
+$parameters =
+# Describing complex tns:IsAuthorized
+#     {http://avatax.avalara.com/services}IsAuthorized
+# xmlns:tns       http://avatax.avalara.com/services
+# xmlns:wsse      http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+
+# is an unnamed complex
+{ # sequence of Operations
+
+  # is a xs:string
+  # is optional
+  Operations => "example", }
+
+;
+
+[DZ] all's well; removing .build/PJ268ZHNId

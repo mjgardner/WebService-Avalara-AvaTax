@@ -200,27 +200,76 @@ Example:
         DetailLevel => 'Tax',
     );
 
-## is\_authorized
+## validate
 
 Example:
 
-    my ( $answer_ref, $trace ) = $avatax->is_authorized( join ', ' => qw(
-        Ping
-        IsAuthorized
-        GetTax
-        PostTax
-        GetTaxHistory
-        CommitTax
-        CancelTax
-        AdjustTax
-    ) );
+    my ( $answer_ref, $trace ) = $avatax->validate(
+        Address => {
+            Line1      => '118 N Clark St',
+            Line2      => 'Suite 100',
+            Line3      => 'ATTN Accounts Payable',
+            City       => 'Chicago',
+            Region     => 'IL',
+            PostalCode => '60602',
+        },
+        Coordinates => 1,
+        Taxability  => 1,
+        TextCase    => 'Upper',
+    );
 
-## ping
+## tax\_svc\_is\_authorized
+
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->tax_svc_is_authorized(
+        join ', ' => qw(
+            Ping
+            IsAuthorized
+            GetTax
+            PostTax
+            GetTaxHistory
+            CommitTax
+            CancelTax
+            AdjustTax
+        ),
+    );
+
+## address\_svc\_is\_authorized
+
+Example:
+
+    my ( $answer_ref, $trace ) = $avatax->address_svc_is_authorized(
+        join ', ' => qw(
+            Ping
+            IsAuthorized
+            Validate
+        ),
+    );
+
+## tax\_svc\_ping
 
 Example:
 
     use List::Util 1.33 'any';
-    my ( $answer_ref, $trace ) = $avatax->ping( Message => 'ignored' );
+    my ( $answer_ref, $trace ) = $avatax->tax_svc_ping;
+    for my $code ( $result_ref->{parameters}{PingResult}{ResultCode} ) {
+        if ( $code eq 'Success' ) { say $code; last }
+        if ( $code eq 'Warning' ) {
+            warn $result_ref->{parameters}{PingResult}{Messages};
+            last;
+        }
+        if ( any {$code eq $_} qw(Error Exception) ) {
+            die $result_ref->{parameters}{PingResult}{Messages};
+        }
+    }
+
+## address\_svc\_ping
+
+Example:
+
+    use List::Util 1.33 'any';
+    my ( $answer_ref, $trace ) = $avatax->address_svc_ping;
     for my $code ( $result_ref->{parameters}{PingResult}{ResultCode} ) {
         if ( $code eq 'Success' ) { say $code; last }
         if ( $code eq 'Warning' ) {
@@ -300,11 +349,10 @@ The Avalara email address used for authentication. Required.
 
 The password used for Avalara authentication. Required.
 
-## endpoint
+## is\_production
 
-A [URI](https://metacpan.org/pod/URI) object indicating the AvaTax WSDL file to load. Defaults to
-[https://development.avalara.net/tax/taxsvc.wsdl](https://development.avalara.net/tax/taxsvc.wsdl). For production API access
-one should set this to [https://avatax.avalara.net/tax/taxsvc.wsdl](https://avatax.avalara.net/tax/taxsvc.wsdl).
+A boolean value that indicates whether to connect to the production AvaTax
+services (true) or development (false). Defaults to false.
 
 ## debug
 

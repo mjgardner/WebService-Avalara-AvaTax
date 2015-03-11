@@ -1,7 +1,10 @@
 Revision history for perl distribution WebService-Avalara-AvaTax
 
 {{$NEXT}}
-
+    - Added support for Avalara address service validation via validate()
+      method. Since this service also has IsAuthorized and Ping operations,
+      the appropriate methods have been renamed address_svc_is_authorized,
+      address_svc_ping, tax_svc_is_authorized and tax_svc_ping.
 0.006     2015-03-10 11:52:22-04:00 America/New_York (TRIAL RELEASE)
     - remove extra "FooRequest => {}" around method parameters
 0.005     2015-03-09 21:30:34-04:00 America/New_York (TRIAL RELEASE)

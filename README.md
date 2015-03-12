@@ -4,7 +4,7 @@ WebService::Avalara::AvaTax - Avalara SOAP interface as compiled Perl methods
 
 # VERSION
 
-version 0.007
+version 0.008
 
 # SYNOPSIS
 
@@ -20,24 +20,31 @@ version 0.007
 This class provides a Perl method API for
 [Avalara AvaTax](http://developer.avalara.com/api-docs/soap)
 web services. The first call to any AvaTax SOAP operation uses
-[XML::Compile::WSDL11](https://metacpan.org/pod/XML::Compile::WSDL11) to compile and execute against the
-specified Avalara AvaTax service; subsequent calls can vary the
-parameters but will use the same compiled code.
+[XML::Compile::WSDL11](https://metacpan.org/pod/XML::Compile::WSDL11)
+to compile and execute against the specified Avalara AvaTax service;
+subsequent calls can vary the parameters but will use the same compiled code.
 
 # METHODS
 
-Aside from the ["new"](#new) method, available method names are dynamically loaded
-from the AvaTax WSDL file's operations and can be passed either a hash or
-reference to a hash with the necessary parameters. In scalar context they
-return a reference to a hash containing the results of the SOAP call; in list
-context they return the results hashref and an
+Aside from the ["new"](#new) method, ["services"](#services) attribute and
+other attributes and methods consumed from
+[WebService::Avalara::AvaTax::Role::Connection](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection),
+available method names are dynamically loaded from each
+["services"](#services)'
+[wsdl](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#wsdl)
+attribute and can be passed either a hash or reference to a hash with the
+necessary parameters. In scalar context they return a reference to a hash
+containing the results of the SOAP call; in list context they return the
+results hashref and an
 [XML::Compile::SOAP::Trace](https://metacpan.org/pod/XML::Compile::SOAP::Trace)
 object suitable for debugging and exception handling.
 
 ## new
 
-Builds a new AvaTax web service client. See the ["ATTRIBUTES"](#attributes) section for
-description of its named parameters.
+Builds a new AvaTax web service client. Since this class consumes the
+[WebService::Avalara::AvaTax::Role::Connection](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection)
+role, please consult that module's documentation for a full list of attributes
+that can be set at construction.
 
 ## get\_tax
 
@@ -218,7 +225,7 @@ Example:
         TextCase    => 'Upper',
     );
 
-## tax\_svc\_is\_authorized
+## is\_authorized
 
 Example:
 
@@ -235,41 +242,12 @@ Example:
         ),
     );
 
-## address\_svc\_is\_authorized
-
-Example:
-
-    my ( $answer_ref, $trace ) = $avatax->address_svc_is_authorized(
-        join ', ' => qw(
-            Ping
-            IsAuthorized
-            Validate
-        ),
-    );
-
-## tax\_svc\_ping
+## ping
 
 Example:
 
     use List::Util 1.33 'any';
     my ( $answer_ref, $trace ) = $avatax->tax_svc_ping;
-    for my $code ( $result_ref->{parameters}{PingResult}{ResultCode} ) {
-        if ( $code eq 'Success' ) { say $code; last }
-        if ( $code eq 'Warning' ) {
-            warn $result_ref->{parameters}{PingResult}{Messages};
-            last;
-        }
-        if ( any {$code eq $_} qw(Error Exception) ) {
-            die $result_ref->{parameters}{PingResult}{Messages};
-        }
-    }
-
-## address\_svc\_ping
-
-Example:
-
-    use List::Util 1.33 'any';
-    my ( $answer_ref, $trace ) = $avatax->address_svc_ping;
     for my $code ( $result_ref->{parameters}{PingResult}{ResultCode} ) {
         if ( $code eq 'Success' ) { say $code; last }
         if ( $code eq 'Warning' ) {
@@ -297,8 +275,8 @@ From [Avalara API documentation](http://developer.avalara.com/api-docs/soap/appl
 
 > The ApplyPayment method of the TaxSvc was originally designed to update an
 > existing document record with a PaymentDate value. This function (and
-> cash-basis accounting in general) is no longer supported, and will not work on
-> new or existing accounts, but remains in the TaxSvc WSDL and some
+> cash-basis accounting in general) is no longer supported, and will not work
+> on new or existing accounts, but remains in the TaxSvc WSDL and some
 > automatically built adaptors for backwards compatibility.
 
 Example:
@@ -341,42 +319,21 @@ Example:
 
 # ATTRIBUTES
 
-## username
+## services
 
-The Avalara email address used for authentication. Required.
+This module is really just a convenience wrapper around instances of
+[WebService::Avalara::AvaTax::Service::Address](https://metacpan.org/pod/WebService::Avalara::AvaTax::Service::Address)
+and
+[WebService::Avalara::AvaTax::Service::Tax](https://metacpan.org/pod/WebService::Avalara::AvaTax::Service::Tax)
+modules. As such this attribute is used to keep an array reference to
+instances of both classes, with the following attributes from ["new"](#new)
+passed to both:
 
-## password
-
-The password used for Avalara authentication. Required.
-
-## is\_production
-
-A boolean value that indicates whether to connect to the production AvaTax
-services (true) or development (false). Defaults to false.
-
-## debug
-
-When set to true, the [Log::Report](https://metacpan.org/pod/Log::Report) dispatcher used by
-[XML::Compile](https://metacpan.org/pod/XML::Compile) and friends is set to _DEBUG_ mode.
-
-## user\_agent
-
-An instance of an [LWP::UserAgent](https://metacpan.org/pod/LWP::UserAgent) (sub-)class. You can
-use your own subclass to add features such as caching or enhanced logging.
-
-If you do not specify a `user_agent` then we default to an
-[LWPx::UserAgent::Cached](https://metacpan.org/pod/LWPx::UserAgent::Cached) with its `ssl_opts`
-parameter set to `{verify_hostname => 0}`.
-
-## wsdl
-
-After construction, you can retrieve the created
-[XML::Compile::WSDL11](https://metacpan.org/pod/XML::Compile::WSDL11) instance.
-
-Example:
-
-    my $wsdl = $avatax->wsdl;
-    my @soap_operations = map { $_->name } $wsdl->operations;
+- [username](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#username)
+- [password](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#password)
+- [is\_production](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#is_production)
+- [user\_agent](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#user_agent)
+- [debug](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#debug)
 
 # SEE ALSO
 

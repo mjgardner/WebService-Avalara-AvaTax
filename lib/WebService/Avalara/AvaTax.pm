@@ -21,209 +21,77 @@ use utf8;
 This class provides a Perl method API for
 L<Avalara AvaTax|http://developer.avalara.com/api-docs/soap>
 web services. The first call to any AvaTax SOAP operation uses
-L<XML::Compile::WSDL11|XML::Compile::WSDL11> to compile and execute against the
-specified Avalara AvaTax service; subsequent calls can vary the
-parameters but will use the same compiled code.
+L<XML::Compile::WSDL11|XML::Compile::WSDL11>
+to compile and execute against the specified Avalara AvaTax service;
+subsequent calls can vary the parameters but will use the same compiled code.
 
 =cut
 
 use Carp;
 use Const::Fast;
 use English '-no_match_vars';
-use Log::Report;
-use LWPx::UserAgent::Cached;
 use Moo;
-use MooX::Types::MooseLike::Email 'EmailAddressLoose';
 use Package::Stash;
 use Scalar::Util 'blessed';
 use Sys::Hostname;
 use Types::Standard qw(ArrayRef Bool HashRef InstanceOf Str);
-use Types::URI 'Uri';
-use URI;
-use XML::Compile::SOAP::WSS;
-use XML::Compile::SOAP11;
-use XML::Compile::SOAP12;
-use XML::Compile::WSDL11;
-use XML::Compile::Transport::SOAPHTTP;
-use MooX::Struct EndpointLocator => [
-    wsdl_uri => [ is => 'ro', isa => Uri, required => 1, coerce => 1 ],
-    port     => [ is => 'ro', isa => Str, required => 1 ],
-    service  => [ is => 'ro', isa => Str, required => 1 ],
-];
+use WebService::Avalara::AvaTax::Service::Address;
+use WebService::Avalara::AvaTax::Service::Tax;
 use namespace::clean;
+with 'WebService::Avalara::AvaTax::Role::Connection';
 
 =method new
 
-Builds a new AvaTax web service client. See the L</ATTRIBUTES> section for
-description of its named parameters.
-
-=attr username
-
-The Avalara email address used for authentication. Required.
+Builds a new AvaTax web service client. Since this class consumes the
+L<WebService::Avalara::AvaTax::Role::Connection|WebService::Avalara::AvaTax::Role::Connection>
+role, please consult that module's documentation for a full list of attributes
+that can be set at construction.
 
 =cut
 
-has username => ( is => 'ro', isa => EmailAddressLoose, required => 1 );
+=attr services
 
-=attr password
+This module is really just a convenience wrapper around instances of
+L<WebService::Avalara::AvaTax::Service::Address|WebService::Avalara::AvaTax::Service::Address>
+and
+L<WebService::Avalara::AvaTax::Service::Tax|WebService::Avalara::AvaTax::Service::Tax>
+modules. As such this attribute is used to keep an array reference to
+instances of both classes, with the following attributes from L</new>
+passed to both:
 
-The password used for Avalara authentication. Required.
+=over
 
-=cut
+=item L<username|WebService::Avalara::AvaTax::Role::Connection/username>
 
-has password => ( is => 'ro', isa => Str, required => 1 );
+=item L<password|WebService::Avalara::AvaTax::Role::Connection/password>
 
-=attr is_production
+=item L<is_production|WebService::Avalara::AvaTax::Role::Connection/is_production>
 
-A boolean value that indicates whether to connect to the production AvaTax
-services (true) or development (false). Defaults to false.
+=item L<user_agent|WebService::Avalara::AvaTax::Role::Connection/user_agent>
 
-=cut
+=item L<debug|WebService::Avalara::AvaTax::Role::Connection/debug>
 
-has is_production => ( is => 'ro', isa => Bool, default => 0 );
-
-{
-    ## no critic (Subroutines::ProhibitCallsToUndeclaredSubs)
-    ## no critic (Modules::RequireExplicitInclusion)
-    has _endpoints =>
-        ( is => 'lazy', isa => ArrayRef [ InstanceOf [EndpointLocator] ] );
-    const my %SOAP_PARAMS => (
-        address => { port => 'AddressSvcSoap', service => 'AddressSvc' },
-        tax     => { port => 'TaxSvcSoap',     service => 'TaxSvc' },
-    );
-
-    sub _build__endpoints {
-        my $self = shift;
-        my $uri_base
-            = 'https://'
-            . ( $self->is_production ? 'avatax' : 'development' )
-            . '.avalara.net';
-        return [
-            map { EndpointLocator->new($_) } (
-                {   wsdl_uri => "$uri_base/address/addresssvc.wsdl",
-                    %{ $SOAP_PARAMS{address} },
-                },
-                {   wsdl_uri => "$uri_base/tax/taxsvc.wsdl",
-                    %{ $SOAP_PARAMS{tax} },
-                },
-            ),
-        ];
-    }
-}
-
-=attr debug
-
-When set to true, the L<Log::Report|Log::Report> dispatcher used by
-L<XML::Compile|XML::Compile> and friends is set to I<DEBUG> mode.
+=back
 
 =cut
 
-has debug => (
-    is      => 'ro',
-    isa     => Bool,
-    default => 0,
-    trigger =>
-        sub { dispatcher( mode => ( $_[1] ? 'DEBUG' : 'NORMAL' ), 'ALL' ) },
-);
-
-=attr user_agent
-
-An instance of an L<LWP::UserAgent|LWP::UserAgent> (sub-)class. You can
-use your own subclass to add features such as caching or enhanced logging.
-
-If you do not specify a C<user_agent> then we default to an
-L<LWPx::UserAgent::Cached|LWPx::UserAgent::Cached> with its C<ssl_opts>
-parameter set to C<< {verify_hostname => 0} >>.
-
-=cut
-
-has user_agent => (
-    is      => 'lazy',
-    isa     => InstanceOf ['LWP::UserAgent'],
-    default => sub {
-        LWPx::UserAgent::Cached->new( ssl_opts => { verify_hostname => 0 } );
-    },
-);
-
-=attr wsdl
-
-After construction, you can retrieve the created
-L<XML::Compile::WSDL11|XML::Compile::WSDL11> instance.
-
-Example:
-
-    my $wsdl = $avatax->wsdl;
-    my @soap_operations = map { $_->name } $wsdl->operations;
-
-=cut
-
-has wsdl => (
+has services => (
     is       => 'lazy',
-    isa      => InstanceOf ['XML::Compile::WSDL11'],
+    isa      => ArrayRef,
     init_arg => undef,
-);
-
-sub _build_wsdl {
-    my $self = shift;
-    my $wsdl = XML::Compile::WSDL11->new;
-    for ( map { $_->wsdl_uri } @{ $self->_endpoints } ) {
-        $wsdl->addWSDL( $self->user_agent->get($_)->content );
-    }
-    return $wsdl;
-}
-
-has _wss => (
-    is      => 'ro',
-    isa     => InstanceOf ['XML::Compile::SOAP::WSS'],
-    default => sub { XML::Compile::SOAP::WSS->new },
-);
-
-has _auth => ( is => 'lazy', isa => InstanceOf ['XML::Compile::WSS'] );
-
-sub _build__auth {
-    my $self = shift;
-    my $wss  = $self->_wss;
-    return $wss->basicAuth( map { ( $_ => $self->$_ ) }
-            qw(username password) );
-}
-
-has _transports => (
-    is      => 'lazy',
-    isa     => ArrayRef [ InstanceOf ['XML::Compile::Transport::SOAPHTTP'] ],
-    default => sub {
-        [ map { $_[0]->_make_transport($_) } @{ $_[0]->_endpoints } ];
+    default  => sub {
+        [ map { $_[0]->_new_service($_) } qw(Address Tax) ];
     },
 );
 
-sub _make_transport {
-    my ( $self, $endpoint_locator ) = @_;
-
-    my $wss  = $self->_wss;
-    my $wsdl = $self->wsdl;
-    my $auth = $self->_auth;
-
-    my %soap_params  = map { $_ => $endpoint_locator->$_ } qw(port service);
-    my $endpoint_uri = URI->new( $wsdl->endPoint(%soap_params) );
-    my $user_agent   = $self->user_agent;
-
-    $user_agent->add_handler(
-        request_prepare => sub {
-            $_[0]->header( SOAPAction =>
-                    $wsdl->operation( $self->_operation_name, %soap_params )
-                    ->soapAction );
-        },
-        (   m_method => 'POST',
-            map { ( "m_$_" => $endpoint_uri->$_ ) } qw(scheme host_port path),
-        ),
-    );
-
-    return XML::Compile::Transport::SOAPHTTP->new(
-        address    => $endpoint_uri,
-        user_agent => $self->user_agent,
+sub _new_service {
+    my $self  = shift;
+    my $class = __PACKAGE__ . '::Service::' . shift;
+    return $class->new(
+        map { ( $_ => $self->$_ ) }
+            qw(username password is_production user_agent debug),
     );
 }
-
-has _operation_name => ( is => 'rw', isa => Str, default => q{} );
 
 =head1 SEE ALSO
 
@@ -248,11 +116,16 @@ order to debug or extend this module.
 
 =head1 METHODS
 
-Aside from the L</new> method, available method names are dynamically loaded
-from the AvaTax WSDL file's operations and can be passed either a hash or
-reference to a hash with the necessary parameters. In scalar context they
-return a reference to a hash containing the results of the SOAP call; in list
-context they return the results hashref and an
+Aside from the L</new> method, L</services> attribute and
+other attributes and methods consumed from
+L<WebService::Avalara::AvaTax::Role::Connection|WebService::Avalara::AvaTax::Role::Connection>,
+available method names are dynamically loaded from each
+L</services>'
+L<wsdl|WebService::Avalara::AvaTax::Role::Connection/wsdl>
+attribute and can be passed either a hash or reference to a hash with the
+necessary parameters. In scalar context they return a reference to a hash
+containing the results of the SOAP call; in list context they return the
+results hashref and an
 L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
 object suitable for debugging and exception handling.
 
@@ -263,31 +136,23 @@ object suitable for debugging and exception handling.
 sub BUILD {
     my $self = shift;
 
-    # compile operations
-    my @operations;
-    for my $index ( 0 .. $#{ $self->_endpoints } ) {
-        my %soap_params
-            = map { ( $_ => $self->_endpoints->[$index]->$_ ) }
-            qw(port service);
-        $self->wsdl->compileCalls(
-            long_names => 1,
-            transport  => $self->_transports->[$index],
+    for my $service ( @{ $self->services } ) {
+        my %soap_params = map { ( $_ => $service->$_ ) } qw(port service);
+
+        $service->wsdl->compileCalls(
+            transport => $service->_transport,
             %soap_params,
         );
-        push @operations => $self->wsdl->operations(%soap_params);
-    }
+        for my $operation ( $service->wsdl->operations(%soap_params) ) {
 
-    # stash methods
-    for my $operation (@operations) {
-        my $method_name
-            = ( 2 > grep { $_->name eq $operation->name } @operations )
-            ? $operation->name
-            : $operation->longName;
-        $method_name =~ s/[#]//xms;
-        $method_name =~ s/ (?<= [[:alnum:]] ) ( [[:upper:]] ) /_\l$1/xmsg;
-        $method_name = lcfirst $method_name;
-        $self->_stash->add_symbol(
-            "&$method_name" => _method_closure($operation) );
+            # normalize operation name into a Perl method name
+            my $method_name = $operation->name;
+            $method_name =~ s/ (?<= [[:alnum:]] ) ( [[:upper:]] ) /_\l$1/xmsg;
+            $method_name = lcfirst $method_name;
+
+            $self->_stash->add_symbol(
+                "&$method_name" => _method_closure( $service, $operation ) );
+        }
     }
     return;
 }
@@ -317,15 +182,15 @@ const my %OPERATION_PARAMETER => (
 );
 
 sub _method_closure {
-    my $operation = shift;
+    my ( $service, $operation ) = @_;
     return sub {
         my ( $self, @parameters ) = @_;
-        my $wsdl = $self->wsdl;
 
-        $self->_operation_name( $operation->name );
+        my $wsdl = $service->wsdl;
+        $service->_current_operation_name( $operation->name );
+
         my ( $answer_ref, $trace ) = $wsdl->call(
-            $operation->serviceName . q{#}
-                . $operation->name => {
+            $operation->name => {
                 Profile => {
                     Client => "$PROGRAM_NAME," . ( $main::VERSION // q{} ),
                     Adapter => __PACKAGE__ . q{,} . ( $VERSION // q{} ),
@@ -337,7 +202,7 @@ sub _method_closure {
                     ? "@parameters"
                     : {@parameters},
                 },
-                },
+            },
         );
 
 =pod
@@ -536,7 +401,7 @@ Example:
         TextCase    => 'Upper',
     );
 
-=method tax_svc_is_authorized
+=method is_authorized
 
 Example:
 
@@ -553,41 +418,12 @@ Example:
         ),
     );
 
-=method address_svc_is_authorized
-
-Example:
-
-    my ( $answer_ref, $trace ) = $avatax->address_svc_is_authorized(
-        join ', ' => qw(
-            Ping
-            IsAuthorized
-            Validate
-        ),
-    );
-
-=method tax_svc_ping
+=method ping
 
 Example:
 
     use List::Util 1.33 'any';
     my ( $answer_ref, $trace ) = $avatax->tax_svc_ping;
-    for my $code ( $result_ref->{parameters}{PingResult}{ResultCode} ) {
-        if ( $code eq 'Success' ) { say $code; last }
-        if ( $code eq 'Warning' ) {
-            warn $result_ref->{parameters}{PingResult}{Messages};
-            last;
-        }
-        if ( any {$code eq $_} qw(Error Exception) ) {
-            die $result_ref->{parameters}{PingResult}{Messages};
-        }
-    }
-
-=method address_svc_ping
-
-Example:
-
-    use List::Util 1.33 'any';
-    my ( $answer_ref, $trace ) = $avatax->address_svc_ping;
     for my $code ( $result_ref->{parameters}{PingResult}{ResultCode} ) {
         if ( $code eq 'Success' ) { say $code; last }
         if ( $code eq 'Warning' ) {
@@ -617,8 +453,8 @@ From L<Avalara API documentation|http://developer.avalara.com/api-docs/soap/appl
 
 The ApplyPayment method of the TaxSvc was originally designed to update an
 existing document record with a PaymentDate value. This function (and
-cash-basis accounting in general) is no longer supported, and will not work on
-new or existing accounts, but remains in the TaxSvc WSDL and some
+cash-basis accounting in general) is no longer supported, and will not work
+on new or existing accounts, but remains in the TaxSvc WSDL and some
 automatically built adaptors for backwards compatibility.
 
 =back

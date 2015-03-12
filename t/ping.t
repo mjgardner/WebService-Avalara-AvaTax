@@ -12,7 +12,7 @@ const my @AVALARA_ENV => qw(username password);
 plan skip_all => 'set environment variables ' . join q{ } =>
     map {"AVALARA_\U$_"} @AVALARA_ENV
     if not all { $ENV{"AVALARA_\U$_"} } @AVALARA_ENV;
-plan tests => 3;
+plan tests => 2;
 
 my $avatax = new_ok(
     'WebService::Avalara::AvaTax' =>
@@ -20,8 +20,5 @@ my $avatax = new_ok(
     'AvaTax',
 );
 
-for my $method ( map {"${_}_ping"} qw(tax_svc address_svc) ) {
-    my $answer_ref = $avatax->$method;
-    is( $answer_ref->{parameters}{PingResult}{ResultCode},
-        'Success', $method );
-}
+my $answer_ref = $avatax->ping;
+is( $answer_ref->{parameters}{PingResult}{ResultCode}, 'Success', 'ping' );

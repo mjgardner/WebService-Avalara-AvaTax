@@ -403,9 +403,21 @@ Example:
 
 =method is_authorized
 
+Both
+L<WebService::Avalara::AvaTax::Service::Address|WebService::Avalara::AvaTax::Service::Address>
+and
+L<WebService::Avalara::AvaTax::Service::Tax|WebService::Avalara::AvaTax::Service::Tax>
+provide C<IsAuthorized> operations. However, since the latter is loaded last,
+only its version is called when you call this method. If you need to
+specifically call a particular service's C<IsAuthorized>, use the
+L<call|XML::Compile::WSDL11/Compilers>
+method on its
+L<wsdl|WebService::Avalara::AvaTax::Role::Connection/wsdl>
+attribute.
+
 Example:
 
-    my ( $answer_ref, $trace ) = $avatax->tax_svc_is_authorized(
+    my ( $answer_ref, $trace ) = $avatax->is_authorized(
         join ', ' => qw(
             Ping
             IsAuthorized
@@ -420,10 +432,22 @@ Example:
 
 =method ping
 
+Both
+L<WebService::Avalara::AvaTax::Service::Address|WebService::Avalara::AvaTax::Service::Address>
+and
+L<WebService::Avalara::AvaTax::Service::Tax|WebService::Avalara::AvaTax::Service::Tax>
+provide C<Ping> operations. However, since the latter is loaded last,
+only its version is called when you call this method. If you need to
+specifically call a particular service's C<Ping>, use the
+L<call|XML::Compile::WSDL11/Compilers>
+method on its
+L<wsdl|WebService::Avalara::AvaTax::Role::Connection/wsdl>
+attribute.
+
 Example:
 
     use List::Util 1.33 'any';
-    my ( $answer_ref, $trace ) = $avatax->tax_svc_ping;
+    my ( $answer_ref, $trace ) = $avatax->ping;
     for my $code ( $result_ref->{parameters}{PingResult}{ResultCode} ) {
         if ( $code eq 'Success' ) { say $code; last }
         if ( $code eq 'Warning' ) {

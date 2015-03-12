@@ -227,9 +227,21 @@ Example:
 
 ## is\_authorized
 
+Both
+[WebService::Avalara::AvaTax::Service::Address](https://metacpan.org/pod/WebService::Avalara::AvaTax::Service::Address)
+and
+[WebService::Avalara::AvaTax::Service::Tax](https://metacpan.org/pod/WebService::Avalara::AvaTax::Service::Tax)
+provide `IsAuthorized` operations. However, since the latter is loaded last,
+only its version is called when you call this method. If you need to
+specifically call a particular service's `IsAuthorized`, use the
+[call](https://metacpan.org/pod/XML::Compile::WSDL11#Compilers)
+method on its
+[wsdl](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#wsdl)
+attribute.
+
 Example:
 
-    my ( $answer_ref, $trace ) = $avatax->tax_svc_is_authorized(
+    my ( $answer_ref, $trace ) = $avatax->is_authorized(
         join ', ' => qw(
             Ping
             IsAuthorized
@@ -244,10 +256,22 @@ Example:
 
 ## ping
 
+Both
+[WebService::Avalara::AvaTax::Service::Address](https://metacpan.org/pod/WebService::Avalara::AvaTax::Service::Address)
+and
+[WebService::Avalara::AvaTax::Service::Tax](https://metacpan.org/pod/WebService::Avalara::AvaTax::Service::Tax)
+provide `Ping` operations. However, since the latter is loaded last,
+only its version is called when you call this method. If you need to
+specifically call a particular service's `Ping`, use the
+[call](https://metacpan.org/pod/XML::Compile::WSDL11#Compilers)
+method on its
+[wsdl](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#wsdl)
+attribute.
+
 Example:
 
     use List::Util 1.33 'any';
-    my ( $answer_ref, $trace ) = $avatax->tax_svc_ping;
+    my ( $answer_ref, $trace ) = $avatax->ping;
     for my $code ( $result_ref->{parameters}{PingResult}{ResultCode} ) {
         if ( $code eq 'Success' ) { say $code; last }
         if ( $code eq 'Warning' ) {

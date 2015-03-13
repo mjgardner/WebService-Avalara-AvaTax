@@ -21,4 +21,4 @@ my $avatax = new_ok(
 );
 
 my $answer_ref = $avatax->ping;
-is( $answer_ref->{parameters}{PingResult}{ResultCode}, 'Success', 'ping' );
+is( $answer_ref->{ResultCode}, 'Success', 'ping' );

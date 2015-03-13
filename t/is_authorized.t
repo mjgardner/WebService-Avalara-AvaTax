@@ -20,5 +20,4 @@ my $avatax
         @AVALARA_ENV );
 
 my $answer_ref = $avatax->is_authorized($AUTHORIZED_LIST);
-is( $answer_ref->{parameters}{IsAuthorizedResult}{ResultCode},
-    'Success', "is_authorized $AUTHORIZED_LIST" );
+is( $answer_ref->{ResultCode}, 'Success', "is_authorized $AUTHORIZED_LIST" );

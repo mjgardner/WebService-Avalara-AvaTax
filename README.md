@@ -274,11 +274,9 @@ Example:
     use List::Util 1.33 'any';
     my ( $answer_ref, $trace ) = $avatax->ping;
     for my $code ( $answer_ref->{ResultCode} ) {
-        if ( $code eq 'Success' ) { say $code; last }
-        if ( $code eq 'Warning' ) {
-            warn $answer_ref->{Messages};
-            last;
-        }
+        if ( $code eq 'Success' ) { say $code;                    last }
+        if ( $code eq 'Warning' ) { warn $answer_ref->{Messages}; last }
+
         die $answer_ref->{Messages} if any {$code eq $_} qw(Error Exception);
     }
 

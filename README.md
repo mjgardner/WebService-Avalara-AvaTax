@@ -40,6 +40,30 @@ results hashref and an
 object suitable for debugging and exception handling. If there is no result
 then an exception will be thrown.
 
+Please consult the
+[Avalara SOAP API reference](http://developer.avalara.com/api-reference)
+for semantic details on the methods, parameters and results available for each
+of the methods listed below. Note that in order to make this interface easier
+and more Perl-ish, the following changes have been made:
+
+- SOAP operation names have been transformed from `CamelCase` to
+`lowercase_with_underscores`. For example, `GetTax` is now
+["get\_tax"](#get_tax).
+- Parameters do not need to be enclosed in `{parameters}{FooRequest}{ ... }`
+hashes of hashes. These will be automatically added for you, along with all
+necessary SOAP headers. The examples below reflect this.
+- Similarly, results are not enclosed in `{parameters}{FooResult}{ ... }`
+hashes of hashes. They are, however, returned as a hash reference, not a
+simple hash. If you want access to other aspects of the SOAP response, make
+the call in list context and the second value in the list will be an
+[XML::Compile::SOAP::Trace](https://metacpan.org/pod/XML::Compile::SOAP::Trace)
+instance with methods for retrieving the full request and response as
+[HTTP::Request](https://metacpan.org/pod/HTTP::Request) and
+[HTTP::Response](https://metacpan.org/pod/HTTP::Response) objects,
+along with other methods for doing things like retrieving the parsed
+[XML::LibXML::Document](https://metacpan.org/pod/XML::LibXML::Document) DOM
+node of the response.
+
 ## new
 
 Builds a new AvaTax web service client. Since this class consumes the
@@ -49,17 +73,94 @@ that can be set at construction.
 
 ## get\_tax
 
-Example:
+Constructing and making an example request:
 
-    my ( $answer_ref, $trace ) = $avatax->get_tax(
-        CustomerCode => 'ABC4335',
-        DocDate      => '2014-01-01',
-        CompanyCode  => 'APITrialCompany',
-        DocCode      => 'INV001',
-        DetailLevel  =>  'Tax',
-        Commit       => 0,
-        DocType      => 'SalesInvoice',
+    my %get_tax_request = (
+        CompanyCode         => 'APITrialCompany',
+        DocType             => 'SalesInvoice',
+        DocCode             => 'INV001',
+        DocDate             => '2014-01-01',
+        CustomerCode        => 'ABC4335',
+        Discount            => 0,
+        OriginCode          => 0,
+        DestinationCode     => 1,
+        DetailLevel         => 'Tax',
+        HashCode            => 0,
+        Commit              => 'false',
+        ServiceMode         => 'Automatic',
+        PaymentDate         => '1900-01-01',
+        ExchangeRate        => 1,
+        ExchangeRateEffDate => '1900-01-01',
     );
+
+    my @addresses = (
+        {   Line1       => '45 Fremont Street',
+            City        => 'San Francisco',
+            Region      => 'CA',
+            PostalCode  => '94105-2204',
+            Country     => 'US',
+            TaxRegionId => 0,
+        },
+        {   Line1       => '118 N Clark St',
+            Line2       => 'ATTN Accounts Payable',
+            City        => 'Chicago',
+            Region      => 'IL',
+            PostalCode  => '60602-1304',
+            Country     => 'US',
+            TaxRegionId => 0,
+        },
+        {   Line1       => '100 Ravine Lane',
+            City        => 'Bainbridge Island',
+            Region      => 'WA',
+            PostalCode  => '98110',
+            Country     => 'US',
+            TaxRegionId => 0,
+        },
+    );
+    for my $address_code (0 .. @addresses) {
+        push @{$get_tax_request{Addresses}{BaseAddress}} => {
+            AddressCode => $address_code,
+            %{ $addresses[$address_code] },
+        };
+    }
+
+    my @lines => (
+        {   OriginCode      => 0,
+            DestinationCode => 1,
+            ItemCode        => 'N543',
+            TaxCode         => 'NT',
+            Qty             => 1,
+            Amount          => 10,
+            Discounted      => 'false',
+            Description     => 'Red Size 7 Widget',
+        },
+        {   OriginCode      => 0,
+            DestinationCode => 2,
+            ItemCode        => 'T345',
+            TaxCode         => 'PC030147',
+            Qty             => 3,
+            Amount          => 150,
+            Discounted      => 'false',
+            Description     => 'Size 10 Green Running Shoe',
+        },
+        {   OriginCode      => 0,
+            DestinationCode => 2,
+            ItemCode        => 'FREIGHT',
+            TaxCode         => 'FR',
+            Qty             => 1,
+            Amount          => 15,
+            Discounted      => 'false',
+            Description     => 'Shipping Charge',
+        },
+    );
+    for my $line_no (0 .. $#lines) {
+        push @{$get_tax_request{Lines}{Line}} => {
+            No => $line_no,
+            %{ $lines[$line_no - 1] },
+        };
+    }
+
+    my ( $answer_ref, $trace ) = $avatax->get_tax(%get_tax_request);
 
 ## post\_tax
 

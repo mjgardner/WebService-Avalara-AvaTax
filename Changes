@@ -1,6 +1,6 @@
 Revision history for perl distribution WebService-Avalara-AvaTax
 
-{{$NEXT}}
+0.009     2015-03-13 14:53:17-04:00 America/New_York (TRIAL RELEASE)
     - documentation fixes (Peter Sandin++)
     - use Mozilla::CA to verify HTTPS certificates (MIKEGRB++, Peter Sandin++)
     - Just return {parameters}{FooResult} hash reference as results, rather

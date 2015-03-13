@@ -25,6 +25,7 @@ use LWP::UserAgent;
 use LWPx::UserAgent::Cached;
 use Moo::Role;
 use MooX::Types::MooseLike::Email 'EmailAddressLoose';
+use Mozilla::CA;
 use Types::Standard qw(Bool InstanceOf Str);
 use Types::URI 'Uri';
 use URI;
@@ -109,18 +110,23 @@ has debug => (
 An instance of an L<LWP::UserAgent|LWP::UserAgent> (sub-)class. You can
 use your own subclass to add features such as caching or enhanced logging.
 
-If you do not specify a C<user_agent> then we default to an
-L<LWPx::UserAgent::Cached|LWPx::UserAgent::Cached> with its C<ssl_opts>
-parameter set to C<< {verify_hostname => 0} >>.
+If you do not specify a C<user_agent> then we default to an instance of
+L<LWPx::UserAgent::Cached|LWPx::UserAgent::Cached>. Note that we also set
+the C<HTTPS_CA_FILE> environment variable to the contents of
+L<Mozilla::CA::SSL_ca_file|Mozilla::CA/SSL_ca_file> in order to correctly
+resolve certificate names.
 
 =cut
 
+BEGIN {
+    ## no critic (Subroutines::ProhibitCallsToUnexportedSubs)
+    ## no critic (Variables::RequireLocalizedPunctuationVars)
+    $ENV{HTTPS_CA_FILE} = Mozilla::CA::SSL_ca_file();
+}
 has user_agent => (
     is      => 'lazy',
     isa     => InstanceOf ['LWP::UserAgent'],
-    default => sub {
-        LWPx::UserAgent::Cached->new( ssl_opts => { verify_hostname => 0 } );
-    },
+    default => sub { LWPx::UserAgent::Cached->new },
 );
 
 =attr wsdl

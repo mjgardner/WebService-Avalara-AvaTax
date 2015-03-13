@@ -127,7 +127,8 @@ necessary parameters. In scalar context they return a reference to a hash
 containing the results of the SOAP call; in list context they return the
 results hashref and an
 L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
-object suitable for debugging and exception handling.
+object suitable for debugging and exception handling. If there is no result
+then an exception will be thrown.
 
 =for Pod::Coverage BUILD
 
@@ -204,12 +205,6 @@ sub _method_closure {
                 },
             },
         );
-
-=pod
-
-If there is no result then an exception will be thrown.
-
-=cut
 
         if ( not $answer_ref ) {
             for ( $trace->errors ) { $_->throw }

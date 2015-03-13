@@ -1,7 +1,8 @@
 Revision history for perl distribution WebService-Avalara-AvaTax
 
 {{$NEXT}}
-
+    - move note about methods throwing exceptions to the METHODS
+      documentation section
 0.008     2015-03-12 17:46:27-04:00 America/New_York (TRIAL RELEASE)
     - ::Role::Connection returns to provide factored out functionality to
     the new ::Service::Address and ::Service::Tax classes; the main AvaTax

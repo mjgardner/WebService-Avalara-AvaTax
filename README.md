@@ -4,7 +4,7 @@ WebService::Avalara::AvaTax - Avalara SOAP interface as compiled Perl methods
 
 # VERSION
 
-version 0.010
+version 0.011
 
 # SYNOPSIS
 
@@ -48,7 +48,8 @@ and more Perl-ish, the following changes have been made:
 
 - SOAP operation names have been transformed from `CamelCase` to
 `lowercase_with_underscores`. For example, `GetTax` is now
-["get\_tax"](#get_tax).
+["get\_tax"](#get_tax). If you do not like this behavior then use
+`["orthodox"](#orthodox) => 1` when calling ["new"](#new).
 - Parameters do not need to be enclosed in `{parameters}{FooRequest}{ ... }`
 hashes of hashes. These will be automatically added for you, along with all
 necessary SOAP headers. The examples below reflect this.
@@ -72,6 +73,8 @@ role, please consult that module's documentation for a full list of attributes
 that can be set at construction.
 
 ## get\_tax
+
+_(SOAP operation: `GetTax`)_
 
 Constructing and making an example request:
 
@@ -164,6 +167,8 @@ Constructing and making an example request:
 
 ## post\_tax
 
+_(SOAP operation: `PostTax`)_
+
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->post_tax(
@@ -179,6 +184,8 @@ Example:
 
 ## commit\_tax
 
+_(SOAP operation: `CommitTax`)_
+
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->commit_tax(
@@ -190,6 +197,8 @@ Example:
 
 ## cancel\_tax
 
+_(SOAP operation: `CommitTax`)_
+
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->cancel_tax(
@@ -200,6 +209,8 @@ Example:
     );
 
 ## adjust\_tax
+
+_(SOAP operation: `AdjustTax`)_
 
 Example:
 
@@ -300,6 +311,8 @@ Example:
 
 ## get\_tax\_history
 
+_(SOAP operation: `GetTaxHistory`)_
+
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->get_tax_history(
@@ -310,6 +323,8 @@ Example:
     );
 
 ## validate
+
+_(SOAP operation: `Validate`)_
 
 Example:
 
@@ -329,6 +344,8 @@ Example:
 
 ## is\_authorized
 
+_(SOAP operation: `IsAuthorized`)_
+
 Both
 [WebService::Avalara::AvaTax::Service::Address](https://metacpan.org/pod/WebService::Avalara::AvaTax::Service::Address)
 and
@@ -340,6 +357,9 @@ specifically call a particular service's `IsAuthorized`, use the
 method on its
 [wsdl](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#wsdl)
 attribute.
+
+Note that the parameter passed to this call is a comma-delimited list of
+SOAP operation names in `CamelCase`, not `lowercase_with_underscores`.
 
 Example:
 
@@ -358,6 +378,8 @@ Example:
 
 ## ping
 
+_(SOAP operation: `Ping`)_
+
 Both
 [WebService::Avalara::AvaTax::Service::Address](https://metacpan.org/pod/WebService::Avalara::AvaTax::Service::Address)
 and
@@ -369,6 +391,9 @@ specifically call a particular service's `Ping`, use the
 method on its
 [wsdl](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#wsdl)
 attribute.
+
+Note that this method does support a single string as a message parameter;
+this is effectively ignored though.
 
 Example:
 
@@ -383,6 +408,8 @@ Example:
 
 ## tax\_summary\_fetch
 
+_(SOAP operation: `TaxSummaryFetch`)_
+
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->tax_summary_fetch(
@@ -392,6 +419,8 @@ Example:
     );
 
 ## apply\_payment (DEPRECATED)
+
+_(SOAP operation: `ApplyPayment`)_
 
 From [Avalara API documentation](http://developer.avalara.com/api-docs/soap/applypayment):
 
@@ -412,6 +441,8 @@ Example:
     );
 
 ## reconcile\_tax\_history (LEGACY API)
+
+_(SOAP operation: `ReconcileTaxHistory`)_
 
 From [Avalara API documentation](http://developer.avalara.com/api-docs/soap/reconciletaxhistory):
 
@@ -456,6 +487,11 @@ passed to both:
 - [is\_production](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#is_production)
 - [user\_agent](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#user_agent)
 - [debug](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#debug)
+
+## orthodox
+
+When set to true at construction, the generated methods will exactly match
+their `CamelCase` SOAP operation names.
 
 # SEE ALSO
 

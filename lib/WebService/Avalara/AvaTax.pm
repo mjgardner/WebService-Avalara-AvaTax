@@ -142,7 +142,8 @@ and more Perl-ish, the following changes have been made:
 
 SOAP operation names have been transformed from C<CamelCase> to
 C<lowercase_with_underscores>. For example, C<GetTax> is now
-L</get_tax>.
+L</get_tax>. If you do not like this behavior then use
+C<< L</orthodox> => 1 >> when calling L</new>.
 
 =item *
 
@@ -166,6 +167,15 @@ node of the response.
 
 =back
 
+=attr orthodox
+
+When set to true at construction, the generated methods will exactly match
+their C<CamelCase> SOAP operation names.
+
+=cut
+
+has orthodox => (is => 'ro', isa => Bool, default => 0);
+
 =for Pod::Coverage BUILD
 
 =cut
@@ -184,8 +194,10 @@ sub BUILD {
 
             # normalize operation name into a Perl method name
             my $method_name = $operation->name;
-            $method_name =~ s/ (?<= [[:alnum:]] ) ( [[:upper:]] ) /_\l$1/xmsg;
-            $method_name = lcfirst $method_name;
+            if (not $self->orthodox) {
+                $method_name =~ s/ (?<= [[:alnum:]] ) ( [[:upper:]] ) /_\l$1/xmsg;
+                $method_name = lcfirst $method_name;
+            }
 
             $self->_stash->add_symbol(
                 "&$method_name" => _method_closure( $service, $operation ) );
@@ -256,6 +268,8 @@ sub _method_closure {
 __END__
 
 =method get_tax
+
+I<< (SOAP operation: C<GetTax>) >>
 
 Constructing and making an example request:
 
@@ -348,6 +362,8 @@ Constructing and making an example request:
 
 =method post_tax
 
+I<< (SOAP operation: C<PostTax>) >>
+
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->post_tax(
@@ -363,6 +379,8 @@ Example:
 
 =method commit_tax
 
+I<< (SOAP operation: C<CommitTax>) >>
+
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->commit_tax(
@@ -374,6 +392,8 @@ Example:
 
 =method cancel_tax
 
+I<< (SOAP operation: C<CommitTax>) >>
+
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->cancel_tax(
@@ -384,6 +404,8 @@ Example:
     );
 
 =method adjust_tax
+
+I<< (SOAP operation: C<AdjustTax>) >>
 
 Example:
 
@@ -484,6 +506,8 @@ Example:
 
 =method get_tax_history
 
+I<< (SOAP operation: C<GetTaxHistory>) >>
+
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->get_tax_history(
@@ -494,6 +518,8 @@ Example:
     );
 
 =method validate
+
+I<< (SOAP operation: C<Validate>) >>
 
 Example:
 
@@ -513,6 +539,8 @@ Example:
 
 =method is_authorized
 
+I<< (SOAP operation: C<IsAuthorized>) >>
+
 Both
 L<WebService::Avalara::AvaTax::Service::Address|WebService::Avalara::AvaTax::Service::Address>
 and
@@ -524,6 +552,9 @@ L<call|XML::Compile::WSDL11/Compilers>
 method on its
 L<wsdl|WebService::Avalara::AvaTax::Role::Connection/wsdl>
 attribute.
+
+Note that the parameter passed to this call is a comma-delimited list of
+SOAP operation names in C<CamelCase>, not C<lowercase_with_underscores>.
 
 Example:
 
@@ -542,6 +573,8 @@ Example:
 
 =method ping
 
+I<< (SOAP operation: C<Ping>) >>
+
 Both
 L<WebService::Avalara::AvaTax::Service::Address|WebService::Avalara::AvaTax::Service::Address>
 and
@@ -553,6 +586,9 @@ L<call|XML::Compile::WSDL11/Compilers>
 method on its
 L<wsdl|WebService::Avalara::AvaTax::Role::Connection/wsdl>
 attribute.
+
+Note that this method does support a single string as a message parameter;
+this is effectively ignored though.
 
 Example:
 
@@ -567,6 +603,8 @@ Example:
 
 =method tax_summary_fetch
 
+I<< (SOAP operation: C<TaxSummaryFetch>) >>
+
 Example:
 
     my ( $answer_ref, $trace ) = $avatax->tax_summary_fetch(
@@ -576,6 +614,8 @@ Example:
     );
 
 =method apply_payment (DEPRECATED)
+
+I<< (SOAP operation: C<ApplyPayment>) >>
 
 From L<Avalara API documentation|http://developer.avalara.com/api-docs/soap/applypayment>:
 
@@ -600,6 +640,8 @@ Example:
     );
 
 =method reconcile_tax_history (LEGACY API)
+
+I<< (SOAP operation: C<ReconcileTaxHistory>) >>
 
 From L<Avalara API documentation|http://developer.avalara.com/api-docs/soap/reconciletaxhistory>:
 

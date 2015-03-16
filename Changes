@@ -1,6 +1,8 @@
 Revision history for perl distribution WebService-Avalara-AvaTax
 
 {{$NEXT}}
+
+0.010     2015-03-16 14:15:51-04:00 America/New_York
     - initial non-trial release
 0.009     2015-03-13 14:53:17-04:00 America/New_York (TRIAL RELEASE)
     - documentation fixes (Peter Sandin++)

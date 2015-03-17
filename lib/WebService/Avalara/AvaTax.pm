@@ -174,7 +174,7 @@ their C<CamelCase> SOAP operation names.
 
 =cut
 
-has orthodox => (is => 'ro', isa => Bool, default => 0);
+has orthodox => ( is => 'ro', isa => Bool, default => 0 );
 
 =for Pod::Coverage BUILD
 
@@ -191,11 +191,10 @@ sub BUILD {
             %soap_params,
         );
         for my $operation ( $service->wsdl->operations(%soap_params) ) {
-
-            # normalize operation name into a Perl method name
             my $method_name = $operation->name;
-            if (not $self->orthodox) {
-                $method_name =~ s/ (?<= [[:alnum:]] ) ( [[:upper:]] ) /_\l$1/xmsg;
+            if ( not $self->orthodox ) {    # normalize operation name
+                $method_name
+                    =~ s/ (?<= [[:alnum:]] ) ( [[:upper:]] ) /_\l$1/xmsg;
                 $method_name = lcfirst $method_name;
             }
 
@@ -315,14 +314,14 @@ Constructing and making an example request:
             TaxRegionId => 0,
         },
     );
-    for my $address_code (0 .. @addresses) {
+    for my $address_code (0 .. $#addresses) {
         push @{$get_tax_request{Addresses}{BaseAddress}} => {
             AddressCode => $address_code,
             %{ $addresses[$address_code] },
         };
     }
 
-    my @lines => (
+    my @lines = (
         {   OriginCode      => 0,
             DestinationCode => 1,
             ItemCode        => 'N543',
@@ -351,7 +350,7 @@ Constructing and making an example request:
             Description     => 'Shipping Charge',
         },
     );
-    for my $line_no (0 .. $#lines) {
+    for my $line_no (1 .. @lines) {
         push @{$get_tax_request{Lines}{Line}} => {
             No => $line_no,
             %{ $lines[$line_no - 1] },

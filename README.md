@@ -76,6 +76,11 @@ that can be set at construction.
 
 _(SOAP operation: `GetTax`)_
 
+As a convenience to
+[Business::Tax::Avalara](https://metacpan.org/pod/Business::Tax::Avalara)
+users (and others), the `DocDate` element below will default to today's date
+in the UTC time zone.
+
 Constructing and making an example request:
 
     my %get_tax_request = (

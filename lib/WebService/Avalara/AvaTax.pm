@@ -29,6 +29,8 @@ subsequent calls can vary the parameters but will use the same compiled code.
 
 use Carp;
 use Const::Fast;
+use DateTime;
+use DateTime::Format::XSD;
 use English '-no_match_vars';
 use Moo;
 use Package::Stash;
@@ -237,6 +239,10 @@ sub _method_closure {
         my $wsdl = $service->wsdl;
         $service->_current_operation_name( $operation->name );
 
+        if ( 'GetTax' eq $operation ) {
+            @parameters = _today_to_docdate(@parameters);
+        }
+
         my ( $answer_ref, $trace ) = $wsdl->call(
             $operation->name => {
                 Profile => {
@@ -262,6 +268,16 @@ sub _method_closure {
     };
 }
 
+sub _today_to_docdate {
+    my %parameters = @_;
+    if ( not defined $parameters{DocDate} ) {
+        $parameters{DocDate}
+            = DateTime::Format::XSD->format_datetime( DateTime->today );
+        $parameters{DocDate} =~ s/ T .* \z//xms;
+    }
+    return %parameters;
+}
+
 1;
 
 __END__
@@ -269,6 +285,11 @@ __END__
 =method get_tax
 
 I<< (SOAP operation: C<GetTax>) >>
+
+As a convenience to
+L<Business::Tax::Avalara|Business::Tax::Avalara>
+users (and others), the C<DocDate> element below will default to today's date
+in the UTC time zone.
 
 Constructing and making an example request:
 

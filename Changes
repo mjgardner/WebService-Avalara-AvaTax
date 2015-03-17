@@ -1,6 +1,8 @@
 Revision history for perl distribution WebService-Avalara-AvaTax
 
 {{$NEXT}}
+
+0.012     2015-03-16 22:11:13-04:00 America/New_York
     - default get_tax's DocDate to today's date in UTC
     - add basic test for GetTax SOAP operation that matches example from docs
     - documentation fixes

@@ -4,7 +4,7 @@ WebService::Avalara::AvaTax - Avalara SOAP interface as compiled Perl methods
 
 # VERSION
 
-version 0.012
+version 0.013
 
 # SYNOPSIS
 
@@ -37,8 +37,9 @@ necessary parameters. In scalar context they return a reference to a hash
 containing the results of the SOAP call; in list context they return the
 results hashref and an
 [XML::Compile::SOAP::Trace](https://metacpan.org/pod/XML::Compile::SOAP::Trace)
-object suitable for debugging and exception handling. If there is no result
-then an exception will be thrown.
+object suitable for debugging and exception handling.
+
+If there is no result then you should check the trace object for why.
 
 Please consult the
 [Avalara SOAP API reference](http://developer.avalara.com/api-reference)

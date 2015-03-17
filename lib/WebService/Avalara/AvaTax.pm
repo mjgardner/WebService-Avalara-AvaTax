@@ -129,8 +129,9 @@ necessary parameters. In scalar context they return a reference to a hash
 containing the results of the SOAP call; in list context they return the
 results hashref and an
 L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
-object suitable for debugging and exception handling. If there is no result
-then an exception will be thrown.
+object suitable for debugging and exception handling.
+
+If there is no result then you should check the trace object for why.
 
 Please consult the
 L<Avalara SOAP API reference|http://developer.avalara.com/api-reference>
@@ -258,12 +259,10 @@ sub _method_closure {
                 },
             },
         );
-
-        if ( not $answer_ref ) {
-            for ( $trace->errors ) { $_->throw }
+        if ( 'HASH' eq ref $answer_ref ) {
+            $answer_ref
+                = $answer_ref->{parameters}{ $operation->name . 'Result' };
         }
-        $answer_ref
-            = $answer_ref->{parameters}{ $operation->name . 'Result' };
         return wantarray ? ( $answer_ref, $trace ) : $answer_ref;
     };
 }

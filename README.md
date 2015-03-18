@@ -4,7 +4,7 @@ WebService::Avalara::AvaTax - Avalara SOAP interface as compiled Perl methods
 
 # VERSION
 
-version 0.014
+version 0.015
 
 # SYNOPSIS
 
@@ -203,7 +203,7 @@ Example:
 
 ## cancel\_tax
 
-_(SOAP operation: `CommitTax`)_
+_(SOAP operation: `CancelTax`)_
 
 Example:
 

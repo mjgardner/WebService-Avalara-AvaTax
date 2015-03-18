@@ -445,7 +445,7 @@ Example:
 
 =method cancel_tax
 
-I<< (SOAP operation: C<CommitTax>) >>
+I<< (SOAP operation: C<CancelTax>) >>
 
 Example:
 

@@ -1,6 +1,8 @@
 Revision history for perl distribution WebService-Avalara-AvaTax
 
 {{$NEXT}}
+
+0.015     2015-03-18 16:56:50-04:00 America/New_York
     - documentation fixes
 0.014     2015-03-18 16:12:04-04:00 America/New_York
     - added reader preprocessing hooks to correct for incorrect placement of

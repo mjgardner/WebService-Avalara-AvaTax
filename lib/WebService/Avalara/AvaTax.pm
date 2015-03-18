@@ -4,28 +4,28 @@ package WebService::Avalara::AvaTax;
 
 use Modern::Perl '2011';    ## no critic (Modules::ProhibitUseQuotedVersion)
 
-# VERSION
+our $VERSION = '0.015';     # VERSION
 use utf8;
 
-=head1 SYNOPSIS
-
-    use WebService::Avalara::AvaTax;
-    my $avatax = WebService::Avalara::AvaTax->new(
-        username => 'avalara@example.com',
-        password => 'sekrit',
-    );
-    my $answer_ref = $avatax->ping;
-
-=head1 DESCRIPTION
-
-This class provides a Perl method API for
-L<Avalara AvaTax|http://developer.avalara.com/api-docs/soap>
-web services. The first call to any AvaTax SOAP operation uses
-L<XML::Compile::WSDL11|XML::Compile::WSDL11>
-to compile and execute against the specified Avalara AvaTax service;
-subsequent calls can vary the parameters but will use the same compiled code.
-
-=cut
+#pod =head1 SYNOPSIS
+#pod
+#pod     use WebService::Avalara::AvaTax;
+#pod     my $avatax = WebService::Avalara::AvaTax->new(
+#pod         username => 'avalara@example.com',
+#pod         password => 'sekrit',
+#pod     );
+#pod     my $answer_ref = $avatax->ping;
+#pod
+#pod =head1 DESCRIPTION
+#pod
+#pod This class provides a Perl method API for
+#pod L<Avalara AvaTax|http://developer.avalara.com/api-docs/soap>
+#pod web services. The first call to any AvaTax SOAP operation uses
+#pod L<XML::Compile::WSDL11|XML::Compile::WSDL11>
+#pod to compile and execute against the specified Avalara AvaTax service;
+#pod subsequent calls can vary the parameters but will use the same compiled code.
+#pod
+#pod =cut
 
 use Carp;
 use Const::Fast;
@@ -45,40 +45,40 @@ with 'WebService::Avalara::AvaTax::Role::Connection';
 
 const my $AVALARA_NS => 'http://avatax.avalara.com/services';
 
-=method new
+#pod =method new
+#pod
+#pod Builds a new AvaTax web service client. Since this class consumes the
+#pod L<WebService::Avalara::AvaTax::Role::Connection|WebService::Avalara::AvaTax::Role::Connection>
+#pod role, please consult that module's documentation for a full list of attributes
+#pod that can be set at construction.
+#pod
+#pod =cut
 
-Builds a new AvaTax web service client. Since this class consumes the
-L<WebService::Avalara::AvaTax::Role::Connection|WebService::Avalara::AvaTax::Role::Connection>
-role, please consult that module's documentation for a full list of attributes
-that can be set at construction.
-
-=cut
-
-=attr services
-
-This module is really just a convenience wrapper around instances of
-L<WebService::Avalara::AvaTax::Service::Address|WebService::Avalara::AvaTax::Service::Address>
-and
-L<WebService::Avalara::AvaTax::Service::Tax|WebService::Avalara::AvaTax::Service::Tax>
-modules. As such this attribute is used to keep an array reference to
-instances of both classes, with the following attributes from L</new>
-passed to both:
-
-=over
-
-=item L<username|WebService::Avalara::AvaTax::Role::Connection/username>
-
-=item L<password|WebService::Avalara::AvaTax::Role::Connection/password>
-
-=item L<is_production|WebService::Avalara::AvaTax::Role::Connection/is_production>
-
-=item L<user_agent|WebService::Avalara::AvaTax::Role::Connection/user_agent>
-
-=item L<debug|WebService::Avalara::AvaTax::Role::Connection/debug>
-
-=back
-
-=cut
+#pod =attr services
+#pod
+#pod This module is really just a convenience wrapper around instances of
+#pod L<WebService::Avalara::AvaTax::Service::Address|WebService::Avalara::AvaTax::Service::Address>
+#pod and
+#pod L<WebService::Avalara::AvaTax::Service::Tax|WebService::Avalara::AvaTax::Service::Tax>
+#pod modules. As such this attribute is used to keep an array reference to
+#pod instances of both classes, with the following attributes from L</new>
+#pod passed to both:
+#pod
+#pod =over
+#pod
+#pod =item L<username|WebService::Avalara::AvaTax::Role::Connection/username>
+#pod
+#pod =item L<password|WebService::Avalara::AvaTax::Role::Connection/password>
+#pod
+#pod =item L<is_production|WebService::Avalara::AvaTax::Role::Connection/is_production>
+#pod
+#pod =item L<user_agent|WebService::Avalara::AvaTax::Role::Connection/user_agent>
+#pod
+#pod =item L<debug|WebService::Avalara::AvaTax::Role::Connection/debug>
+#pod
+#pod =back
+#pod
+#pod =cut
 
 has services => (
     is       => 'lazy',
@@ -98,72 +98,72 @@ sub _new_service {
     );
 }
 
-=head1 METHODS
-
-Aside from the L</new> method, L</services> attribute and
-other attributes and methods consumed from
-L<WebService::Avalara::AvaTax::Role::Connection|WebService::Avalara::AvaTax::Role::Connection>,
-available method names are dynamically loaded from each
-L</services>'
-L<wsdl|WebService::Avalara::AvaTax::Role::Connection/wsdl>
-attribute and can be passed either a hash or reference to a hash with the
-necessary parameters. In scalar context they return a reference to a hash
-containing the results of the SOAP call; in list context they return the
-results hashref and an
-L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
-object suitable for debugging and exception handling.
-
-If there is no result then you should check the trace object for why.
-
-Please consult the
-L<Avalara SOAP API reference|http://developer.avalara.com/api-reference>
-for semantic details on the methods, parameters and results available for each
-of the methods listed below. Note that in order to make this interface easier
-and more Perl-ish, the following changes have been made:
-
-=over
-
-=item *
-
-SOAP operation names have been transformed from C<CamelCase> to
-C<lowercase_with_underscores>. For example, C<GetTax> is now
-L</get_tax>. If you do not like this behavior then use
-C<< L</orthodox> => 1 >> when calling L</new>.
-
-=item *
-
-Parameters do not need to be enclosed in C<{parameters}{FooRequest}{ ... }>
-hashes of hashes. These will be automatically added for you, along with all
-necessary SOAP headers. The examples below reflect this.
-
-=item *
-
-Similarly, results are not enclosed in C<{parameters}{FooResult}{ ... }>
-hashes of hashes. They are, however, returned as a hash reference, not a
-simple hash. If you want access to other aspects of the SOAP response, make
-the call in list context and the second value in the list will be an
-L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
-instance with methods for retrieving the full request and response as
-L<HTTP::Request|HTTP::Request> and
-L<HTTP::Response|HTTP::Response> objects,
-along with other methods for doing things like retrieving the parsed
-L<XML::LibXML::Document|XML::LibXML::Document> DOM
-node of the response.
-
-=back
-
-=attr orthodox
-
-When set to true at construction, the generated methods will exactly match
-their C<CamelCase> SOAP operation names.
-
-=cut
+#pod =head1 METHODS
+#pod
+#pod Aside from the L</new> method, L</services> attribute and
+#pod other attributes and methods consumed from
+#pod L<WebService::Avalara::AvaTax::Role::Connection|WebService::Avalara::AvaTax::Role::Connection>,
+#pod available method names are dynamically loaded from each
+#pod L</services>'
+#pod L<wsdl|WebService::Avalara::AvaTax::Role::Connection/wsdl>
+#pod attribute and can be passed either a hash or reference to a hash with the
+#pod necessary parameters. In scalar context they return a reference to a hash
+#pod containing the results of the SOAP call; in list context they return the
+#pod results hashref and an
+#pod L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
+#pod object suitable for debugging and exception handling.
+#pod
+#pod If there is no result then you should check the trace object for why.
+#pod
+#pod Please consult the
+#pod L<Avalara SOAP API reference|http://developer.avalara.com/api-reference>
+#pod for semantic details on the methods, parameters and results available for each
+#pod of the methods listed below. Note that in order to make this interface easier
+#pod and more Perl-ish, the following changes have been made:
+#pod
+#pod =over
+#pod
+#pod =item *
+#pod
+#pod SOAP operation names have been transformed from C<CamelCase> to
+#pod C<lowercase_with_underscores>. For example, C<GetTax> is now
+#pod L</get_tax>. If you do not like this behavior then use
+#pod C<< L</orthodox> => 1 >> when calling L</new>.
+#pod
+#pod =item *
+#pod
+#pod Parameters do not need to be enclosed in C<{parameters}{FooRequest}{ ... }>
+#pod hashes of hashes. These will be automatically added for you, along with all
+#pod necessary SOAP headers. The examples below reflect this.
+#pod
+#pod =item *
+#pod
+#pod Similarly, results are not enclosed in C<{parameters}{FooResult}{ ... }>
+#pod hashes of hashes. They are, however, returned as a hash reference, not a
+#pod simple hash. If you want access to other aspects of the SOAP response, make
+#pod the call in list context and the second value in the list will be an
+#pod L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
+#pod instance with methods for retrieving the full request and response as
+#pod L<HTTP::Request|HTTP::Request> and
+#pod L<HTTP::Response|HTTP::Response> objects,
+#pod along with other methods for doing things like retrieving the parsed
+#pod L<XML::LibXML::Document|XML::LibXML::Document> DOM
+#pod node of the response.
+#pod
+#pod =back
+#pod
+#pod =attr orthodox
+#pod
+#pod When set to true at construction, the generated methods will exactly match
+#pod their C<CamelCase> SOAP operation names.
+#pod
+#pod =cut
 
 has orthodox => ( is => 'ro', isa => Bool, default => 0 );
 
-=for Pod::Coverage BUILD
-
-=cut
+#pod =for Pod::Coverage BUILD
+#pod
+#pod =cut
 
 sub BUILD {
     my $self = shift;
@@ -260,15 +260,15 @@ sub _today_to_docdate {
     return %parameters;
 }
 
-=head1 WORKAROUNDS FOR INCORRECT AVALARA RESPONSES
-
-As of this writing the Avalara SOAP API returns responses that are
-inconsistent with the WSDL document provided. Specifically, the C<TaxIncluded>
-and C<GeocodeType> fields in the C<GetTaxResponse> are wrongly placed in their
-sequences of fields. This module adds preprocessing hooks that attempt to
-work around these problems so that the responses may be successfully parsed.
-
-=cut
+#pod =head1 WORKAROUNDS FOR INCORRECT AVALARA RESPONSES
+#pod
+#pod As of this writing the Avalara SOAP API returns responses that are
+#pod inconsistent with the WSDL document provided. Specifically, the C<TaxIncluded>
+#pod and C<GeocodeType> fields in the C<GetTaxResponse> are wrongly placed in their
+#pod sequences of fields. This module adds preprocessing hooks that attempt to
+#pod work around these problems so that the responses may be successfully parsed.
+#pod
+#pod =cut
 
 sub _make_hooks {
     my $self = shift;
@@ -315,7 +315,101 @@ sub _make_hooks {
 
 __END__
 
-=method get_tax
+=pod
+
+=encoding UTF-8
+
+=for :stopwords Mark Gardner ZipRecruiter cpan testmatrix url annocpan anno bugtracker rt
+cpants kwalitee diff irc mailto metadata placeholders metacpan
+
+=head1 NAME
+
+WebService::Avalara::AvaTax - Avalara SOAP interface as compiled Perl methods
+
+=head1 VERSION
+
+version 0.015
+
+=head1 SYNOPSIS
+
+    use WebService::Avalara::AvaTax;
+    my $avatax = WebService::Avalara::AvaTax->new(
+        username => 'avalara@example.com',
+        password => 'sekrit',
+    );
+    my $answer_ref = $avatax->ping;
+
+=head1 DESCRIPTION
+
+This class provides a Perl method API for
+L<Avalara AvaTax|http://developer.avalara.com/api-docs/soap>
+web services. The first call to any AvaTax SOAP operation uses
+L<XML::Compile::WSDL11|XML::Compile::WSDL11>
+to compile and execute against the specified Avalara AvaTax service;
+subsequent calls can vary the parameters but will use the same compiled code.
+
+=head1 METHODS
+
+Aside from the L</new> method, L</services> attribute and
+other attributes and methods consumed from
+L<WebService::Avalara::AvaTax::Role::Connection|WebService::Avalara::AvaTax::Role::Connection>,
+available method names are dynamically loaded from each
+L</services>'
+L<wsdl|WebService::Avalara::AvaTax::Role::Connection/wsdl>
+attribute and can be passed either a hash or reference to a hash with the
+necessary parameters. In scalar context they return a reference to a hash
+containing the results of the SOAP call; in list context they return the
+results hashref and an
+L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
+object suitable for debugging and exception handling.
+
+If there is no result then you should check the trace object for why.
+
+Please consult the
+L<Avalara SOAP API reference|http://developer.avalara.com/api-reference>
+for semantic details on the methods, parameters and results available for each
+of the methods listed below. Note that in order to make this interface easier
+and more Perl-ish, the following changes have been made:
+
+=over
+
+=item *
+
+SOAP operation names have been transformed from C<CamelCase> to
+C<lowercase_with_underscores>. For example, C<GetTax> is now
+L</get_tax>. If you do not like this behavior then use
+C<< L</orthodox> => 1 >> when calling L</new>.
+
+=item *
+
+Parameters do not need to be enclosed in C<{parameters}{FooRequest}{ ... }>
+hashes of hashes. These will be automatically added for you, along with all
+necessary SOAP headers. The examples below reflect this.
+
+=item *
+
+Similarly, results are not enclosed in C<{parameters}{FooResult}{ ... }>
+hashes of hashes. They are, however, returned as a hash reference, not a
+simple hash. If you want access to other aspects of the SOAP response, make
+the call in list context and the second value in the list will be an
+L<XML::Compile::SOAP::Trace|XML::Compile::SOAP::Trace>
+instance with methods for retrieving the full request and response as
+L<HTTP::Request|HTTP::Request> and
+L<HTTP::Response|HTTP::Response> objects,
+along with other methods for doing things like retrieving the parsed
+L<XML::LibXML::Document|XML::LibXML::Document> DOM
+node of the response.
+
+=back
+
+=head2 new
+
+Builds a new AvaTax web service client. Since this class consumes the
+L<WebService::Avalara::AvaTax::Role::Connection|WebService::Avalara::AvaTax::Role::Connection>
+role, please consult that module's documentation for a full list of attributes
+that can be set at construction.
+
+=head2 get_tax
 
 I<< (SOAP operation: C<GetTax>) >>
 
@@ -413,7 +507,7 @@ Constructing and making an example request:
 
     my ( $answer_ref, $trace ) = $avatax->get_tax(%get_tax_request);
 
-=method post_tax
+=head2 post_tax
 
 I<< (SOAP operation: C<PostTax>) >>
 
@@ -430,7 +524,7 @@ Example:
         NewDocCode  => 'INV001-1',
     );
 
-=method commit_tax
+=head2 commit_tax
 
 I<< (SOAP operation: C<CommitTax>) >>
 
@@ -443,7 +537,7 @@ Example:
         NewDocCode  => 'INV001-1',
     );
 
-=method cancel_tax
+=head2 cancel_tax
 
 I<< (SOAP operation: C<CancelTax>) >>
 
@@ -456,7 +550,7 @@ Example:
         CancelCode  => 'DocVoided',
     );
 
-=method adjust_tax
+=head2 adjust_tax
 
 I<< (SOAP operation: C<AdjustTax>) >>
 
@@ -557,7 +651,7 @@ Example:
         },
     );
 
-=method get_tax_history
+=head2 get_tax_history
 
 I<< (SOAP operation: C<GetTaxHistory>) >>
 
@@ -570,7 +664,7 @@ Example:
         DetailLevel => 'Tax',
     );
 
-=method validate
+=head2 validate
 
 I<< (SOAP operation: C<Validate>) >>
 
@@ -590,7 +684,7 @@ Example:
         TextCase    => 'Upper',
     );
 
-=method is_authorized
+=head2 is_authorized
 
 I<< (SOAP operation: C<IsAuthorized>) >>
 
@@ -624,7 +718,7 @@ Example:
         ),
     );
 
-=method ping
+=head2 ping
 
 I<< (SOAP operation: C<Ping>) >>
 
@@ -654,7 +748,7 @@ Example:
         die $answer_ref->{Messages} if any {$code eq $_} qw(Error Exception);
     }
 
-=method tax_summary_fetch
+=head2 tax_summary_fetch
 
 I<< (SOAP operation: C<TaxSummaryFetch>) >>
 
@@ -666,7 +760,7 @@ Example:
         EndDate      => '2014-01-31',
     );
 
-=method apply_payment (DEPRECATED)
+=head2 apply_payment (DEPRECATED)
 
 I<< (SOAP operation: C<ApplyPayment>) >>
 
@@ -692,7 +786,7 @@ Example:
         PaymentDate => '2014-01-01',
     );
 
-=method reconcile_tax_history (LEGACY API)
+=head2 reconcile_tax_history (LEGACY API)
 
 I<< (SOAP operation: C<ReconcileTaxHistory>) >>
 
@@ -726,6 +820,47 @@ Example:
         PageSize    => 10,
     );
 
+=head1 ATTRIBUTES
+
+=head2 services
+
+This module is really just a convenience wrapper around instances of
+L<WebService::Avalara::AvaTax::Service::Address|WebService::Avalara::AvaTax::Service::Address>
+and
+L<WebService::Avalara::AvaTax::Service::Tax|WebService::Avalara::AvaTax::Service::Tax>
+modules. As such this attribute is used to keep an array reference to
+instances of both classes, with the following attributes from L</new>
+passed to both:
+
+=over
+
+=item L<username|WebService::Avalara::AvaTax::Role::Connection/username>
+
+=item L<password|WebService::Avalara::AvaTax::Role::Connection/password>
+
+=item L<is_production|WebService::Avalara::AvaTax::Role::Connection/is_production>
+
+=item L<user_agent|WebService::Avalara::AvaTax::Role::Connection/user_agent>
+
+=item L<debug|WebService::Avalara::AvaTax::Role::Connection/debug>
+
+=back
+
+=head2 orthodox
+
+When set to true at construction, the generated methods will exactly match
+their C<CamelCase> SOAP operation names.
+
+=for Pod::Coverage BUILD
+
+=head1 WORKAROUNDS FOR INCORRECT AVALARA RESPONSES
+
+As of this writing the Avalara SOAP API returns responses that are
+inconsistent with the WSDL document provided. Specifically, the C<TaxIncluded>
+and C<GeocodeType> fields in the C<GetTaxResponse> are wrongly placed in their
+sequences of fields. This module adds preprocessing hooks that attempt to
+work around these problems so that the responses may be successfully parsed.
+
 =head1 SEE ALSO
 
 =over
@@ -746,3 +881,123 @@ and the basis for this distribution. It's helpful to understand these in
 order to debug or extend this module.
 
 =back
+
+=head1 SUPPORT
+
+=head2 Perldoc
+
+You can find documentation for this module with the perldoc command.
+
+  perldoc WebService::Avalara::AvaTax
+
+=head2 Websites
+
+The following websites have more information about this module, and may be of help to you. As always,
+in addition to those websites please use your favorite search engine to discover more resources.
+
+=over 4
+
+=item *
+
+MetaCPAN
+
+A modern, open-source CPAN search engine, useful to view POD in HTML format.
+
+L<http://metacpan.org/release/WebService-Avalara-AvaTax>
+
+=item *
+
+Search CPAN
+
+The default CPAN search engine, useful to view POD in HTML format.
+
+L<http://search.cpan.org/dist/WebService-Avalara-AvaTax>
+
+=item *
+
+AnnoCPAN
+
+The AnnoCPAN is a website that allows community annotations of Perl module documentation.
+
+L<http://annocpan.org/dist/WebService-Avalara-AvaTax>
+
+=item *
+
+CPAN Ratings
+
+The CPAN Ratings is a website that allows community ratings and reviews of Perl modules.
+
+L<http://cpanratings.perl.org/d/WebService-Avalara-AvaTax>
+
+=item *
+
+CPAN Forum
+
+The CPAN Forum is a web forum for discussing Perl modules.
+
+L<http://cpanforum.com/dist/WebService-Avalara-AvaTax>
+
+=item *
+
+CPANTS
+
+The CPANTS is a website that analyzes the Kwalitee ( code metrics ) of a distribution.
+
+L<http://cpants.cpanauthors.org/dist/WebService-Avalara-AvaTax>
+
+=item *
+
+CPAN Testers
+
+The CPAN Testers is a network of smokers who run automated tests on uploaded CPAN distributions.
+
+L<http://www.cpantesters.org/distro/W/WebService-Avalara-AvaTax>
+
+=item *
+
+CPAN Testers Matrix
+
+The CPAN Testers Matrix is a website that provides a visual overview of the test results for a distribution on various Perls/platforms.
+
+L<http://matrix.cpantesters.org/?dist=WebService-Avalara-AvaTax>
+
+=item *
+
+CPAN Testers Dependencies
+
+The CPAN Testers Dependencies is a website that shows a chart of the test results of all dependencies for a distribution.
+
+L<http://deps.cpantesters.org/?module=WebService::Avalara::AvaTax>
+
+=back
+
+=head2 Bugs / Feature Requests
+
+Please report any bugs or feature requests through the web
+interface at
+L<https://github.com/mjgardner/WebService-Avalara-AvaTax/issues>.
+You will be automatically notified of any progress on the
+request by the system.
+
+=head2 Source Code
+
+The code is open to the world, and available for you to hack on. Please feel free to browse it and play
+with it, or whatever. If you want to contribute patches, please send me a diff or prod me to pull
+from your repository :)
+
+L<https://github.com/mjgardner/WebService-Avalara-AvaTax>
+
+  git clone git://github.com/mjgardner/WebService-Avalara-AvaTax.git
+
+=head1 AUTHOR
+
+Mark Gardner <mjgardner@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2015 by ZipRecruiter.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut

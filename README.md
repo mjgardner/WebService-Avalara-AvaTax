@@ -4,7 +4,7 @@ WebService::Avalara::AvaTax - Avalara SOAP interface as compiled Perl methods
 
 # VERSION
 
-version 0.013
+version 0.014
 
 # SYNOPSIS
 
@@ -498,6 +498,14 @@ passed to both:
 
 When set to true at construction, the generated methods will exactly match
 their `CamelCase` SOAP operation names.
+
+# WORKAROUNDS FOR INCORRECT AVALARA RESPONSES
+
+As of this writing the Avalara SOAP API returns responses that are
+inconsistent with the WSDL document provided. Specifically, the `TaxIncluded`
+and `GeocodeType` fields in the `GetTaxResponse` are wrongly placed in their
+sequences of fields. This module adds preprocessing hooks that attempt to
+work around these problems so that the responses may be successfully parsed.
 
 # SEE ALSO
 

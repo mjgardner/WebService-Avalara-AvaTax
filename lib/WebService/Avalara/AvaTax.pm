@@ -39,8 +39,11 @@ use Sys::Hostname;
 use Types::Standard qw(ArrayRef Bool HashRef InstanceOf Str);
 use WebService::Avalara::AvaTax::Service::Address;
 use WebService::Avalara::AvaTax::Service::Tax;
+use XML::LibXML::XPathContext;
 use namespace::clean;
 with 'WebService::Avalara::AvaTax::Role::Connection';
+
+const my $AVALARA_NS => 'http://avatax.avalara.com/services';
 
 =method new
 
@@ -94,27 +97,6 @@ sub _new_service {
             qw(username password is_production user_agent debug),
     );
 }
-
-=head1 SEE ALSO
-
-=over
-
-=item L<Avalara Developer Network|http://developer.avalara.com/>
-
-Official source for Avalara developer information, including API
-references, technical articles and more.
-
-=item L<Business::Tax::Avalara|Business::Tax::Avalara>
-
-An alternative that uses Avalara's REST API.
-
-=item L<XML::Compile::SOAP|XML::Compile::SOAP> and L<XML::Compile::WSDL11|XML::Compile::WSDL11>
-
-Part of the L<XML::Compile|XML::Compile> suite
-and the basis for this distribution. It's helpful to understand these in
-order to debug or extend this module.
-
-=back
 
 =head1 METHODS
 
@@ -191,6 +173,7 @@ sub BUILD {
 
         $service->wsdl->compileCalls(
             transport => $service->_transport,
+            hooks     => $self->_make_hooks,
             %soap_params,
         );
         for my $operation ( $service->wsdl->operations(%soap_params) ) {
@@ -275,6 +258,57 @@ sub _today_to_docdate {
         $parameters{DocDate} =~ s/ T .* \z//xms;
     }
     return %parameters;
+}
+
+=head1 WORKAROUNDS FOR INCORRECT AVALARA RESPONSES
+
+As of this writing the Avalara SOAP API returns responses that are
+inconsistent with the WSDL document provided. Specifically, the C<TaxIncluded>
+and C<GeocodeType> fields in the C<GetTaxResponse> are wrongly placed in their
+sequences of fields. This module adds preprocessing hooks that attempt to
+work around these problems so that the responses may be successfully parsed.
+
+=cut
+
+sub _make_hooks {
+    my $self = shift;
+    my $xpc  = XML::LibXML::XPathContext->new;
+    $xpc->registerNs( ava => $AVALARA_NS );
+    return [
+        {   action => 'READER',
+            type   => "{$AVALARA_NS}TaxLine",
+            before => sub {
+                my $xml = shift->cloneNode(1);
+                my $tax_included = $xpc->findnodes( 'ava:TaxIncluded', $xml );
+                $tax_included->foreach(
+                    sub {
+                        my $parent = $_->parentNode;
+                        $_->unbindNode;
+                        $parent->appendChild($_);
+                    },
+                );
+                return $xml;
+            },
+        },
+        {   action => 'READER',
+            type   => "{$AVALARA_NS}TaxAddress",
+            before => sub {
+                my $xml = shift->cloneNode(1);
+                my $geocode_type = $xpc->findnodes( 'ava:GeocodeType', $xml );
+                $geocode_type->foreach(
+                    sub {
+                        my $parent = $_->parentNode;
+                        my $validate_status
+                            = $xpc->findnodes( 'ava:ValidateStatus', $parent )
+                            ->shift;
+                        $_->unbindNode;
+                        $parent->insertAfter( $_, $validate_status );
+                    },
+                );
+                return $xml;
+            },
+        },
+    ];
 }
 
 1;
@@ -691,3 +725,24 @@ Example:
         LastDocCode => 'example',
         PageSize    => 10,
     );
+
+=head1 SEE ALSO
+
+=over
+
+=item L<Avalara Developer Network|http://developer.avalara.com/>
+
+Official source for Avalara developer information, including API
+references, technical articles and more.
+
+=item L<Business::Tax::Avalara|Business::Tax::Avalara>
+
+An alternative that uses Avalara's REST API.
+
+=item L<XML::Compile::SOAP|XML::Compile::SOAP> and L<XML::Compile::WSDL11|XML::Compile::WSDL11>
+
+Part of the L<XML::Compile|XML::Compile> suite
+and the basis for this distribution. It's helpful to understand these in
+order to debug or extend this module.
+
+=back

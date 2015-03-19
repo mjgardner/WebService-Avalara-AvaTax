@@ -4,7 +4,7 @@ WebService::Avalara::AvaTax - Avalara SOAP interface as compiled Perl methods
 
 # VERSION
 
-version 0.017
+version 0.018
 
 # SYNOPSIS
 

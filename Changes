@@ -1,6 +1,6 @@
 Revision history for perl distribution WebService-Avalara-AvaTax
 
-{{$NEXT}}
+0.017     2015-03-19 13:05:26-04:00 America/New_York (TRIAL RELEASE)
     - documentation fixes
     - use a WSDL patch schema rather than janky hooks (MARKOV++)
 0.016     2015-03-19 09:32:34-04:00 America/New_York

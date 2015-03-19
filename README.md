@@ -4,7 +4,7 @@ WebService::Avalara::AvaTax - Avalara SOAP interface as compiled Perl methods
 
 # VERSION
 
-version 0.016
+version 0.017
 
 # SYNOPSIS
 
@@ -50,7 +50,7 @@ and more Perl-ish, the following changes have been made:
 - SOAP operation names have been transformed from `CamelCase` to
 `lowercase_with_underscores`. For example, `GetTax` is now
 ["get\_tax"](#get_tax). If you do not like this behavior then use
-`["orthodox"](#orthodox) => 1` when calling ["new"](#new).
+[`orthodox => 1`](#orthodox) when calling ["new"](#new).
 - Parameters do not need to be enclosed in `{parameters}{FooRequest}{ ... }`
 hashes of hashes. These will be automatically added for you, along with all
 necessary SOAP headers. The examples below reflect this.

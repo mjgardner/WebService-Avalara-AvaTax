@@ -1,7 +1,7 @@
 Revision history for perl distribution WebService-Avalara-AvaTax
 
 {{$NEXT}}
-
+    - documentation fixes
 0.016     2015-03-19 09:32:34-04:00 America/New_York
     - move preprocessing hooks to WebService::Avalara::AvaTax::Service::Tax
 0.015     2015-03-18 16:56:50-04:00 America/New_York

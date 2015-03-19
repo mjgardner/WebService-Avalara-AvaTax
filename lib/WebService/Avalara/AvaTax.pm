@@ -125,7 +125,7 @@ and more Perl-ish, the following changes have been made:
 SOAP operation names have been transformed from C<CamelCase> to
 C<lowercase_with_underscores>. For example, C<GetTax> is now
 L</get_tax>. If you do not like this behavior then use
-C<< L</orthodox> => 1 >> when calling L</new>.
+L<<< C<< orthodox => 1 >>|/orthodox >>> when calling L</new>.
 
 =item *
 

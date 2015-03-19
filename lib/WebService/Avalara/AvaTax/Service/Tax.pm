@@ -27,17 +27,14 @@ with defaults for certain attributes as listed below.
 
 =cut
 
-use Const::Fast;
+use File::ShareDir::ProjectDistDir 'dist_file';
 use Moo;
 use URI;
 use XML::Compile::SOAP11;
 use XML::Compile::SOAP12;
 use XML::Compile::WSDL11;
-use XML::LibXML::XPathContext;
 use namespace::clean;
 with 'WebService::Avalara::AvaTax::Role::Connection';
-
-const my $AVALARA_NS => 'http://avatax.avalara.com/services';
 
 =attr uri
 
@@ -81,59 +78,21 @@ has '+service' => ( default => 'TaxSvc' );
 As of this writing the Avalara SOAP API returns responses that are
 inconsistent with the WSDL document provided. Specifically, the C<TaxIncluded>
 and C<GeocodeType> fields in the C<GetTaxResponse> are wrongly placed in their
-sequences of fields. This module adds preprocessing hooks that attempt to
-work around these problems so that the responses may be successfully parsed.
+sequences of fields. This module adds an overlay to the Avalara tax service
+WSDL file that attempts to work around these problems so that the responses
+may be successfully parsed.
 
 =cut
 
 has '+wsdl' => (
     default => sub {
         my $self = shift;
-        XML::Compile::WSDL11->new(
-            $self->user_agent->get( $self->uri )->content,
-            hooks => $self->_make_hooks );
+        my $wsdl = XML::Compile::WSDL11->new(
+            $self->user_agent->get( $self->uri )->content );
+        $wsdl->addWSDL(
+            dist_file( 'WebService-Avalara-AvaTax', 'taxsvc_patch.wsdl' ) );
+        return $wsdl;
     },
 );
-
-sub _make_hooks {
-    my $self = shift;
-    my $xpc  = XML::LibXML::XPathContext->new;
-    $xpc->registerNs( ava => $AVALARA_NS );
-    return [
-        {   action => 'READER',
-            type   => "{$AVALARA_NS}TaxLine",
-            before => sub {
-                my $xml = shift->cloneNode(1);
-                my $tax_included = $xpc->findnodes( 'ava:TaxIncluded', $xml );
-                $tax_included->foreach(
-                    sub {
-                        my $parent = $_->parentNode;
-                        $_->unbindNode;
-                        $parent->appendChild($_);
-                    },
-                );
-                return $xml;
-            },
-        },
-        {   action => 'READER',
-            type   => "{$AVALARA_NS}TaxAddress",
-            before => sub {
-                my $xml = shift->cloneNode(1);
-                my $geocode_type = $xpc->findnodes( 'ava:GeocodeType', $xml );
-                $geocode_type->foreach(
-                    sub {
-                        my $parent = $_->parentNode;
-                        my $validate_status
-                            = $xpc->findnodes( 'ava:ValidateStatus', $parent )
-                            ->shift;
-                        $_->unbindNode;
-                        $parent->insertAfter( $_, $validate_status );
-                    },
-                );
-                return $xml;
-            },
-        },
-    ];
-}
 
 1;

@@ -113,7 +113,7 @@ use your own subclass to add features such as caching or enhanced logging.
 If you do not specify a C<user_agent> then we default to an instance of
 L<LWPx::UserAgent::Cached|LWPx::UserAgent::Cached>. Note that we also set
 the C<HTTPS_CA_FILE> environment variable to the result from
-L<Mozilla::CA::SSL_ca_file|Mozilla::CA/SSL_ca_file> in order to correctly
+L<Mozilla::CA::SSL_ca_file|Mozilla::CA> in order to correctly
 resolve certificate names.
 
 =cut

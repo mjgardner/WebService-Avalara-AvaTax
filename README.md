@@ -4,7 +4,7 @@ WebService::Avalara::AvaTax - Avalara SOAP interface as compiled Perl methods
 
 # VERSION
 
-version 0.018
+version 0.019
 
 # SYNOPSIS
 
@@ -30,8 +30,7 @@ Aside from the ["new"](#new) method, ["services"](#services) attribute and
 other attributes and methods consumed from
 [WebService::Avalara::AvaTax::Role::Connection](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection),
 available method names are dynamically loaded from each
-["services"](#services)'
-[wsdl](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#wsdl)
+["services"](#services)' `wsdl`
 attribute and can be passed either a hash or reference to a hash with the
 necessary parameters. In scalar context they return a reference to a hash
 containing the results of the SOAP call; in list context they return the
@@ -360,9 +359,7 @@ provide `IsAuthorized` operations. However, since the latter is loaded last,
 only its version is called when you call this method. If you need to
 specifically call a particular service's `IsAuthorized`, use the
 [call](https://metacpan.org/pod/XML::Compile::WSDL11#Compilers)
-method on its
-[wsdl](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#wsdl)
-attribute.
+method on its `wsdl` attribute.
 
 Note that the parameter passed to this call is a comma-delimited list of
 SOAP operation names in `CamelCase`, not `lowercase_with_underscores`.
@@ -394,9 +391,7 @@ provide `Ping` operations. However, since the latter is loaded last,
 only its version is called when you call this method. If you need to
 specifically call a particular service's `Ping`, use the
 [call](https://metacpan.org/pod/XML::Compile::WSDL11#Compilers)
-method on its
-[wsdl](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#wsdl)
-attribute.
+method on its `wsdl` attribute.
 
 Note that this method does support a single string as a message parameter;
 this is effectively ignored though.

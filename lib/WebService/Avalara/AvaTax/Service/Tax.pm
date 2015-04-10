@@ -34,7 +34,10 @@ use XML::Compile::SOAP11;
 use XML::Compile::SOAP12;
 use XML::Compile::WSDL11;
 use namespace::clean;
-with 'WebService::Avalara::AvaTax::Role::Connection';
+with qw(
+    WebService::Avalara::AvaTax::Role::Connection
+    WebService::Avalara::AvaTax::Role::Service
+);
 
 =attr uri
 

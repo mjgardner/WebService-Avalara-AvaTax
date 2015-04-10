@@ -25,7 +25,7 @@ lib_sections = NAME | VERSION | SYNOPSIS | DESCRIPTION | SUPPORT | AUTHOR | COPY
 script_sections = NAME | USAGE | DESCRIPTION | CONFIGURATION | SUPPORT | AUTHOR | COPYRIGHT AND LICENSE
 
 [Subroutines::ProhibitCallsToUndeclaredSubs]
-exempt_subs = Const::Fast::const Log::Report::dispatcher Moo::has Moo::with Moo::Role::has Sys::Hostname::hostname
+exempt_subs = Const::Fast::const Log::Report::dispatcher Moo::has Moo::with Moo::Role::around Moo::Role::has Sys::Hostname::hostname
 
 [Subroutines::ProhibitUnusedPrivateSubroutines]
 private_name_regex = _(?!build_)\w+

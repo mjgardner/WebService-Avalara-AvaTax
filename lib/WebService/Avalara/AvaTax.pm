@@ -101,8 +101,7 @@ Aside from the L</new> method, L</services> attribute and
 other attributes and methods consumed from
 L<WebService::Avalara::AvaTax::Role::Connection|WebService::Avalara::AvaTax::Role::Connection>,
 available method names are dynamically loaded from each
-L</services>'
-L<wsdl|WebService::Avalara::AvaTax::Role::Connection/wsdl>
+L</services>' C<wsdl>
 attribute and can be passed either a hash or reference to a hash with the
 necessary parameters. In scalar context they return a reference to a hash
 containing the results of the SOAP call; in list context they return the
@@ -166,22 +165,18 @@ sub BUILD {
     my $self = shift;
 
     for my $service ( @{ $self->services } ) {
-        my %soap_params = map { ( $_ => $service->$_ ) } qw(port service);
-
-        $service->wsdl->compileCalls(
-            transport => $service->_transport,
-            %soap_params,
-        );
-        for my $operation ( $service->wsdl->operations(%soap_params) ) {
-            my $method_name = $operation->name;
+        while ( my ( $operation_name, $client )
+            = each %{ $service->clients } )
+        {
+            my $method_name = $operation_name;
             if ( not $self->orthodox ) {    # normalize operation name
                 $method_name
                     =~ s/ (?<= [[:alnum:]] ) ( [[:upper:]] ) /_\l$1/xmsg;
                 $method_name = lcfirst $method_name;
             }
 
-            $self->_stash->add_symbol(
-                "&$method_name" => _method_closure( $service, $operation ) );
+            $self->_stash->add_symbol( "&$method_name" =>
+                    _method_closure( $service, $operation_name, $client ) );
         }
     }
     return;
@@ -212,35 +207,30 @@ const my %OPERATION_PARAMETER => (
 );
 
 sub _method_closure {
-    my ( $service, $operation ) = @_;
+    my ( $service, $operation_name, $client ) = @_;
     return sub {
         my ( $self, @parameters ) = @_;
 
-        my $wsdl = $service->wsdl;
-        $service->_current_operation_name( $operation->name );
-
-        if ( 'GetTax' eq $operation ) {
+        $service->_current_operation_name($operation_name);
+        if ( 'GetTax' eq $operation_name ) {
             @parameters = _today_to_docdate(@parameters);
         }
 
-        my ( $answer_ref, $trace ) = $wsdl->call(
-            $operation->name => {
-                Profile => {
-                    Client => "$PROGRAM_NAME," . ( $main::VERSION // q{} ),
-                    Adapter => __PACKAGE__ . q{,} . ( $VERSION // q{} ),
-                    Machine => hostname(),
-                },
-                parameters => {
-                    $OPERATION_PARAMETER{ $operation->name } =>
-                        @parameters % 2
-                    ? "@parameters"
-                    : {@parameters},
-                },
+        my ( $answer_ref, $trace ) = $client->(
+            Profile => {
+                Client => "$PROGRAM_NAME," . ( $main::VERSION // q{} ),
+                Adapter => __PACKAGE__ . q{,} . ( $VERSION // q{} ),
+                Machine => hostname(),
+            },
+            parameters => {
+                $OPERATION_PARAMETER{$operation_name} => @parameters % 2
+                ? "@parameters"
+                : {@parameters},
             },
         );
         if ( 'HASH' eq ref $answer_ref ) {
             $answer_ref
-                = $answer_ref->{parameters}{ $operation->name . 'Result' };
+                = $answer_ref->{parameters}{"${operation_name}Result"};
         }
         return wantarray ? ( $answer_ref, $trace ) : $answer_ref;
     };
@@ -547,9 +537,7 @@ provide C<IsAuthorized> operations. However, since the latter is loaded last,
 only its version is called when you call this method. If you need to
 specifically call a particular service's C<IsAuthorized>, use the
 L<call|XML::Compile::WSDL11/Compilers>
-method on its
-L<wsdl|WebService::Avalara::AvaTax::Role::Connection/wsdl>
-attribute.
+method on its C<wsdl> attribute.
 
 Note that the parameter passed to this call is a comma-delimited list of
 SOAP operation names in C<CamelCase>, not C<lowercase_with_underscores>.
@@ -581,9 +569,7 @@ provide C<Ping> operations. However, since the latter is loaded last,
 only its version is called when you call this method. If you need to
 specifically call a particular service's C<Ping>, use the
 L<call|XML::Compile::WSDL11/Compilers>
-method on its
-L<wsdl|WebService::Avalara::AvaTax::Role::Connection/wsdl>
-attribute.
+method on its C<wsdl> attribute.
 
 Note that this method does support a single string as a message parameter;
 this is effectively ignored though.

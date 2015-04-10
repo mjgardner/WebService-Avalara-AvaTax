@@ -27,12 +27,6 @@ use Moo::Role;
 use MooX::Types::MooseLike::Email 'EmailAddressLoose';
 use Mozilla::CA;
 use Types::Standard qw(Bool InstanceOf Str);
-use Types::URI 'Uri';
-use URI;
-use XML::Compile::SOAP::WSS;
-use XML::Compile::Transport::SOAPHTTP;
-use XML::Compile::WSDL11;
-use XML::Compile::WSS;
 use namespace::clean;
 
 =attr username
@@ -59,36 +53,6 @@ services (true) or development (false). Defaults to false.
 =cut
 
 has is_production => ( is => 'ro', isa => Bool, default => 0 );
-
-=attr uri
-
-The L<URI|URI> of the WSDL file used to define the web service.
-Consumer classes are expected to set this attribute.
-As a convenience this can also be set with anything that
-L<Types::URI|Types::URI> can coerce into a C<Uri>.
-
-=cut
-
-has uri => ( is => 'lazy', isa => Uri, coerce => 1 );
-
-=attr port
-
-The SOAP port identifier (not to be confused with the TCP/IP port) used in the
-WSDL file at L</uri>.
-Consumer classes are expected to set this attribute.
-
-=cut
-
-has port => ( is => 'ro', isa => Str );
-
-=attr service
-
-The SOAP service name used in the WSDL file at L</uri>.
-Consumer classes are expected to set this attribute.
-
-=cut
-
-has service => ( is => 'ro', isa => Str );
 
 =attr debug
 
@@ -128,85 +92,5 @@ has user_agent => (
     isa     => InstanceOf ['LWP::UserAgent'],
     default => sub { LWPx::UserAgent::Cached->new },
 );
-
-=attr wsdl
-
-After construction, you can retrieve the created
-L<XML::Compile::WSDL11|XML::Compile::WSDL11> instance.
-
-Example:
-
-    my $wsdl = $avatax->wsdl;
-    my @soap_operations = map { $_->name } $wsdl->operations;
-
-=cut
-
-has wsdl => (
-    is       => 'lazy',
-    isa      => InstanceOf ['XML::Compile::WSDL11'],
-    init_arg => undef,
-    default  => sub {
-        XML::Compile::WSDL11->new(
-            $_[0]->user_agent->get( $_[0]->uri )->content );
-    },
-);
-
-has _wss => (
-    is       => 'ro',
-    isa      => InstanceOf ['XML::Compile::SOAP::WSS'],
-    default  => sub { XML::Compile::SOAP::WSS->new },
-    init_arg => undef,
-);
-
-has _auth => (
-    is       => 'lazy',
-    isa      => InstanceOf ['XML::Compile::WSS'],
-    init_arg => undef,
-);
-
-sub _build__auth {
-    my $self = shift;
-    my $wss  = $self->_wss;
-    return $wss->basicAuth( map { ( $_ => $self->$_ ) }
-            qw(username password) );
-}
-
-has _current_operation_name => ( is => 'rw', isa => Str, default => q{} );
-
-has _transport => (
-    is       => 'lazy',
-    isa      => InstanceOf ['XML::Compile::Transport::SOAPHTTP'],
-    init_arg => undef,
-);
-
-sub _build__transport {
-    my $self = shift;
-
-    my $wss  = $self->_wss;
-    my $wsdl = $self->wsdl;
-    my $auth = $self->_auth;
-
-    my %soap_params  = map { ( $_ => $self->$_ ) } qw(port service);
-    my $endpoint_uri = URI->new( $wsdl->endPoint(%soap_params) );
-    my $user_agent   = $self->user_agent;
-
-    $user_agent->add_handler(
-        request_prepare => sub {
-            $_[0]->header(
-                SOAPAction =>
-                    $wsdl->operation( $self->_current_operation_name,
-                    %soap_params )->soapAction,
-            );
-        },
-        (   m_method => 'POST',
-            map { ( "m_$_" => $endpoint_uri->$_ ) } qw(scheme host_port path),
-        ),
-    );
-
-    return XML::Compile::Transport::SOAPHTTP->new(
-        address    => $endpoint_uri,
-        user_agent => $user_agent,
-    );
-}
 
 1;

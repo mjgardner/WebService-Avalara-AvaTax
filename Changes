@@ -1,7 +1,7 @@
 Revision history for perl distribution WebService-Avalara-AvaTax
 
 {{$NEXT}}
-
+	- refactor to better support XML::Compile::Dumper
 0.018     2015-04-10 11:03:07-04:00 America/New_York
     - require appropriate version of Moo
     - re-add release test against perlbrew

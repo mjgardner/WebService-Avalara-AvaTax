@@ -47,12 +47,20 @@ L<https://avatax.avalara.net/> if
 L<is_production|WebService::Avalara::AvaTax::Role::Connection/is_production>
 returns true, or L<https://development.avalara.net/> if it returns false.
 
+Note that if
+L<use_wss|WebService::Avalara::AvaTax::Role::Connection/use_wss>
+is false, the alternate security WSDL file C</tax/taxsvcaltsec.wsdl>
+will be used instead.
+
 =cut
 
 has '+uri' => (
     default => sub {
-        URI->new_abs( '/tax/taxsvc.wsdl' => 'https://'
-                . ( $_[0]->is_production ? 'avatax' : 'development' )
+        my $self = shift;
+        URI->new_abs( '/tax/taxsvc'
+                . ( $self->use_wss ? q{} : 'altsec' )
+                . '.wsdl' => 'https://'
+                . ( $self->is_production ? 'avatax' : 'development' )
                 . '.avalara.net/' );
     },
 );
@@ -65,7 +73,8 @@ Defaults to C<AddressSvcSoap>.
 
 =cut
 
-has '+port' => ( default => 'TaxSvcSoap' );
+has '+port' => ( default =>
+        sub { 'TaxSvc' . ( $_[0]->use_wss ? q{} : 'AltSec' ) . 'Soap' }, );
 
 =attr service
 

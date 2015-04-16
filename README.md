@@ -485,6 +485,7 @@ passed to both:
 
 - [username](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#username)
 - [password](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#password)
+- [use\_wss](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#use_wss)
 - [is\_production](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#is_production)
 - [user\_agent](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#user_agent)
 - [debug](https://metacpan.org/pod/WebService::Avalara::AvaTax::Role::Connection#debug)

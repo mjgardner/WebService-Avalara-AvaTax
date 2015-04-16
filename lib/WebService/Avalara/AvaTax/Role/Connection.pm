@@ -45,6 +45,17 @@ The password used for Avalara authentication. Required.
 
 has password => ( is => 'ro', isa => Str, required => 1 );
 
+=attr use_wss
+
+A boolean value that indicates whether or not to use WSS security tokens in
+the SOAP header or to use those specified in Avalara's alternate security WSDL.
+Defaults to true. Normally you should leave this alone unless your application
+does not work correctly with WSS.
+
+=cut
+
+has use_wss => ( is => 'lazy', isa => Bool, default => 1 );
+
 =attr is_production
 
 A boolean value that indicates whether to connect to the production AvaTax

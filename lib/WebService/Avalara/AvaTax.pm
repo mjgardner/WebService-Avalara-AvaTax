@@ -67,6 +67,8 @@ passed to both:
 
 =item L<password|WebService::Avalara::AvaTax::Role::Connection/password>
 
+=item L<use_wss|WebService::Avalara::AvaTax::Role::Connection/use_wss>
+
 =item L<is_production|WebService::Avalara::AvaTax::Role::Connection/is_production>
 
 =item L<user_agent|WebService::Avalara::AvaTax::Role::Connection/user_agent>
@@ -91,7 +93,7 @@ sub _new_service {
     my $class = __PACKAGE__ . '::Service::' . shift;
     return $class->new(
         map { ( $_ => $self->$_ ) }
-            qw(username password is_production user_agent debug),
+            qw(username password use_wss is_production user_agent debug),
     );
 }
 
@@ -227,6 +229,13 @@ sub _method_closure {
                 ? "@parameters"
                 : {@parameters},
             },
+            $self->use_wss ? ()
+            : ( Security => {
+                    UsernameToken => {
+                        map { ( "\u$_" => $self->$_ ) } qw(username password),
+                    },
+                },
+            ),
         );
         if ( 'HASH' eq ref $answer_ref ) {
             $answer_ref

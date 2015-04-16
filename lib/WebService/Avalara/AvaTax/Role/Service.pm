@@ -21,7 +21,7 @@ web service interface.
 =cut
 
 use Moo::Role;
-use Types::Standard qw(CodeRef HashRef InstanceOf Str);
+use Types::Standard qw(Bool CodeRef HashRef InstanceOf Str);
 use Types::URI 'Uri';
 use URI;
 use XML::Compile::SOAP::WSS;
@@ -49,7 +49,7 @@ Consumer classes are expected to set this attribute.
 
 =cut
 
-has port => ( is => 'ro', isa => Str );
+has port => ( is => 'lazy', isa => Str );
 
 =attr service
 
@@ -90,7 +90,14 @@ has clients => (
 
 sub _build_clients {
     my $self = shift;
+
+    my ( $wss, $auth );
+    if ( $self->use_wss ) { $wss = XML::Compile::SOAP::WSS->new }
     my $wsdl = $self->wsdl;
+    if ( $self->use_wss ) {
+        $auth = $wss->basicAuth( map { ( $_ => $self->$_ ) }
+                qw(username password) );
+    }
 
     my %soap_params = map { ( $_ => $self->$_ ) } qw(port service);
     my %client_params = (
@@ -103,42 +110,16 @@ sub _build_clients {
     };
 }
 
-has _wss => (
-    is       => 'ro',
-    isa      => InstanceOf ['XML::Compile::SOAP::WSS'],
-    default  => sub { XML::Compile::SOAP::WSS->new },
-    init_arg => undef,
-);
-
-has _auth => (
-    is       => 'lazy',
-    isa      => InstanceOf ['XML::Compile::WSS'],
-    init_arg => undef,
-);
-
-sub _build__auth {
-    my $self = shift;
-    my $wss  = $self->_wss;
-    return $wss->basicAuth( map { ( $_ => $self->$_ ) }
-            qw(username password) );
-}
-
 has _current_operation_name => ( is => 'rw', isa => Str, default => q{} );
 
-has _transport => (
-    is       => 'lazy',
-    isa      => InstanceOf ['XML::Compile::Transport'],
-    init_arg => undef,
-);
+has _transport =>
+    ( is => 'lazy', isa => InstanceOf ['XML::Compile::Transport'] );
 
 sub _build__transport {
     my $self = shift;
 
-    my $wss  = $self->_wss;
-    my $wsdl = $self->wsdl;
-    my $auth = $self->_auth;
-
     my %soap_params  = map { ( $_ => $self->$_ ) } qw(port service);
+    my $wsdl         = $self->wsdl;
     my $endpoint_uri = URI->new( $wsdl->endPoint(%soap_params) );
     my $user_agent   = $self->user_agent;
 

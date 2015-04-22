@@ -1,4 +1,4 @@
-#!perl
+#!/usr/bin/env perl
 
 BEGIN {
     unless ( $ENV{RELEASE_TESTING} ) {
@@ -17,10 +17,14 @@ SKIP: {
     Test::Vars->import;
 
     subtest 'unused vars' => sub {
-        vars_ok( 'lib/WebService/Avalara/AvaTax/Role/Connection.pm' =>
+        vars_ok('lib/WebService/Avalara/AvaTax/Role/Connection.pm');
+        vars_ok('lib/WebService/Avalara/AvaTax/Role/Dumper.pm');
+        vars_ok( 'lib/WebService/Avalara/AvaTax/Role/Service.pm' =>
                 ( ignore_vars => { '$auth' => 1, '$wss' => 1 } ) );
+
         vars_ok('lib/WebService/Avalara/AvaTax/Service/Address.pm');
         vars_ok('lib/WebService/Avalara/AvaTax/Service/Tax.pm');
+
         vars_ok('lib/WebService/Avalara/AvaTax.pm');
     };
 }

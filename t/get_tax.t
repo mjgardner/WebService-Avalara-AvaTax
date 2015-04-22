@@ -5,6 +5,9 @@ use Const::Fast;
 use English '-no_match_vars';
 use Sys::Hostname;
 use Test::More tests => 5;
+use Test::File::ShareDir::Module 1.000000 {
+    'WebService::Avalara::AvaTax::Service::Tax' => 'shares/ServiceTax/'
+};
 use XML::Compile::Tester;
 use XML::Compile::Util;
 use WebService::Avalara::AvaTax::Service::Tax;

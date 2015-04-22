@@ -3,6 +3,9 @@
 use Modern::Perl;
 use Const::Fast;
 use Test::More;
+use Test::File::ShareDir::Module 1.000000 {
+    'WebService::Avalara::AvaTax::Service::Tax' => 'shares/ServiceTax/'
+};
 use List::Util 1.33 'all';
 use XML::Compile::Tester;
 use WebService::Avalara::AvaTax;

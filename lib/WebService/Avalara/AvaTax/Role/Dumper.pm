@@ -20,7 +20,7 @@ and then restoring it later to save time without having to recompile.
 =cut
 
 use English '-no_match_vars';
-use File::ShareDir::ProjectDistDir 'dist_dir';
+use File::ShareDir 1.00 'dist_dir';
 use Moo::Role;
 use Package::Stash;
 use Path::Tiny;

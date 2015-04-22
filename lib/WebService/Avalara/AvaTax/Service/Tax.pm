@@ -27,7 +27,7 @@ with defaults for certain attributes as listed below.
 
 =cut
 
-use File::ShareDir::ProjectDistDir 'dist_file';
+use File::ShareDir 1.00 'module_file';
 use Moo;
 use URI;
 use XML::Compile::SOAP11;
@@ -101,8 +101,7 @@ has '+wsdl' => (
         my $self = shift;
         my $wsdl = XML::Compile::WSDL11->new(
             $self->user_agent->get( $self->uri )->content );
-        $wsdl->addWSDL(
-            dist_file( 'WebService-Avalara-AvaTax', 'taxsvc_patch.wsdl' ) );
+        $wsdl->addWSDL( module_file( __PACKAGE__, 'taxsvc_patch.wsdl' ) );
         return $wsdl;
     },
 );

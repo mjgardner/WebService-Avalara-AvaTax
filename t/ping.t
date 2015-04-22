@@ -3,6 +3,9 @@
 use Modern::Perl;
 use Test::More;
 use Test::RequiresInternet ( 'development.avalara.net' => 443 );
+use Test::File::ShareDir::Module 1.000000 {
+    'WebService::Avalara::AvaTax::Service::Tax' => 'shares/ServiceTax/'
+};
 use Const::Fast;
 use List::Util 1.33 'all';
 use WebService::Avalara::AvaTax;

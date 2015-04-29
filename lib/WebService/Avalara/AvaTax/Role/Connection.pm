@@ -54,7 +54,7 @@ does not work correctly with WSS.
 
 =cut
 
-has use_wss => ( is => 'lazy', isa => Bool, default => 1 );
+has use_wss => ( is => 'rwp', isa => Bool, default => 1 );
 
 =attr is_production
 

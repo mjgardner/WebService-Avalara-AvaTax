@@ -18,7 +18,7 @@ above_version = 5.012
 flowcontrol = carp cluck confess croak die exit goto warn throw
 
 [Documentation::PodSpelling]
-stop_words = AvaTax Avalara username boolean uri URI WSDL wsdl Perldoc perldoc API hashref ish DOM UTC ApplyPayment TaxSvc PaymentDate adaptors ReconcileTaxHistory ERP AccountSvc DocumentFetch AVALARA
+stop_words = AvaTax Avalara username boolean uri URI WSDL wsdl Perldoc perldoc API hashref ish DOM UTC ApplyPayment TaxSvc PaymentDate adaptors ReconcileTaxHistory ERP AccountSvc DocumentFetch AVALARA untrusted WSS
 
 [Documentation::RequirePodSections]
 lib_sections = NAME | VERSION | SYNOPSIS | DESCRIPTION | SUPPORT | AUTHOR | COPYRIGHT AND LICENSE

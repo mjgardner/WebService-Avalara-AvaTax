@@ -6,8 +6,8 @@ use Test::More;
 use Test::File::ShareDir::Module 1.000000 {
     'WebService::Avalara::AvaTax::Service::Tax' => 'shares/ServiceTax/'
 };
+use Test::RequiresInternet ( 'development.avalara.net' => 443 );
 use List::Util 1.33 'all';
-use XML::Compile::Tester;
 use WebService::Avalara::AvaTax;
 
 const my @AVALARA_ENV => qw(username password);

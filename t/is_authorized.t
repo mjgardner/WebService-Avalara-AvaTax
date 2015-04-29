@@ -2,6 +2,7 @@
 
 use Modern::Perl;
 use Test::More;
+use Test::RequiresInternet ( 'development.avalara.net' => 443 );
 use Test::File::ShareDir::Module 1.000000 {
     'WebService::Avalara::AvaTax::Service::Tax' => 'shares/ServiceTax/'
 };
@@ -22,5 +23,13 @@ my $avatax
     = WebService::Avalara::AvaTax->new( map { ( $_ => $ENV{"AVALARA_\U$_"} ) }
         @AVALARA_ENV );
 
-my $answer_ref = $avatax->is_authorized($AUTHORIZED_LIST);
-is( $answer_ref->{ResultCode}, 'Success', "is_authorized $AUTHORIZED_LIST" );
+my ( $answer_ref, $trace ) = $avatax->is_authorized($AUTHORIZED_LIST);
+is( $answer_ref->{ResultCode}, 'Success', "is_authorized $AUTHORIZED_LIST" )
+    or do {
+    explain $answer_ref;
+    diag $trace->request->as_string
+        if ref $trace->request and $trace->request->isa('HTTP::Request');
+    diag $trace->responseDOM->toString(1)
+        if ref $trace->responseDOM
+        and $trace->responseDOM->isa('XML::LibXML::Document');
+    };

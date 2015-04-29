@@ -229,10 +229,11 @@ sub _method_closure {
                 ? "@parameters"
                 : {@parameters},
             },
-            $self->use_wss ? ()
+            $service->use_wss ? ()
             : ( Security => {
                     UsernameToken => {
-                        map { ( "\u$_" => $self->$_ ) } qw(username password),
+                        map { ( "\u$_" => $service->$_ ) }
+                            qw(username password),
                     },
                 },
             ),

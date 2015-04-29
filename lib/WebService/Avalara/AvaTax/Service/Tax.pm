@@ -37,6 +37,7 @@ use namespace::clean;
 with qw(
     WebService::Avalara::AvaTax::Role::Connection
     WebService::Avalara::AvaTax::Role::Service
+    WebService::Avalara::AvaTax::Role::Dumper
 );
 
 =attr uri

@@ -20,14 +20,28 @@ and then restoring it later to save time without having to recompile.
 =cut
 
 use English '-no_match_vars';
-use File::ShareDir 1.00 'dist_dir';
 use Moo::Role;
 use Package::Stash;
-use Path::Tiny;
+use Path::Tiny 0.018;
 use Types::Path::Tiny qw(Dir Path);
 use Types::Standard qw(Bool Str);
 use XML::Compile::Dumper;
 use namespace::clean;
+
+=attr use_wss
+
+This role overrides the value of the
+L<use_wss attribute from WebService::Avalara::AvaTax::Role::Connection|WebService::Avalara::AvaTax::Role::Connection/use_wss>
+to false, since L<XML::Compile::WSS|XML::Compile::WSS> does not seem to
+work cleanly with L<XML::Compile::Dumper|XML::Compile::Dumper>.
+
+=cut
+
+around BUILDARGS => sub {
+    return { @_[ 2 .. $#_ ], use_wss => 0 };
+};
+
+=cut
 
 =attr recompile
 
@@ -41,17 +55,24 @@ has recompile => ( is => 'ro', isa => Bool, default => 0 );
 
 =attr dump_dir
 
-The directory in which to save and look for the generated class files. Defaults
-to the F<share> directory for the C<WebService-Avalara-AvaTax> distribution.
+The directory in which to save and look for the generated class files.
+Defaults to a temporary directory provided by
+L<Path::Tiny::tempdir|Path::Tiny>.
+
+=head1 CAVEATS
+
+The generated class files in the L</dump_dir> directory will be read and
+executed, therefore it is B<critical> that this directory is in a secure
+location on the file system that cannot be written to by untrusted users
+or processes!
 
 =cut
 
 has dump_dir => ( is => 'lazy', isa => Dir, coerce => 1 );
 
 sub _build_dump_dir {
-    my $self     = shift;
-    my $dump_dir = Path::Tiny->new( dist_dir('WebService-Avalara-AvaTax') );
-    $dump_dir = -w "$dump_dir" ? $dump_dir : Path::Tiny->tempdir;
+    my $self = shift;
+    my $dump_dir = Path::Tiny->tempdir( TEMPLATE => 'AvalaraDumpXXXXX' );
     unshift @INC => "$dump_dir";
     return $dump_dir;
 }
@@ -80,7 +101,7 @@ sub _build_dump_file_name {
 has _package_name => (
     is      => 'lazy',
     isa     => Str,
-    default => sub { ref(shift) . '::Client' },
+    default => sub { ref( $_[0] ) . q{::} . $_[0]->service },
 );
 
 =attr clients
@@ -94,35 +115,51 @@ add it to the symbol table.
 around _build_clients => sub {
     my ( $orig, $self, @params ) = @_;
 
-    my $package   = $self->_package_name;
-    my $dump_file = $self->dump_dir->child( $self->dump_file_name );
-    my $stash     = Package::Stash->new($package);
+    my $package = $self->_package_name;
+    my $path    = $self->dump_dir->child( $self->dump_file_name );
 
-    if ( $dump_file->is_file and not $self->recompile ) {
-        ## no critic (BuiltinFunctions::ProhibitStringyEval)
-        # not sure if this is the right way to do it
-        if ( eval( $dump_file->slurp ) and not $EVAL_ERROR ) {
-            return { map { ( $_ => $stash->get_symbol("&$_") ) }
-                    $stash->list_all_symbols('CODE') };
-        }
+    if ( $path->is_file and not $self->recompile ) {
+        require "$path";    ## no critic (Modules::RequireBarewordIncludes)
+        my $stash = Package::Stash->new($package);
+        return { map { ( $_ => $stash->get_symbol("&$_") ) }
+                $stash->list_all_symbols('CODE') };
     }
 
     my %clients = %{ $self->$orig(@params) };
-
-    my $dumper = XML::Compile::Dumper->new(
-        package  => $package,
-        filename => "$dump_file",
-    );
-    $dumper->freeze(%clients);
-    $dumper->close;
-    while ( my ( $operation_name, $client ) = each %clients ) {
-        $stash->add_symbol(
-            "&$operation_name" => $client,
-            filename           => "$dump_file",
-        );
-    }
-
+    $self->_write_dump_file( "$path", $package, %clients );
     return \%clients;
 };
+
+sub _write_dump_file {
+    my ( $self, $path, $package, %clients ) = @_;
+
+    my $dumper = XML::Compile::Dumper->new(
+        package => ( $package || $self->_package_name ),
+        filename => "$path",
+    );
+
+    my $dump_fh = $dumper->file;
+    $dump_fh->print(<<'END_PERL');
+use URI::https;
+use LWPx::UserAgent::Cached;
+use HTTP::Config;
+use Mozilla::CA;
+use XML::Compile::WSDL11;
+use XML::Compile::SOAP11;
+
+BEGIN { $ENV{HTTPS_CA_FILE} = Mozilla::CA::SSL_ca_file() }
+END_PERL
+    $dump_fh->print( 'use ' . ref($self) . ";\n" );
+
+    $dumper->freeze(%clients);
+    $dumper->close;
+
+    local @ARGV         = ("$path");
+    local $INPLACE_EDIT = '.bak';
+    while (<>) { / weaken [(] [\$] s [)] /xms or print }
+    Path::Tiny->new("$path$INPLACE_EDIT")->remove;
+
+    return;
+}
 
 1;

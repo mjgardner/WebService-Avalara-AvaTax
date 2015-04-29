@@ -23,5 +23,12 @@ my $avatax = new_ok(
     'AvaTax',
 );
 
-my $answer_ref = $avatax->ping;
-is( $answer_ref->{ResultCode}, 'Success', 'ping' );
+my ( $answer_ref, $trace ) = $avatax->ping;
+is( $answer_ref->{ResultCode}, 'Success', 'ping' ) or do {
+    explain $answer_ref;
+    diag $trace->request->as_string
+        if ref $trace->request and $trace->request->isa('HTTP::Request');
+    diag $trace->responseDOM->toString(1)
+        if ref $trace->responseDOM
+        and $trace->responseDOM->isa('XML::LibXML::Document');
+};

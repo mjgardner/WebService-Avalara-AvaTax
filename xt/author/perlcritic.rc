@@ -9,9 +9,9 @@ commentedcoderegex = pod\s+\K\$[A-Za-z_].*=
 perltidyrc = xt/author/perltidy.rc
 
 [Compatibility::PerlMinimumVersionAndWhy]
-above_version = 5.008009
+above_version = 5.008
 [Compatibility::PodMinimumVersion]
-above_version = 5.008009
+above_version = 5.008
 
 [ControlStructures::ProhibitPostfixControls]
 flowcontrol = carp cluck confess croak die exit goto warn throw

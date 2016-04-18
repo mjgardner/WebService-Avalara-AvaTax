@@ -1,6 +1,8 @@
 Revision history for perl distribution WebService-Avalara-AvaTax
 
 {{$NEXT}}
+
+0.020     2016-04-18 18:59:12-04:00 America/New_York
     - OK, support down to 5.8.x for any value x
 0.019     2016-04-18 18:44:44-04:00 America/New_York
     - fix bug to support non-email address usernames (Jawaid Bazyar++)

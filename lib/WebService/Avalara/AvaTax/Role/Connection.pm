@@ -24,18 +24,17 @@ use Log::Report;
 use LWP::UserAgent;
 use LWPx::UserAgent::Cached;
 use Moo::Role;
-use MooX::Types::MooseLike::Email 'EmailAddressLoose';
 use Mozilla::CA;
 use Types::Standard qw(Bool InstanceOf Str);
 use namespace::clean;
 
 =attr username
 
-The Avalara email address used for authentication. Required.
+The Avalara AvaTax Admin Console user name. Usually an email address. Required.
 
 =cut
 
-has username => ( is => 'ro', isa => EmailAddressLoose, required => 1 );
+has username => ( is => 'ro', isa => Str, required => 1 );
 
 =attr password
 

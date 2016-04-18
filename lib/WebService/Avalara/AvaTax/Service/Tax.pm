@@ -2,7 +2,8 @@ package WebService::Avalara::AvaTax::Service::Tax;
 
 # ABSTRACT: Avalara AvaTax tax engine service via SOAP
 
-use Modern::Perl '2011';    ## no critic (Modules::ProhibitUseQuotedVersion)
+use strict;
+use warnings;
 
 # VERSION
 use utf8;
@@ -20,7 +21,7 @@ use utf8;
 =head1 DESCRIPTION
 
 This class implements basic support for the
-L<Avalara AvaTax|http://developer.avalara.com/api-docs/soap>
+Avalara AvaTax (C<http://developer.avalara.com/api-docs/soap>)
 tax engine service using SOAP. Most of its mechanics are in
 L<WebService::Avalara::AvaTax::Role::Connection|WebService::Avalara::AvaTax::Role::Connection>,
 with defaults for certain attributes as listed below.
@@ -44,9 +45,9 @@ with qw(
 
 The L<URI|URI> of the WSDL file used to define the web service.
 Defaults to C</tax/taxsvc.wsdl>, with the URI base either
-L<https://avatax.avalara.net/> if
+C<https://avatax.avalara.net/> if
 L<is_production|WebService::Avalara::AvaTax::Role::Connection/is_production>
-returns true, or L<https://development.avalara.net/> if it returns false.
+returns true, or C<https://development.avalara.net/> if it returns false.
 
 Note that if
 L<use_wss|WebService::Avalara::AvaTax::Role::Connection/use_wss>
@@ -106,5 +107,9 @@ has '+wsdl' => (
         return $wsdl;
     },
 );
+
+=for Pod::Coverage BUILDARGS
+
+=cut
 
 1;

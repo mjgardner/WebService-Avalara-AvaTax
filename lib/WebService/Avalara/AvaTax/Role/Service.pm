@@ -2,7 +2,8 @@ package WebService::Avalara::AvaTax::Role::Service;
 
 # ABSTRACT: Common attributes and methods for AvaTax services
 
-use Modern::Perl '2011';    ## no critic (Modules::ProhibitUseQuotedVersion)
+use strict;
+use warnings;
 
 # VERSION
 use utf8;
@@ -15,7 +16,7 @@ use utf8;
 =head1 DESCRIPTION
 
 This role factors out the common attributes and methods used by the
-L<Avalara AvaTax|http://developer.avalara.com/api-docs/soap>
+Avalara AvaTax (C<http://developer.avalara.com/api-docs/soap>)
 web service interface.
 
 =cut

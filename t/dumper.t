@@ -1,6 +1,8 @@
 #!/usr/bin/env perl
 
-use Modern::Perl;
+use strict;
+use warnings;
+
 use Test::Most;    # skip_all => 'bugs in Data::Dump::Streamer';
 use Test::File::ShareDir::Module 1.000000 {
     'WebService::Avalara::AvaTax::Service::Tax' => 'shares/ServiceTax/'

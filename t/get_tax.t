@@ -1,6 +1,8 @@
 #!/usr/bin/env perl
 
-use Modern::Perl;
+use strict;
+use warnings;
+
 use Const::Fast;
 use English '-no_match_vars';
 use Sys::Hostname;

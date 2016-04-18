@@ -1,6 +1,8 @@
 #!/usr/bin/env perl
 
-use Modern::Perl;
+use strict;
+use warnings;
+
 use Test::More;
 use Test::RequiresInternet ( 'development.avalara.net' => 443 );
 use Test::File::ShareDir::Module 1.000000 {

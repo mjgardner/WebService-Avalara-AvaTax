@@ -2,7 +2,8 @@ package WebService::Avalara::AvaTax::Role::Dumper;
 
 # ABSTRACT: Dump and restore compiled SOAP clients for AvaTax
 
-use Modern::Perl '2011';    ## no critic (Modules::ProhibitUseQuotedVersion)
+use strict;
+use warnings;
 
 # VERSION
 use utf8;

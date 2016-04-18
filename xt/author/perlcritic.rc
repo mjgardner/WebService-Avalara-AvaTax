@@ -8,11 +8,10 @@ commentedcoderegex = pod\s+\K\$[A-Za-z_].*=
 [CodeLayout::RequireTidyCode]
 perltidyrc = xt/author/perltidy.rc
 
-# using Modern::Perl
 [Compatibility::PerlMinimumVersionAndWhy]
-above_version = 5.012
+above_version = 5.008009
 [Compatibility::PodMinimumVersion]
-above_version = 5.012
+above_version = 5.008009
 
 [ControlStructures::ProhibitPostfixControls]
 flowcontrol = carp cluck confess croak die exit goto warn throw
@@ -29,9 +28,3 @@ exempt_subs = Const::Fast::const Log::Report::dispatcher Moo::has Moo::with Moo:
 
 [Subroutines::ProhibitUnusedPrivateSubroutines]
 private_name_regex = _(?!build_)\w+
-
-[TestingAndDebugging::RequireUseStrict]
-equivalent_modules = Modern::Perl
-
-[TestingAndDebugging::RequireUseWarnings]
-equivalent_modules = Modern::Perl

@@ -2,7 +2,8 @@ package WebService::Avalara::AvaTax;
 
 # ABSTRACT: Avalara SOAP interface as compiled Perl methods
 
-use Modern::Perl '2011';    ## no critic (Modules::ProhibitUseQuotedVersion)
+use strict;
+use warnings;
 
 # VERSION
 use utf8;
@@ -19,7 +20,7 @@ use utf8;
 =head1 DESCRIPTION
 
 This class provides a Perl method API for
-L<Avalara AvaTax|http://developer.avalara.com/api-docs/soap>
+Avalara AvaTax (C<http://developer.avalara.com/api-docs/soap>)
 web services. The first call to any AvaTax SOAP operation uses
 L<XML::Compile::WSDL11|XML::Compile::WSDL11>
 to compile and execute against the specified Avalara AvaTax service;
@@ -114,7 +115,7 @@ object suitable for debugging and exception handling.
 If there is no result then you should check the trace object for why.
 
 Please consult the
-L<Avalara SOAP API reference|http://developer.avalara.com/api-reference>
+Avalara SOAP API reference (C<http://developer.avalara.com/api-reference>)
 for semantic details on the methods, parameters and results available for each
 of the methods listed below. Note that in order to make this interface easier
 and more Perl-ish, the following changes have been made:
@@ -218,10 +219,14 @@ sub _method_closure {
             @parameters = _today_to_docdate(@parameters);
         }
 
+        my $client_version  = "$PROGRAM_NAME,";
+        my $adapter_version = __PACKAGE__ . q{,};
+        if ($main::VERSION) { $client_version  .= $main::VERSION }
+        if ($VERSION)       { $adapter_version .= $VERSION }
         my ( $answer_ref, $trace ) = $client->(
             Profile => {
-                Client => "$PROGRAM_NAME," . ( $main::VERSION // q{} ),
-                Adapter => __PACKAGE__ . q{,} . ( $VERSION // q{} ),
+                Client  => $client_version,
+                Adapter => $adapter_version,
                 Machine => hostname(),
             },
             parameters => {
@@ -239,6 +244,7 @@ sub _method_closure {
             ),
         );
         if ( 'HASH' eq ref $answer_ref ) {
+            ## no critic (ValuesAndExpressions::ProhibitAccessOfPrivateData)
             $answer_ref
                 = $answer_ref->{parameters}{"${operation_name}Result"};
         }
@@ -611,7 +617,8 @@ Example:
 
 I<< (SOAP operation: C<ApplyPayment>) >>
 
-From L<Avalara API documentation|http://developer.avalara.com/api-docs/soap/applypayment>:
+From Avalara API documentation
+(C<http://developer.avalara.com/api-docs/soap/applypayment>):
 
 =over
 
@@ -637,7 +644,8 @@ Example:
 
 I<< (SOAP operation: C<ReconcileTaxHistory>) >>
 
-From L<Avalara API documentation|http://developer.avalara.com/api-docs/soap/reconciletaxhistory>:
+From Avalara API documentation
+(C<http://developer.avalara.com/api-docs/soap/reconciletaxhistory>):
 
 =over
 
@@ -647,7 +655,8 @@ pull a range of documents for reconciliation against a document of record
 flagged documents would then be omitted from subsequent ReconcileTaxHistory
 calls. This method no longer changes the "reconciled" document flag, but can
 be used to retrieve ranges of document data (much like the AccountSvc
-L<DocumentFetch|http://developer.avalara.com/api-docs/soap/accountsvc/document-elements>),
+DocumentFetch
+(C<http://developer.avalara.com/api-docs/soap/accountsvc/document-elements>)),
 and remains in the TaxSvc WSDL and some automatically built
 adaptors for backwards compatibility.
 
@@ -671,7 +680,7 @@ Example:
 
 =over
 
-=item L<Avalara Developer Network|http://developer.avalara.com/>
+=item Avalara Developer Network (C<http://developer.avalara.com/>)
 
 Official source for Avalara developer information, including API
 references, technical articles and more.
